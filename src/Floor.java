@@ -136,10 +136,10 @@ public class Floor extends Tile
 		boolean tempE = east;
 		boolean tempW = west;
 		
-		north = tempE;
-		south = tempW;
-		east = tempS;
-		west = tempN;		
+		north = tempW;
+		south = tempE;
+		east = tempN;
+		west = tempS;		
 	}
 	
 	public boolean[] exitPoints()
