@@ -1,4 +1,4 @@
-package game;
+//package game;
 
 /**
 * <P>Purpose: Setting out tiles by collaborating with Floor in order to create the game board. 
@@ -147,8 +147,8 @@ public class Board{
 	
 	/**
 	 * checkIfRowMovable checks whether it is possible or not to insert a tile into this row
-	 * @param insert The Floor tile that needs to be inserted
-	 * @param curTile
+	 * @param y
+	 * @param curTile - The Floor tile that needs to be inserted
 	 */
 	public boolean checkIfRowMovable(int y, Floor curTile) {//x starts at 0
 		for (int i=0; i<= length-1; i++) {

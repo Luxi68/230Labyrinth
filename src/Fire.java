@@ -9,10 +9,10 @@ public class Fire extends Action
 		super(tileType);
 	}
 	
-	public void typeFire()
-	{
-		fire typeFire() = new TypeFire();
-		typeFire.Use();
-		 
-	}
+//	public void typeFire()
+//	{
+//		fire typeFire() = new TypeFire();
+//		typeFire.Use();
+//
+//	}
 }

@@ -18,7 +18,7 @@ public class Action extends Tile {
 	}
 	
 	enum Type {
-		fire, ice, doubleMove, backTrack;
+		fire, ice, doubleMove, backTrack
 	}
 	
 	public void useFireIce(Floor tile) {
@@ -29,11 +29,12 @@ public class Action extends Tile {
 		}
 	}
 	
-	public void useBackDouble(Player player) {
-		if (actionType.equals(Type.doubleMove)) {
-			//player.doubleMove();
-		} else if (actionType.equals(Type.backTrack)){
-			//player.backTrack();
-		}
-	}
+//	public void useBackDouble(Player player) {
+//		if (actionType.equals(Type.doubleMove)) {
+//			//player.doubleMove();
+//		} else if (actionType.equals(Type.backTrack)){
+//			//player.backTrack();
+//		}
+//	}
+
 }
