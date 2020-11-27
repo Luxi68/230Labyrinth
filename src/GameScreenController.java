@@ -1,3 +1,9 @@
+/**
+ * Class that holds the actions and logic behind GameScreen.fxml
+ *
+ * @author Lucy
+ */
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -6,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -13,9 +20,11 @@ public class GameScreenController implements Initializable {
 	// The dimensions of the window
 	private int windowWidth;
 	private int windowHeight;
-	public VBox sideBar;
-	public HBox actionTracker;
 
+	@FXML
+	public VBox sideBar;
+	@FXML
+	public HBox actionTracker;
 	@FXML
 	private BorderPane borderPane;
 	@FXML
@@ -54,18 +63,28 @@ public class GameScreenController implements Initializable {
 		// Code that either loads past game or starts new game
 	}
 
+	/**
+	 * Action that happens when player mouses over the Draw shape in the action tracker
+	 */
 	@FXML
 	public void actionTrackerDrawMouseEnter() {
 		actionTrackerDraw.setFill(Paint.valueOf("Grey"));
 		actionTrackerPlay.setFill(Paint.valueOf("Red"));
 	}
 
+	/**
+	 * Action that happens when player mouses over the Play shape in the action tracker
+	 */
 	@FXML
 	public void actionTrackerPlayMouseEnter() {
 		actionTrackerPlay.setFill(Paint.valueOf("Grey"));
 		actionTrackerMove.setFill(Paint.valueOf("Red"));
 	}
 
+	/**
+	 * Action that happens when player mouses over the Move shape in the action tracker
+	 */
+	@FXML
 	public void actionTrackerMoveMouseEnter() {
 		actionTrackerMove.setFill(Paint.valueOf("Grey"));
 		actionTrackerDraw.setFill(Paint.valueOf("Red"));
