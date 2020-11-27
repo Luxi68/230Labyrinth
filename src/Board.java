@@ -1,5 +1,3 @@
-package game;
-
 /**
 * <P>Purpose: Setting out tiles by collaborating with Floor in order to create the game board. 
 * It is also responsible for managing the tiles movements</p>
@@ -39,7 +37,7 @@ public class Board {
 			insertFromRight(insert, x, y);
 		} else if (button says insert from top) {
 			insertFromTop(insert, x, y);
-		} else if (button says insert from botoom) {
+		} else if (button says insert from bottom) {
 			insertFromBottom(insert, x, y);
 		}
 			
