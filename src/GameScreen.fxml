@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.Text?>
+<BorderPane fx:id="borderPane" fx:controller="GameScreenController"
+			xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+	<left>
+		<VBox fx:id="sideBar" alignment="CENTER" spacing="10.0">
+			<Circle radius="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0"/>
+			<VBox alignment="CENTER">
+				<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Action Tracker" textAlignment="CENTER">
+					<VBox.margin>
+						<Insets bottom="5.0" top="5.0"/>
+					</VBox.margin>
+				</Text>
+				<HBox fx:id="actionTracker" alignment="CENTER" spacing="5.0">
+					<padding>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+					</padding>
+					<StackPane prefHeight="70" prefWidth="70">
+						<Circle fx:id="actionTrackerDraw" fill="Grey" radius="35.0" stroke="BLACK"
+								strokeType="INSIDE" onMouseEntered="#actionTrackerDrawMouseEnter"/>
+						<Label text="Draw a Tile" wrapText="true" textAlignment="CENTER"/>
+					</StackPane>
+					<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE"
+							  strokeWidth="5.0"/>
+					<StackPane prefHeight="70" prefWidth="70">
+						<Circle fx:id="actionTrackerPlay" fill="Grey" radius="35.0" stroke="BLACK"
+								strokeType="INSIDE" onMouseEntered="#actionTrackerPlayMouseEnter"/>
+						<Label text="Play an Action" wrapText="true" textAlignment="CENTER"/>
+					</StackPane>
+					<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE"
+							  strokeWidth="5.0"/>
+					<StackPane prefHeight="70" prefWidth="70">
+						<Circle fx:id="actionTrackerMove" fill="Grey" radius="35.0" stroke="BLACK"
+								strokeType="INSIDE" onMouseEntered="#actionTrackerMoveMouseEnter"/>
+						<Label text="Move the Player" wrapText="true" textAlignment="CENTER"/>
+					</StackPane>
+				</HBox>
+			</VBox>
+		</VBox>
+	</left>
+</BorderPane>
