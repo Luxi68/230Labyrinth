@@ -9,7 +9,7 @@ package game;
 * <P>Modified: /2020
 */
 
-public class Board{
+public class Board {
 	
 	private Floor board[][];
 	private int length;
