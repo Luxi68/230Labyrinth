@@ -6,59 +6,66 @@ import javafx.scene.image.Image;
  * @author Chris and Ryan
  *
  */
-public class Floor extends Tile
-{
+public class Floor extends Tile {
+	private final Type FLOOR_TYPE;
+	private final boolean IS_FIXED;
+	private final boolean IS_GOAL;
 	private boolean north;
 	private boolean south;
 	private boolean east;
 	private boolean west;
-	private boolean isGoal;
-	private boolean isFixed;
 	private boolean isFire;
 	private boolean isIce;
 	//private String floorType;
-	private Type floorType;
-	private Image floorImage;
-	
+
 	/**
 	 * Constructor initialising the the floor tile and checking if it has been affected by anything.
 	 * @param tileType what type of floor tile it is
-	 * @param north the exit points of the tile 
-	 * @param south the exit points of the tile 
-	 * @param east the exit points of the tile  
-	 * @param west the exit points of the tile 
-	 * @param isGoal true if tile is goal tile, false if not
+	 * @param image what the tile looks like
 	 * @param isFixed true if tile is fixed, false if not
-	 * @param isFire true if tile is on fire, false if not
-	 * @param isIce true if tile is frozen, false if not
 	 */
-	public Floor(String tileType, Image image, boolean north, boolean south, boolean east, boolean west, boolean isGoal, boolean isFixed,
-				boolean isFire, boolean isIce)
-	{
+	public Floor(String tileType, Image image, boolean isFixed)	{
 		super(tileType, image);
-		this.floorImage = image;
-		this.north = north;
-		this.south = south;
-		this.east = east;
-		this.west = west;
-		this.isGoal = isGoal;
-		this.isFixed = isFixed;
-		this.isFire = isFire;
-		this.isIce = isIce;	
+		this.IS_FIXED = isFixed;
+		this.isFire = false;
+		this.isIce = false;
 		//this.floorType = floorType;
-		
-		if (tileType.equalsIgnoreCase("corner")) 
-		{
-			this.floorType = Type.corner;
-		} else if (tileType.equalsIgnoreCase("straight")) 
-		{
-			this.floorType = Type.straight;
-		} else if (tileType.equalsIgnoreCase("lShape")) 
-		{
-			this.floorType = Type.lShape;
-		} else if (tileType.equalsIgnoreCase("tShape")) 
-		{
-			this.floorType = Type.tShape;
+
+		switch (tileType) {
+			case ("corner"):
+				this.FLOOR_TYPE = Type.corner;
+				this.north = false;
+				this.south = true;
+				this.east = true;
+				this.west = false;
+				this.IS_GOAL = false;
+				break;
+
+			case ("straight"):
+				this.FLOOR_TYPE = Type.straight;
+				this.north = true;
+				this.south = true;
+				this.east = false;
+				this.west = false;
+				this.IS_GOAL = false;
+				break;
+
+			case ("tee"):
+				this.FLOOR_TYPE = Type.tee;
+				this.north = true;
+				this.south = true;
+				this.east = true;
+				this.west = false;
+				this.IS_GOAL = false;
+				break;
+
+			default:
+				this.FLOOR_TYPE = Type.goal;
+				this.north = true;
+				this.south = true;
+				this.east = true;
+				this.west = true;
+				this.IS_GOAL = true;
 		}
 		
 	}
@@ -68,71 +75,15 @@ public class Floor extends Tile
 	 * The different types of floor tiles.
 	 *
 	 */
-	enum Type 
-	{
-		corner, straight, lShape, tShape;
+	enum Type {
+		corner, straight, tee, goal
 	}
-	
-	/**
-	 * 
-	 * @param north set to north
-	 */
-	public void setNorth (boolean north)
-	{
-		this.north = north;
-	}
-	
-	/**
-	 * 
-	 * @param south set to south
-	 */
-	public void setSouth (boolean south)
-	{
-		this.south = south;
-	}
-	
-	/**
-	 * 
-	 * @param east set to east
-	 */
-	public void setEast (boolean east)
-	{
-		this.east = east;
-	}
-	
-	/**
-	 * 
-	 * @param west set to west
-	 */
-	public void setWest (boolean west)
-	{
-		this.west = west;
-	}
-	
-	/**
-	 * 
-	 * @param isGoal set to itself
-	 */
-	public void setIsGoal (boolean isGoal)
-	{
-		this.isGoal = isGoal;
-	}
-	
-	/**
-	 * 
-	 * @param isFixed set it to itself
-	 */
-	public void setIsFixed (boolean isFixed)
-	{
-		this.isFixed = isFixed;
-	}
-	
+
 	/**
 	 * 
 	 * @param isFire set to itself
 	 */
-	public void setIsFire (boolean isFire)
-	{
+	public void setIsFire (boolean isFire) {
 		this.isFire = isFire;
 	}
 	
@@ -140,26 +91,15 @@ public class Floor extends Tile
 	 * 
 	 * @param isIce set to itself
 	 */
-	public void setIsIce (boolean isIce)
-	{
+	public void setIsIce (boolean isIce) {
 		this.isIce = isIce;
 	}
-	
-	/**
-	 * 
-	 * @param floorType set to itself
-	 */
-	public void setFloorType (Type floorType)
-	{
-		this.floorType = floorType;
-	}
-	
+
 	/**
 	 * 
 	 * @return returns north
 	 */
-	public boolean getNorth()
-	{
+	public boolean getNorth() {
 		return north;
 	}
 	
@@ -167,8 +107,7 @@ public class Floor extends Tile
 	 * 
 	 * @return returns south
 	 */
-	public boolean getSouth()
-	{
+	public boolean getSouth() {
 		return south;
 	}
 	
@@ -176,8 +115,7 @@ public class Floor extends Tile
 	 * 
 	 * @return returns east
 	 */
-	public boolean getEast()
-	{
+	public boolean getEast() {
 		return east;
 	}
 	
@@ -185,8 +123,7 @@ public class Floor extends Tile
 	 * 
 	 * @return returns west
 	 */
-	public boolean getWest()
-	{
+	public boolean getWest() {
 		return west;
 	}
 	
@@ -194,26 +131,23 @@ public class Floor extends Tile
 	 * 
 	 * @return whether the tile is goal or not
 	 */
-	public boolean getIsGoal()
-	{
-		return isGoal;
+	public boolean getIsGoal() {
+		return IS_GOAL;
 	}
 	
 	/**
 	 * 
 	 * @return whether the tile is fixed or not
 	 */
-	public boolean getIsFixed()
-	{
-		return isFixed;
+	public boolean getIsFixed() {
+		return IS_FIXED;
 	}
 	
 	/**
 	 * 
 	 * @return whether the tile is on fire or not
 	 */
-	public boolean getIsFire()
-	{
+	public boolean getIsFire() {
 		return isFire;
 	}
 	
@@ -221,8 +155,7 @@ public class Floor extends Tile
 	 * 
 	 * @return whether the tile is frozen or not
 	 */
-	public boolean getIsIce()
-	{
+	public boolean getIsIce() {
 		return isIce;
 	}
 	
@@ -230,29 +163,24 @@ public class Floor extends Tile
 	 * 
 	 * @return the floor type
 	 */
-	public Type getFloorType()
-	{
-		return floorType;
+	public Type getFLOOR_TYPE() {
+		return FLOOR_TYPE;
 	}
-	
+
 	// Method that rotates the tile
-	public void rotate ()
-	{
+	public void rotate () {
 		boolean tempN = north;
 		boolean tempS = south;
 		boolean tempE = east;
-		boolean tempW = west;
-		
-		north = tempW;
+
+		north = west;
 		south = tempE;
 		east = tempN;
 		west = tempS;		
 	}
 	
 	//Method that returns the exits points of a tile
-	public boolean[] exitPoints()
-	{
-		boolean[] exitPoints = new boolean [] {north, east, south, west};
-		return exitPoints;
+	public boolean[] exitPoints() {
+		return new boolean [] {north, east, south, west};
 	}
 }
