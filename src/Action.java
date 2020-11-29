@@ -8,9 +8,8 @@ import javafx.scene.image.Image;
  */
 public class Action extends Tile {
 	
-	private Type actionType;
-	private Image actionImage;
-	
+	private final Type ACTION_TYPE;
+
 	/**
 	 * The constructor initialising the type of action tile it is.
 	 * @param tileType inherited from Tile.java to see which action tile it is.
@@ -18,15 +17,23 @@ public class Action extends Tile {
 	public Action(String tileType, Image image) {
 		super(tileType, image);
 
-		this.actionImage = image;
-		if (tileType.equalsIgnoreCase("fire")) {
-			this.actionType = Type.fire;
-		} else if (tileType.equalsIgnoreCase("ice")) {
-			this.actionType = Type.ice;
-		} else if (tileType.equalsIgnoreCase("doubleMove")) {
-			this.actionType = Type.doubleMove;
-		} else if (tileType.equalsIgnoreCase("backTrack")) {
-			this.actionType = Type.backTrack;
+		switch (tileType) {
+			case ("fire"):
+				this.ACTION_TYPE = Type.fire;
+				break;
+			case ("ice"):
+				this.ACTION_TYPE = Type.ice;
+				break;
+			case ("doubleMove"):
+				this.ACTION_TYPE = Type.doubleMove;
+				break;
+			case ("backTrack"):
+				this.ACTION_TYPE = Type.backTrack;
+				break;
+			default:
+				this.ACTION_TYPE = null;
+				System.out.println("Error: Tried to create action tile with invalid type");
+				break;
 		}
 	}
 	
@@ -44,9 +51,9 @@ public class Action extends Tile {
 	 * @param tile
 	 */
 	public void useFireIce(Floor tile) {
-		if (actionType.equals(Type.fire)) {
+		if (ACTION_TYPE.equals(Type.fire)) {
 			tile.setIsFire(true);
-		} else if (actionType.equals(Type.ice)) {
+		} else if (ACTION_TYPE.equals(Type.ice)) {
 			tile.setIsIce(true);
 		}
 	}

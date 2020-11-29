@@ -59,13 +59,20 @@ public class Floor extends Tile {
 				this.IS_GOAL = false;
 				break;
 
-			default:
+			case ("goal"):
 				this.FLOOR_TYPE = Type.goal;
 				this.north = true;
 				this.south = true;
 				this.east = true;
 				this.west = true;
 				this.IS_GOAL = true;
+				break;
+
+			default: // TODO - Maybe throw an exception?
+				this.FLOOR_TYPE = null;
+				this.IS_GOAL = false;
+				System.out.println("Error: Tried to create floor tile with invalid type");
+				break;
 		}
 		
 	}

@@ -16,9 +16,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 public class GameScreenController implements Initializable {
 	// The dimensions of the window
@@ -177,13 +177,14 @@ public class GameScreenController implements Initializable {
 	 */
 	private void setupGame() {
 		silkBag = new SilkBag();
-		silkBag.addTile(new Floor("corner", new Image("tileBaseCorner.png"), false));
+		silkBag.addTile(new Floor("corner", new Image("corner.png"), false));
 		silkBag.addTile(new Floor("corner", new Image("aries.png"), false));
 		currPlayer = new Player("Aries", 1, new Image("aries.png"));
 		currPlayerFireImg.setImage(new Image("fire.png"));
 		currPlayerIceImg.setImage(new Image("ice.png"));
 		currPlayerDoubleMoveImg.setImage(new Image("doublemove.png"));
 		currPlayerBacktrackImg.setImage(new Image("backtrack.png"));
+		setupPlayerHand(currPlayer);
 		// TODO - do properly
 	}
 
