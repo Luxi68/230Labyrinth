@@ -1,26 +1,35 @@
-import javafx.scene.image.Image;
-
-public abstract class Tile {
+/**
+ * Tile.java
+ * An abstract class which defines a variable to be used by its sub classes.
+ * @author Chris and Ryan
+ *
+ */
+public abstract class Tile 
+{
 	String tileType;
-	Image image;
-	
-	protected Tile(String tileType)	{
+	/**
+	 * Constructor initialising the type of tile.
+	 * @param tileType defines the type of tile.
+	 */
+	protected Tile(String tileType)
+	{
+		this.tileType = tileType;
+	}
+	/**
+	 * 
+	 * @param tileType sets the tile type
+	 */
+	public void setTileType (String tileType)
+	{
 		this.tileType = tileType;
 	}
 	
-	public void setTileType (String tileType)	{
-		this.tileType = tileType;
-	}
-
-	public void setImage (Image image) {
-		this.image = image;
-	}
-
-	public String getTileType()	{
+	/**
+	 * 
+	 * @return the tile type
+	 */
+	public String getTileType()
+	{
 		return tileType;
-	}
-
-	public Image getImage() {
-		return image;
 	}
 }
