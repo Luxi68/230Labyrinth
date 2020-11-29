@@ -4,28 +4,28 @@
 - Multiple boards
 - A number of fixed tiles
     - Indicated in some way
-- Board populated randomly
-- Player profiles selected to play
+- entity.Board populated randomly
+- entity.Player profiles selected to play
 - Correct number of player pieces placed
 
 ## On Your Turn
 - Win if reach goal
-- Player turn moves left (clockwise)
+- entity.Player turn moves left (clockwise)
 
-### Draw a Tile
+### Draw a entity.Tile
 - Draw a random tile from silk bag
 
-**If Action**
+**If entity.Action**
 - Keep it but **cannot** play this round
 
-**If Floor**
+**If entity.Floor**
 - Slide from an available edge space
     - Must be indicated in some way
 - Tiles pushed over one space
     - Opposite tile ejected into silk bag
-    - Player piece moved to other side
+    - entity.Player piece moved to other side
 
-### Play Action Tile
+### Play entity.Action entity.Tile
 - Play action from hand
     - Don't have to
 - After using, it is removed from game
@@ -48,7 +48,7 @@
 
 **Backtrack**
 - Choose opponent
-- Player Piece moves back 2 turns
+- entity.Player Piece moves back 2 turns
     - Unless previous tile is on fire
 - Can only affect each player once per game
 
@@ -71,19 +71,19 @@
     > • Details about each fixed tile: which tile it is (Straight, Corner. T-shaped, Goal),
     > its orientation and its location on the board (x, y).
     > 
-    > • The set of tiles (both Action Tiles and Floor Tiles) that go into the Silk Bag (these
+    > • The set of tiles (both entity.Action Tiles and entity.Floor Tiles) that go into the Silk Bag (these
     > do not include the fixed tiles specified in the previous point).
     > 
     > • The starting location of the 4 player pieces (all 4 must be specified in the file,
     > but fewer may be used in any particular game that uses this game board).
 
-## Player Profile
+## entity.Player Profile
 - Has player name
 - Tracks no games played, wins, looses
 
 ## Leaderboard
 - Per board
-- Player profiles listed in order of wins
+- entity.Player profiles listed in order of wins
 
 ## Data
 - Data must persist across runs

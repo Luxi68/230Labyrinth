@@ -1,15 +1,16 @@
-/**
- * FileReader.java
- * This class reads a level file.  For the format of this file, see A1 design (slight modification have been done to it)
- * @author Alberto Ortenzi
+package core;
+/*
+Right now File reader will work as soon as other classes are implemented I will update it using the appropriate method
+names and fully implement it as soon as we decide how to integrate it with the ui and the rest of the java program.
  */
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-/*
-Right now File reader will work as soon as other classes are implemented I will update it using the appropriate method
-names and fully implement it as soon as we decide how to integrate it with the ui and the rest of the java program.
+/**
+ * FileReader.java
+ * This class reads a level file.  For the format of this file, see A1 design (slight modification have been done to it)
+ * @author Alberto Ortenzi
  */
 public class FileReader {
     /**

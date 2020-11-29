@@ -1,8 +1,4 @@
-/**
- * Motd.java
- * This class issues a HTTP get request and obtains the message of the day
- * @author Alberto Ortenzi
- */
+package service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +6,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Motd.java
+ * This class issues a HTTP get request and obtains the message of the day
+ * @author Alberto Ortenzi
+ */
 public class Motd {
     /**
      * This method takes in a string which is a url and issues a HTTP get request using said url

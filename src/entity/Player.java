@@ -1,12 +1,13 @@
+package entity;
+
+import javafx.scene.image.Image;
+import java.util.ArrayList;
+
 /**
  * Class that represents the players and their tokens within the game
  *
  * @author Junjie
  */
-
-import javafx.scene.image.Image;
-import java.util.ArrayList;
-
 public class Player { // TODO - finish class
 	private final String NAME;
 	private final int ORDER;

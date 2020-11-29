@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1"
+	  fx:controller="controller.StartScreenController">
+	<MenuBar VBox.vgrow="NEVER">
+		<Menu mnemonicParsing="false" text="File">
+			<MenuItem mnemonicParsing="false" text="Quit"/>
+		</Menu>
+		<Menu mnemonicParsing="false" text="Help">
+			<MenuItem mnemonicParsing="false" text="About MyHelloApp"/>
+		</Menu>
+	</MenuBar>
+	<AnchorPane VBox.vgrow="ALWAYS">
+		<Button layoutX="281.0" layoutY="111.0" mnemonicParsing="false" onAction="#goToNewGame"
+				text="New Game"/>
+		<Button layoutX="280.0" layoutY="153.0" mnemonicParsing="false" onAction="#goToLoadGame"
+				text="Load Game"/>
+		<Button layoutX="291.0" layoutY="193.0" mnemonicParsing="false" onAction="#goToProfileSelection"
+				text="Profiles"/>
+		<Button layoutX="302.0" layoutY="233.0" mnemonicParsing="false" onAction="#closeApplication"
+				text="Quit"/>
+		<Label layoutX="215.0" layoutY="14.0" text="LABYRINTH" textFill="#e86a0b">
+			<font>
+				<Font size="39.0"/>
+			</font>
+			<effect>
+				<Glow/>
+			</effect>
+		</Label>
+	</AnchorPane>
+</VBox>

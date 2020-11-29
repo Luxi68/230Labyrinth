@@ -1,19 +1,18 @@
-/**
- * The Class that setups the main game screen that players will be using to interact with the game.
- *
- * @author Lucy
- */
+package core;
 
+import controller.GameScreenController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import java.net.URL;
 
 /**
- * Opens the window for the game to be displayed onto.
+ * The Class that opens the main game screen that players will be using to interact with the game.
+ *
+ * @author Lucy
  */
 public class GameScreen extends Application {
 	// The dimensions of the window
@@ -22,6 +21,7 @@ public class GameScreen extends Application {
 
 	/**
 	 * Main method declaration necessary for class to run
+	 *
 	 * @param args - generic arguments that is run
 	 */
 	public static void main(String[] args) {
@@ -39,10 +39,11 @@ public class GameScreen extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			// Setting up the fxml
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
+			URL url = getClass().getResource("/scene/GameScreen.fxml");
+			FXMLLoader loader = new FXMLLoader(url);
 			Pane root = loader.load();
 			GameScreenController controller = loader.getController();
-			controller.initData(WINDOW_WIDTH, WINDOW_HEIGHT);
+			controller.initData();
 
 			// Display the scene on the stage
 			primaryStage.setTitle("Labyrinth");

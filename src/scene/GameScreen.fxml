@@ -6,8 +6,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
-<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-			fx:controller="GameScreenController">
+<BorderPane fx:id="borderPane" prefWidth="1000" prefHeight="600" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1"
+			fx:controller="controller.GameScreenController">
 	<left>
 		<!--Sidebar: where all the buttons and user interaction is-->
 		<VBox alignment="CENTER" spacing="5.0">

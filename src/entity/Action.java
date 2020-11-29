@@ -1,3 +1,5 @@
+package entity;
+
 import javafx.scene.image.Image;
 
 /**
@@ -43,12 +45,12 @@ public class Action extends Tile {
 	 *
 	 */
 	enum Type {
-		fire, ice, doubleMove, backTrack;
+		fire, ice, doubleMove, backTrack
 	}
 	
 	/**
 	 * Method that uses action tiles which affect the floor tiles.
-	 * @param tile
+	 * @param tile - The tile which is being acted upon.
 	 */
 	public void useFireIce(Floor tile) {
 		if (ACTION_TYPE.equals(Type.fire)) {

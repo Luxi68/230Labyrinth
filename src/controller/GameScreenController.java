@@ -1,9 +1,6 @@
-/**
- * Class that holds the actions and logic behind GameScreen.fxml
- *
- * @author Junjie, Rhys
- */
+package controller;
 
+import entity.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,7 +16,11 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
+/**
+ * Class that holds the actions and logic behind core.GameScreen.fxml
+ *
+ * @author Junjie, Rhys
+ */
 public class GameScreenController implements Initializable {
 	// The dimensions of the window
 	private int windowWidth;
@@ -61,17 +62,6 @@ public class GameScreenController implements Initializable {
 	private Circle actionTrackerMove;
 
 	/**
-	 * Initialises data necessary to setup game screen
-	 *
-	 * @param width  - preferred width of the window
-	 * @param height - preferred height of window
-	 */
-	public void initData(int width, int height) {
-		this.windowWidth = width;
-		this.windowHeight = height;
-	}
-
-	/**
 	 * Called to initialize a controller after its root element has been
 	 * completely processed.
 	 *
@@ -87,7 +77,7 @@ public class GameScreenController implements Initializable {
 			setupGame();
 			actionTrackerDraw.setFill(Paint.valueOf("Red"));
 		});
-		// Code that either loads past game or starts new game
+		// TODO - Code that either loads past game or starts new game
 	}
 
 	/**
@@ -173,7 +163,14 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
-	 * Method to setup the beginning of the game and initialise all the needed variables.
+	 * Initialises data necessary to setup game
+	 */
+	public void initData() {
+		// TODO - Need to link to newGameController
+	}
+
+	/**
+	 * Method to setup the beginning of the game and initialise all the needed variables
 	 */
 	private void setupGame() {
 		silkBag = new SilkBag();
@@ -189,8 +186,8 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
-	 * TODO
-	 * @param player
+	 * Setups the player's hand with the correct humber of each action tile
+	 * @param player - player's hand that is being setup
 	 */
 	private void setupPlayerHand(Player player) {
 		int fire = 0;
