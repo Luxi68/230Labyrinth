@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class SilkBag {
-    ArrayList<Tile> bag = new ArrayList<Tile>();
+    ArrayList<Tile> bag = new ArrayList<>();
 
     public ArrayList<Tile> getBag() {
         return bag;
@@ -16,5 +16,4 @@ public class SilkBag {
     public void addTile(Tile discard){
         bag.add(discard);
     }
-
 }

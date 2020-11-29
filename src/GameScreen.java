@@ -40,9 +40,9 @@ public class GameScreen extends Application {
 		try {
 			// Setting up the fxml
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
+			Pane root = loader.load();
 			GameScreenController controller = loader.getController();
 			controller.initData(WINDOW_WIDTH, WINDOW_HEIGHT);
-			Pane root = loader.load();
 
 			// Display the scene on the stage
 			primaryStage.setTitle("Labyrinth");

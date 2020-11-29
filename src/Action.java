@@ -1,11 +1,12 @@
+import javafx.scene.image.Image;
 
 public class Action extends Tile {
 	
 	private Type actionType;
-	
+
 	public Action(String tileType) {
 		super(tileType);
-		
+
 		if (tileType.equalsIgnoreCase("fire")) {
 			this.actionType = Type.fire;
 		} else if (tileType.equalsIgnoreCase("ice")) {
@@ -16,7 +17,7 @@ public class Action extends Tile {
 			this.actionType = Type.backTrack;
 		}
 	}
-	
+
 	enum Type {
 		fire, ice, doubleMove, backTrack
 	}
