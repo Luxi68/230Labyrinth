@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -25,7 +26,7 @@ public class GameScreenController implements Initializable {
 	// The dimensions of the window
 	private int windowWidth;
 	private int windowHeight;
-	// Game companents
+	// Game components
 	private SilkBag silkBag;
 	private Tile newTile;
 
@@ -38,7 +39,7 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private Circle actionTrackerMove;
 	@FXML
-	public Rectangle newTileImg;
+	public Rectangle silkBagTileImg;
 
 	/**
 	 * Initialises data necessary to setup game screen
@@ -100,17 +101,31 @@ public class GameScreenController implements Initializable {
 	//		TODO - img resources
 	@FXML
 	public void takeTileClicked() {
+		silkBagTileImg.setRotate(0);
 		newTile = silkBag.drawTile();
-		ImageView newTileImg = new ImageView();
-		newTileImg.setImage(newTile.getImage());
+		silkBagTileImg.setFill(new ImagePattern(newTile.getImage()));
 	}
 
 	@FXML
 	public void rotateTileClicked() {
-		if (newTile.getTileType().equals("Floor")) {
+		// Checking if tile is one of the floor tiles
+		String tileType = newTile.getTileType();
+		if (tileType.equals("corner")||tileType.equals("straight")||tileType.equals("tee")) {
 			Floor tempFloor = (Floor) newTile;
 			tempFloor.rotate();
-			newTileImg.setRotate(90);
+
+			// Rotates the image since it is not 'locked' to tile
+			double rotation = silkBagTileImg.getRotate();
+			if (rotation == 0) {
+				silkBagTileImg.setRotate(90);
+			} else if (rotation == 90) {
+				silkBagTileImg.setRotate(180);
+			} else if (rotation == 180) {
+				silkBagTileImg.setRotate(270);
+			} else {
+				silkBagTileImg.setRotate(0);
+			}
+
 		} else {
 			System.out.println("error type wrong");
 			// TODO - find somewhere to print error message
@@ -119,9 +134,12 @@ public class GameScreenController implements Initializable {
 
 	private void setupGame() {
 		silkBag = new SilkBag();
-		silkBag.addTile(new Action("fire"));
-		silkBag.addTile(new Floor("floor", false, true, true, false,
-				false, false, false, false, "corner"));
-		// TODO - how in general
+		silkBag.addTile(new Floor("corner", new Image("tileBaseCorner.png"),
+				false, true, true, false,
+				false, false, false, false));
+		silkBag.addTile(new Floor("corner", new Image("aries.png"),
+				false, true, true, false,
+				false, false, false, false));
+		// TODO - do properly
 	}
 }

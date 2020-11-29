@@ -1,3 +1,4 @@
+import javafx.scene.image.Image;
 
 /**
  * Action.java
@@ -8,14 +9,16 @@
 public class Action extends Tile {
 	
 	private Type actionType;
+	private Image actionImage;
 	
 	/**
 	 * The constructor initialising the type of action tile it is.
 	 * @param tileType inherited from Tile.java to see which action tile it is.
 	 */
-	public Action(String tileType) {
-		super(tileType);
-		
+	public Action(String tileType, Image image) {
+		super(tileType, image);
+
+		this.actionImage = image;
 		if (tileType.equalsIgnoreCase("fire")) {
 			this.actionType = Type.fire;
 		} else if (tileType.equalsIgnoreCase("ice")) {
@@ -48,15 +51,15 @@ public class Action extends Tile {
 		}
 	}
 	
-	/**
-	 * Method that uses action tiles which affect the player.
-	 * @param player
-	 */
-	public void useBackDouble(Player player) {
-		if (actionType.equals(Type.doubleMove)) {
-			//player.doubleMove();
-		} else if (actionType.equals(Type.backTrack)){
-			//player.backTrack();
-		}
-	}
+//	/**
+//	 * Method that uses action tiles which affect the player.
+//	 * @param player
+//	 */
+//	public void useBackDouble(Player player) {
+//		if (actionType.equals(Type.doubleMove)) {
+//			//player.doubleMove();
+//		} else if (actionType.equals(Type.backTrack)){
+//			//player.backTrack();
+//		}
+//	}
 }

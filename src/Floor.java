@@ -1,3 +1,5 @@
+import javafx.scene.image.Image;
+
 /**
  * Floor.java
  * Class which created different types of floor tiles and to rotate the tiles.
@@ -16,6 +18,7 @@ public class Floor extends Tile
 	private boolean isIce;
 	//private String floorType;
 	private Type floorType;
+	private Image floorImage;
 	
 	/**
 	 * Constructor initialising the the floor tile and checking if it has been affected by anything.
@@ -29,10 +32,11 @@ public class Floor extends Tile
 	 * @param isFire true if tile is on fire, false if not
 	 * @param isIce true if tile is frozen, false if not
 	 */
-	public Floor(String tileType, boolean north, boolean south, boolean east, boolean west, boolean isGoal, boolean isFixed, 
+	public Floor(String tileType, Image image, boolean north, boolean south, boolean east, boolean west, boolean isGoal, boolean isFixed,
 				boolean isFire, boolean isIce)
 	{
-		super(tileType);
+		super(tileType, image);
+		this.floorImage = image;
 		this.north = north;
 		this.south = south;
 		this.east = east;
