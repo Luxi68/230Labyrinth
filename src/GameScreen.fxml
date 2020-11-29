@@ -5,54 +5,105 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
-
-<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameScreenController">
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1"
+			fx:controller="GameScreenController">
 	<left>
-<!--		Sidebar: where all the buttons and user interaction is-->
-		<VBox alignment="CENTER" spacing="10.0">
-			<VBox alignment="CENTER">
-<!--				Action tracker: to track progression of actions each player can take on their turn-->
-				<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Action Tracker" textAlignment="CENTER">
-					<VBox.margin>
-						<Insets bottom="5.0" top="5.0" />
-					</VBox.margin>
-				</Text>
-				<HBox alignment="CENTER" spacing="5.0">
-					<padding>
-						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-					</padding>
-					<StackPane prefHeight="70" prefWidth="70">
-						<Circle fx:id="actionTrackerDraw" fill="Grey" onMouseEntered="#actionTrackerDrawMouseEnter" radius="35.0" stroke="BLACK" strokeType="INSIDE" />
-						<Label text="Draw a Tile" textAlignment="CENTER" wrapText="true" />
-					</StackPane>
-					<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0" />
-					<StackPane prefHeight="70" prefWidth="70">
-						<Circle fx:id="actionTrackerPlay" fill="Grey" onMouseEntered="#actionTrackerPlayMouseEnter" radius="35.0" stroke="BLACK" strokeType="INSIDE" />
-						<Label text="Play an Action" textAlignment="CENTER" wrapText="true" />
-					</StackPane>
-					<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0" />
-					<StackPane prefHeight="70" prefWidth="70">
-						<Circle fx:id="actionTrackerMove" fill="Grey" onMouseEntered="#actionTrackerMoveMouseEnter" radius="35.0" stroke="BLACK" strokeType="INSIDE" />
-						<Label text="Move the Player" textAlignment="CENTER" wrapText="true" />
-					</StackPane>
-				</HBox>
-<!--				Silk Bag: Area that shows the current taken tile and the options for it-->
-				<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Silk Bag" textAlignment="CENTER">
-					<VBox.margin>
-						<Insets bottom="5.0" top="5.0" />
-					</VBox.margin>
+		<!--Sidebar: where all the buttons and user interaction is-->
+		<VBox alignment="CENTER" spacing="5.0">
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+			</padding>
+			<!--Action tracker: to track progression of actions each player can take on their turn-->
+			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Action Tracker" textAlignment="CENTER">
+				<VBox.margin>
+					<Insets bottom="5.0" top="5.0"/>
+				</VBox.margin>
+				<font>
+					<Font name="System Bold" size="15.0"/>
+				</font>
+			</Text>
+			<HBox alignment="CENTER" spacing="5.0">
+				<padding>
+					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+				</padding>
+				<StackPane prefHeight="50" prefWidth="50">
+					<Circle fx:id="actionTrackerDraw" fill="Grey" onMouseEntered="#actionTrackerDrawMouseEnter"
+							radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Label text="Draw" textAlignment="CENTER" wrapText="true"/>
+				</StackPane>
+				<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0"/>
+				<StackPane prefHeight="50" prefWidth="50">
+					<Circle fx:id="actionTrackerPlay" fill="Grey" onMouseEntered="#actionTrackerPlayMouseEnter"
+							radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Label text="Action" textAlignment="CENTER" wrapText="true"/>
+				</StackPane>
+				<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0"/>
+				<StackPane prefHeight="50" prefWidth="50">
+					<Circle fx:id="actionTrackerMove" fill="Grey" onMouseEntered="#actionTrackerMoveMouseEnter"
+							radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Label text="Move" textAlignment="CENTER" wrapText="true"/>
+				</StackPane>
+			</HBox>
+			<!--Silk Bag: Area that shows the current taken tile and the options for it-->
+			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Silk Bag" textAlignment="CENTER">
+				<VBox.margin>
+					<Insets bottom="5.0" top="5.0"/>
+				</VBox.margin>
+				<font>
+					<Font name="System Bold" size="15.0"/>
+				</font>
+			</Text>
+			<HBox alignment="CENTER" spacing="10.0">
+				<padding>
+					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+				</padding>
+				<VBox alignment="CENTER" spacing="5.0">
+					<Button mnemonicParsing="false" onMouseClicked="#takeTileClick" text="Take a new tile"/>
+					<Button mnemonicParsing="false" onMouseClicked="#rotateTileClick" text="Rotate Tile"/>
+				</VBox>
+				<!--TODO - set final size for tile -->
+				<Rectangle fx:id="silkBagTileImg" fill="#3f443e" height="150" width="150"/>
+			</HBox>
+			<!--Current player: Area that shows the current player's items-->
+			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current Player" textAlignment="CENTER">
+				<VBox.margin>
+					<Insets bottom="5.0" top="5.0"/>
+				</VBox.margin>
+				<font>
+					<Font name="System Bold" size="15.0"/>
+				</font>
+			</Text>
+			<VBox alignment="CENTER" spacing="5.0">
+				<!--Text will display name of the current player token-->
+				<Text fx:id="currPlayerTxt" text="Aries" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
+					<font>
+						<Font size="15.0"/>
+					</font>
 				</Text>
 				<HBox alignment="CENTER" spacing="10.0">
 					<padding>
-						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
 					</padding>
-					<VBox alignment="CENTER" spacing="5.0">
-						<Button text="Take a new tile" onMouseClicked="#takeTileClicked" mnemonicParsing="false"/>
-						<Button text="Rotate Tile" onMouseClicked="#rotateTileClicked" mnemonicParsing="false"/>
-					</VBox>
-<!--					TODO - set proper size for tile -->
-					<Rectangle fx:id="silkBagTileImg" fill="#3f443e" height="200" width="200"/>
+					<StackPane prefHeight="50" prefWidth="50" >
+						<ImageView fx:id="currPlayerFireImg" fitHeight="50" fitWidth="50"/>
+						<Label fx:id="currPlayerFireTxt" textAlignment="JUSTIFY" wrapText="true"/>
+					</StackPane>
+					<StackPane prefHeight="50" prefWidth="50" >
+						<ImageView fx:id="currPlayerIceImg" fitHeight="50" fitWidth="50"/>
+						<Label fx:id="currPlayerIceTxt" textAlignment="JUSTIFY" wrapText="true"/>
+					</StackPane>
+					<StackPane prefHeight="50" prefWidth="50" >
+						<ImageView fx:id="currPlayerDoubleMoveImg" fitHeight="50" fitWidth="50"/>
+						<Label fx:id="currPlayerDoubleMoveTxt" textAlignment="JUSTIFY" wrapText="true"/>
+					</StackPane>
+					<StackPane prefHeight="50" prefWidth="50" >
+						<ImageView fx:id="currPlayerBacktrackImg" fitHeight="50" fitWidth="50"/>
+						<Label fx:id="currPlayerBacktrackTxt" textAlignment="JUSTIFY" wrapText="true"/>
+					</StackPane>
 				</HBox>
+				<Button mnemonicParsing="false" onMouseClicked="#endTurnClick" text="End Turn"/>
 			</VBox>
 		</VBox>
 	</left>

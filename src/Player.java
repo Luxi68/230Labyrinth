@@ -1,9 +1,17 @@
+/**
+ * Class that represents the players and their tokens within the game
+ *
+ * @author Junjie
+ */
+
 import javafx.scene.image.Image;
+import java.util.ArrayList;
 
 public class Player { // TODO - finish class
 	private final String NAME;
 	private final int ORDER;
 	private final Image IMAGE;
+	private ArrayList<Action> hand;
 
 	/**
 	 * Constructor to create new player object
@@ -15,6 +23,7 @@ public class Player { // TODO - finish class
 		this.NAME = name;
 		this.ORDER = order;
 		this.IMAGE = image;
+		hand = new ArrayList<>();
 	}
 
 	public String getName() {
@@ -27,5 +36,13 @@ public class Player { // TODO - finish class
 
 	public Image getImage() {
 		return IMAGE;
+	}
+
+	public ArrayList<Action> getHand() {
+		return hand;
+	}
+
+	public void addHand(ArrayList<Action> hand) {
+		this.hand = hand;
 	}
 }
