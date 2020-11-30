@@ -1,5 +1,3 @@
-package core;
-
 import controller.GameScreenController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,8 +14,8 @@ import java.net.URL;
  */
 public class GameScreen extends Application {
 	// The dimensions of the window
-	private static final int WINDOW_WIDTH = 1000;
-	private static final int WINDOW_HEIGHT = 600;
+	private static final int WINDOW_WIDTH = 1200;
+	private static final int WINDOW_HEIGHT = 630;
 
 	/**
 	 * Main method declaration necessary for class to run
