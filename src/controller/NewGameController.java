@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -14,6 +16,9 @@ import java.util.ResourceBundle;
 
 public class NewGameController {
 
+	public RadioButton twoPlayers;
+	public RadioButton threePlayers;
+	public RadioButton fourPlayers;
 	@FXML
 	private ResourceBundle resources;
 
@@ -22,6 +27,11 @@ public class NewGameController {
 
 	@FXML
 	public void initialize() {
+		ToggleGroup playerSelectionGroup = new ToggleGroup();
+		twoPlayers.setToggleGroup(playerSelectionGroup);
+		twoPlayers.setSelected(true);
+		threePlayers.setToggleGroup(playerSelectionGroup);
+		fourPlayers.setToggleGroup(playerSelectionGroup);
 	}
 
 	@FXML

@@ -27,5 +27,6 @@
       <TextField fx:id="profileName" layoutX="271.0" layoutY="102.0" />
       <Label layoutX="177.0" layoutY="107.0" text="Profile Name" />
       <Button layoutX="234.0" layoutY="149.0" mnemonicParsing="false" onAction="#createNewProfile" text="Create New Profile" />
+      <Button layoutX="216.0" layoutY="241.0" mnemonicParsing="false" onAction="#goBackToProfileSelection" text="Back to Profile Selection" />
    </children>
 </AnchorPane>
