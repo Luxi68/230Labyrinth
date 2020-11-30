@@ -24,14 +24,8 @@ import java.util.ResourceBundle;
  * @author Junjie, Rhys
  */
 public class GameScreenController implements Initializable {
-	@FXML
-	public ImageView currPlayerImg;
-	@FXML
-	public TextArea gameLog;
-	// Game info
-	private int windowWidth;
-	private int windowHeight;
 	// Game components
+	private Board board;
 	private SilkBag silkBag;
 	private Tile newTile;
 	private String newTileType;
@@ -41,16 +35,15 @@ public class GameScreenController implements Initializable {
 	private Player queuePlayer1;
 	private Player queuePlayer2;
 	private Player queuePlayer3;
-	// Game checks
+	// TODO - Game checks
 	private boolean isTileDrawn;
 	// Colour Scheme
 	private Paint grey = Paint.valueOf("#3f443e");
 	private Paint red = Paint.valueOf("#b53232");
 	private Paint pink = Paint.valueOf("#c677b3");
-
-	// TODO - work out double move
 	private Paint green = Paint.valueOf("#55b54c");
 	private Paint gold = Paint.valueOf("#fdd14b");
+
 	@FXML
 	private BorderPane borderPane;
 	@FXML
@@ -86,11 +79,15 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private Label q3Txt;
 	@FXML
+	public ImageView currPlayerImg;
+	@FXML
 	private ImageView q1Img;
 	@FXML
 	private ImageView q2Img;
 	@FXML
 	private ImageView q3Img;
+	@FXML
+	public TextArea gameLog;
 
 	/**
 	 * Called to initialize a controller after its root element has been
@@ -104,7 +101,6 @@ public class GameScreenController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Platform.runLater(() -> {
-			borderPane.setPrefSize(windowWidth, windowHeight);
 			setupGame();
 			gameLog.appendText("GAME START!\n");
 			startNextTurn();
@@ -204,13 +200,7 @@ public class GameScreenController implements Initializable {
 		}
 		silkBagTileImg.setFill(Paint.valueOf("#3f443e"));
 
-		// Update the player turns
-		Player tempPlayer = queuePlayer1;
-		queuePlayer1 = queuePlayer2;
-		queuePlayer2 = queuePlayer3;
-		queuePlayer3 = currPlayer;
-		currPlayer = tempPlayer;
-
+		updatePlayerOrder();
 		gameLog.appendText("NEXT PLAYER\n");
 		startNextTurn();
 	}
@@ -233,8 +223,9 @@ public class GameScreenController implements Initializable {
 		silkBag.addTile(new Action("fire", new Image("/assets/fire.png")));
 		currPlayer = new Player("Aries", new Image("/assets/aries.png"), "#b53232", 0, 0);
 		queuePlayer1 = new Player("Apollo", new Image("/assets/apollo.png"), "#c677b3", 0, 0);
-		queuePlayer2 = new Player("Artemis", new Image("/assets/artemis.png"), "#55b54c", 0, 0);
-		queuePlayer3 = new Player("Aphrodite", new Image("/assets/aphrodite.png"), "#fdd14b", 0, 0);
+//		queuePlayer2 = new Player("Artemis", new Image("/assets/artemis.png"), "#55b54c", 0, 0);
+//		queuePlayer3 = new Player("Aphrodite", new Image("/assets/aphrodite.png"), "#fdd14b", 0, 0);
+		totalPlayers = 2;
 		currPlayerFireImg.setImage(new Image("/assets/fire.png"));
 		currPlayerIceImg.setImage(new Image("/assets/ice.png"));
 		currPlayerDoubleMoveImg.setImage(new Image("/assets/doublemove.png"));
@@ -246,11 +237,40 @@ public class GameScreenController implements Initializable {
 	 * Loads the next turn of the game
 	 */
 	private void startNextTurn() {
-		updatePlayerQueue(q1Img, q1Txt, queuePlayer1);
-		updatePlayerQueue(q2Img, q2Txt, queuePlayer2);
-		updatePlayerQueue(q3Img, q3Txt, queuePlayer3);
 		setupNextPlayerDisplay(currPlayer);
+		updatePlayerQueue(q1Img, q1Txt, queuePlayer1);
+		if (totalPlayers >= 3) {
+			updatePlayerQueue(q2Img, q2Txt, queuePlayer2);
+		}
+		if (totalPlayers >=4 ) {
+			updatePlayerQueue(q3Img, q3Txt, queuePlayer3);
+		}
 		gameLog.appendText("It's now " + currPlayer.getName() + "'s turn.\n");
+	}
+
+	/**
+	 * Takes the current player and moves them to the back of the queue
+	 */
+	private void updatePlayerOrder() {
+		Player tempPlayer = queuePlayer1;
+		switch (totalPlayers) {
+			case 2:
+				queuePlayer1 = currPlayer;
+				break;
+			case 3:
+				queuePlayer1 = queuePlayer2;
+				queuePlayer2 = currPlayer;
+				break;
+			case 4:
+				queuePlayer1 = queuePlayer2;
+				queuePlayer2 = queuePlayer3;
+				queuePlayer3 = currPlayer;
+				break;
+			default:
+				gameLog.appendText("ERROR: Player order disrupted. Please reload from last save file.");
+				break;
+		}
+		currPlayer = tempPlayer;
 	}
 
 	/**

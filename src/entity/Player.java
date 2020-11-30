@@ -93,33 +93,70 @@ public class Player { // TODO - finish class + javadoc
 		HAND.add(action);
 	}
 
-	public void moveN(Board board) throws Exception {
+	/**
+	 *
+	 * @param type
+	 * @return
+	 */
+	public Action playActionTile(String type) {
+		Action tempAction = null;
+		for (Action actionTile: HAND) {
+			if (actionTile.tileType.equals(type)) {
+				tempAction = actionTile;
+				break;
+			}
+		}
+
+		if (tempAction == null) {
+			throw new NullPointerException("ERROR: " + this.NAME + " does not hold any " + type + " action tiles.");
+		} else {
+			HAND.remove(tempAction);
+		}
+		return tempAction;
+	}
+
+	/**
+	 *
+	 * @param board
+	 */
+	public void moveN(Board board) {
 		if (yLoc == board.getHEIGHT() - 1) {
-			throw new IndexOutOfBoundsException(this.NAME + " is already at the top of the board.");
+			throw new IndexOutOfBoundsException("ERROR: " + this.NAME + " is already at the top of the board.");
 		} else {
 			this.yLoc++;
 		}
 	}
 
-	public void moveE(Board board) throws Exception {
+	/**
+	 *
+	 * @param board
+	 */
+	public void moveE(Board board) {
 		if (xLoc == board.getLENGTH() - 1) {
-			throw new IndexOutOfBoundsException(this.NAME + " is already at the edge of the board.");
+			throw new IndexOutOfBoundsException("ERROR: " + this.NAME + " is already at the edge of the board.");
 		} else {
 			this.xLoc++;
 		}
 	}
 
-	public void moveS() throws Exception {
+	/**
+	 *
+	 */
+	public void moveS() {
 		if (yLoc == 0) {
-			throw new IndexOutOfBoundsException(this.NAME + " is already at the bottom of the board.");
+			throw new IndexOutOfBoundsException("ERROR: " + this.NAME + " is already at the bottom of the board.");
 		} else {
 			this.yLoc--;
 		}
 	}
 
-	public void moveW() throws Exception {
+	/**
+	 *
+	 *
+	 */
+	public void moveW() {
 		if (xLoc == 0) {
-			throw new IndexOutOfBoundsException(this.NAME + " is already at the edge of the board.");
+			throw new IndexOutOfBoundsException("ERROR: " + this.NAME + " is already at the edge of the board.");
 		} else {
 			this.xLoc--;
 		}

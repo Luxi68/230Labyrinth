@@ -9,8 +9,7 @@
 <?import javafx.scene.text.*?>
 <?import java.lang.Double?>
 <BorderPane fx:id="borderPane" prefWidth="1200" prefHeight="630" xmlns="http://javafx.com/javafx/8.0.241"
-			xmlns:fx="http://javafx.com/fxml/1"
-			fx:controller="controller.GameScreenController">
+			xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameScreenController">
 	<fx:define>
 		<Paint fx:id="Grey" fx:value="#3f443e"/>
 		<Paint fx:id="Red" fx:value="#b53232"/>
@@ -41,7 +40,6 @@
 					<Button mnemonicParsing="false" onMouseClicked="#takeTileClick" text="Take a new tile"/>
 					<Button mnemonicParsing="false" onMouseClicked="#rotateTileClick" text="Rotate Tile"/>
 				</VBox>
-				<!--TODO - set final size for tile -->
 				<Rectangle fx:id="silkBagTileImg" fill="$Grey" height="150" width="150"/>
 			</HBox>
 			<!--Current player: Area that shows the current player's items-->
