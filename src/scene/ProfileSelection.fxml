@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1"
-	  fx:controller="controller.ProfileSelectionController">
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileSelectionController">
 	<MenuBar VBox.vgrow="NEVER">
 		<Menu mnemonicParsing="false" text="File">
-			<MenuItem mnemonicParsing="false" text="New"/>
-			<MenuItem mnemonicParsing="false" text="Open…"/>
-			<Menu mnemonicParsing="false" text="Open Recent"/>
-			<SeparatorMenuItem mnemonicParsing="false"/>
-			<MenuItem mnemonicParsing="false" text="Close"/>
-			<MenuItem mnemonicParsing="false" text="Save"/>
-			<MenuItem mnemonicParsing="false" text="Save As…"/>
-			<MenuItem mnemonicParsing="false" text="Revert"/>
-			<SeparatorMenuItem mnemonicParsing="false"/>
-			<MenuItem mnemonicParsing="false" text="Preferences…"/>
-			<SeparatorMenuItem mnemonicParsing="false"/>
-			<MenuItem mnemonicParsing="false" text="Quit"/>
+			<MenuItem mnemonicParsing="false" text="New" />
+			<MenuItem mnemonicParsing="false" text="Open…" />
+			<Menu mnemonicParsing="false" text="Open Recent" />
+			<SeparatorMenuItem mnemonicParsing="false" />
+			<MenuItem mnemonicParsing="false" text="Close" />
+			<MenuItem mnemonicParsing="false" text="Save" />
+			<MenuItem mnemonicParsing="false" text="Save As…" />
+			<MenuItem mnemonicParsing="false" text="Revert" />
+			<SeparatorMenuItem mnemonicParsing="false" />
+			<MenuItem mnemonicParsing="false" text="Preferences…" />
+			<SeparatorMenuItem mnemonicParsing="false" />
+			<MenuItem mnemonicParsing="false" text="Quit" />
 		</Menu>
 		<Menu mnemonicParsing="false" text="Help">
-			<MenuItem mnemonicParsing="false" text="About MyHelloApp"/>
+			<MenuItem mnemonicParsing="false" text="About MyHelloApp" />
 		</Menu>
 	</MenuBar>
 	<AnchorPane VBox.vgrow="ALWAYS">
-		<Button layoutX="477.0" layoutY="138.0" mnemonicParsing="false" text="Create New Profile"/>
-		<Button layoutX="461.0" layoutY="172.0" mnemonicParsing="false" text="View Profile Information"/>
-		<Button layoutX="577.0" layoutY="330.0" mnemonicParsing="false" onAction="#backToStartScreen"
-				text="Back"/>
+		<Button layoutX="477.0" layoutY="138.0" mnemonicParsing="false" onAction="#goToCreateProfile" text="Create New Profile" />
+		<Button layoutX="461.0" layoutY="172.0" mnemonicParsing="false" text="View Profile Information" />
+		<Button layoutX="577.0" layoutY="330.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Back" />
 	</AnchorPane>
 </VBox>

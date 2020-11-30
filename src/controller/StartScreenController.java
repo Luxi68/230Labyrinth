@@ -7,7 +7,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import service.Motd;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,6 +17,7 @@ import java.util.ResourceBundle;
 
 public class StartScreenController {
 
+	public Label labelMotd;
 	@FXML
 	private ResourceBundle resources;
 
@@ -22,8 +25,11 @@ public class StartScreenController {
 	private URL location;
 
 	@FXML
-	public void initialize() {
-
+	public void initialize() throws IOException {
+		Motd message = new Motd();
+		labelMotd.setWrapText(true);
+		labelMotd.setMaxWidth(600);
+		labelMotd.setText("Message of the Day: " + message.getMessageOfTheDay());
 	}
 
 	@FXML
