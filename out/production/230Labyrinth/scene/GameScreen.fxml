@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.Double?>
+<BorderPane fx:id="borderPane" prefWidth="1200" prefHeight="630" xmlns="http://javafx.com/javafx/8.0.241"
+			xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameScreenController">
+	<fx:define>
+		<Paint fx:id="Grey" fx:value="#3f443e"/>
+		<Paint fx:id="Red" fx:value="#b53232"/>
+		<Paint fx:id="Pink" fx:value="#c677b3"/>
+		<Paint fx:id="Green" fx:value="#55b54c"/>
+		<Paint fx:id="Gold" fx:value="#fdd14b"/>
+	</fx:define>
+	<left>
+		<!--Left Sidebar: where all the buttons and user interaction is-->
+		<VBox alignment="CENTER" spacing="5.0">
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+			</padding>
+			<!--Silk Bag: Area that shows the current taken tile and the options for it-->
+			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Silk Bag" textAlignment="CENTER">
+				<VBox.margin>
+					<Insets bottom="5.0" top="5.0"/>
+				</VBox.margin>
+				<font>
+					<Font name="System Bold" size="18.0"/>
+				</font>
+			</Text>
+			<HBox alignment="CENTER" spacing="10.0">
+				<padding>
+					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+				</padding>
+				<VBox alignment="CENTER" spacing="5.0">
+					<Button mnemonicParsing="false" onMouseClicked="#takeTileClick" text="Take a new tile"/>
+					<Button mnemonicParsing="false" onMouseClicked="#rotateTileClick" text="Rotate Tile"/>
+				</VBox>
+				<Rectangle fx:id="silkBagTileImg" fill="$Grey" height="150" width="150"/>
+			</HBox>
+			<!--Current player: Area that shows the current player's items-->
+			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current Player" textAlignment="CENTER">
+				<VBox.margin>
+					<Insets bottom="5.0" top="5.0"/>
+				</VBox.margin>
+				<font>
+					<Font name="System Bold" size="18.0"/>
+				</font>
+			</Text>
+			<VBox alignment="CENTER" spacing="5.0">
+				<!--Text will display name of the current player token-->
+				<Text fx:id="currPlayerTxt" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
+					<font>
+						<Font size="17.0"/>
+					</font>
+				</Text>
+				<HBox alignment="CENTER" spacing="10.0">
+					<fx:define>
+						<Double fx:id="moveArrowSize" fx:value="30"/>
+					</fx:define>
+					<ImageView fx:id="currPlayerImg" fitWidth="120" fitHeight="120"/>
+					<GridPane alignment="CENTER" hgap="5" vgap="5">
+						<columnConstraints>
+							<ColumnConstraints prefWidth="$moveArrowSize" hgrow="NEVER"/>
+							<ColumnConstraints prefWidth="$moveArrowSize" hgrow="NEVER"/>
+							<ColumnConstraints prefWidth="$moveArrowSize" hgrow="NEVER"/>
+						</columnConstraints>
+						<rowConstraints>
+							<RowConstraints prefHeight="$moveArrowSize" vgrow="NEVER"/>
+							<RowConstraints prefHeight="$moveArrowSize" vgrow="NEVER"/>
+							<RowConstraints prefHeight="$moveArrowSize" vgrow="NEVER"/>
+						</rowConstraints>
+						<Polygon points="15, 45, 45, 45, 30, 15" fill="$Grey" GridPane.columnIndex="1"/>
+						<Polygon points="15, 45, 45, 45, 30, 15" fill="$Grey" GridPane.rowIndex="1"
+								 rotate="270"/>
+						<Polygon points="15, 45, 45, 45, 30, 15" fill="$Grey" GridPane.columnIndex="2"
+								 GridPane.rowIndex="1" rotate="90"/>
+						<Polygon points="15, 45, 45, 45, 30, 15" fill="$Grey" GridPane.columnIndex="1"
+								 GridPane.rowIndex="2" rotate="180"/>
+					</GridPane>
+				</HBox>
+				<HBox alignment="CENTER" spacing="10.0">
+					<fx:define>
+						<Double fx:id="currActionTileSize" fx:value="50"/>
+					</fx:define>
+					<padding>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+					</padding>
+					<!--TODO - Need to add 'click to use' action-->
+					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
+						<Rectangle height="$currActionTileSize" width="$currActionTileSize" fill="$Grey"/>
+						<ImageView fx:id="currPlayerFireImg" fitHeight="$currActionTileSize"
+								   fitWidth="$currActionTileSize"/>
+						<Label fx:id="currPlayerFireTxt" textAlignment="JUSTIFY" wrapText="true">
+							<font>
+								<Font name="System Bold" size="12.0"/>
+							</font>
+						</Label>
+					</StackPane>
+					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
+						<Rectangle height="$currActionTileSize" width="$currActionTileSize" fill="$Grey"/>
+						<ImageView fx:id="currPlayerIceImg" fitHeight="$currActionTileSize"
+								   fitWidth="$currActionTileSize"/>
+						<Label fx:id="currPlayerIceTxt" textAlignment="JUSTIFY" wrapText="true">
+							<font>
+								<Font name="System Bold" size="12.0"/>
+							</font>
+						</Label>
+					</StackPane>
+					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
+						<Rectangle height="$currActionTileSize" width="$currActionTileSize" fill="$Grey"/>
+						<ImageView fx:id="currPlayerDoubleMoveImg" fitHeight="$currActionTileSize"
+								   fitWidth="$currActionTileSize"/>
+						<Label fx:id="currPlayerDoubleMoveTxt" textAlignment="JUSTIFY" wrapText="true">
+							<font>
+								<Font name="System Bold" size="12.0"/>
+							</font>
+						</Label>
+					</StackPane>
+					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
+						<Rectangle height="$currActionTileSize" width="$currActionTileSize" fill="$Grey"/>
+						<ImageView fx:id="currPlayerBacktrackImg" fitHeight="$currActionTileSize"
+								   fitWidth="$currActionTileSize"/>
+						<Label fx:id="currPlayerBacktrackTxt" textAlignment="JUSTIFY" wrapText="true">
+							<font>
+								<Font name="System Bold" size="12.0"/>
+							</font>
+						</Label>
+					</StackPane>
+				</HBox>
+				<Button mnemonicParsing="false" onMouseClicked="#endTurnClick" text="End Turn"/>
+			</VBox>
+		</VBox>
+	</left>
+	<right>
+		<!--Right Sidebar: where all the player and game information is-->
+		<VBox alignment="CENTER" spacing="5.0">
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
+			</padding>
+			<!--Action tracker: to track progression of actions each player can take on their turn-->
+			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Action Tracker" textAlignment="CENTER">
+				<VBox.margin>
+					<Insets bottom="5.0" top="5.0"/>
+				</VBox.margin>
+				<font>
+					<Font name="System Bold" size="18.0"/>
+				</font>
+			</Text>
+			<HBox alignment="CENTER" spacing="5.0">
+				<padding>
+					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+				</padding>
+				<StackPane prefHeight="50" prefWidth="50">
+					<Circle fx:id="actionTrackerDraw" fill="Grey" onMouseEntered="#actionTrackerDrawMouseEnter"
+							radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Label text="Draw" textAlignment="CENTER" wrapText="true"/>
+				</StackPane>
+				<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0"/>
+				<StackPane prefHeight="50" prefWidth="50">
+					<Circle fx:id="actionTrackerPlay" fill="Grey" onMouseEntered="#actionTrackerPlayMouseEnter"
+							radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Label text="Action" textAlignment="CENTER" wrapText="true"/>
+				</StackPane>
+				<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0"/>
+				<StackPane prefHeight="50" prefWidth="50">
+					<Circle fx:id="actionTrackerMove" fill="Grey" onMouseEntered="#actionTrackerMoveMouseEnter"
+							radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Label text="Move" textAlignment="CENTER" wrapText="true"/>
+				</StackPane>
+			</HBox>
+			<!--Player Order: Track who's turn it is next-->
+			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Player Order" textAlignment="CENTER">
+				<VBox.margin>
+					<Insets bottom="5.0" top="5.0"/>
+				</VBox.margin>
+				<font>
+					<Font name="System Bold" size="18.0"/>
+				</font>
+			</Text>
+			<fx:define>
+				<Double fx:id="playerTileSize" fx:value="50"/>
+			</fx:define>
+			<!--P1: Player 1st in line TODO - line them up better-->
+			<HBox alignment="CENTER" spacing="15.0">
+				<padding>
+					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+				</padding>
+				<ImageView fx:id="q1Img" fitHeight="$playerTileSize" fitWidth="$playerTileSize"/>
+				<Label fx:id="q1Txt">
+					<font>
+						<Font size="15.0"/>
+					</font>
+				</Label>
+			</HBox>
+			<!--P2: Player 2nd in line-->
+			<HBox alignment="CENTER" spacing="15.0">
+				<padding>
+					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+				</padding>
+				<ImageView fx:id="q2Img" fitHeight="$playerTileSize" fitWidth="$playerTileSize"/>
+				<Label fx:id="q2Txt">
+					<font>
+						<Font size="15.0"/>
+					</font>
+				</Label>
+			</HBox>
+			<!--P3: Player 3rd in line-->
+			<HBox alignment="CENTER" spacing="15.0">
+				<padding>
+					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+				</padding>
+				<ImageView fx:id="q3Img" fitHeight="$playerTileSize" fitWidth="$playerTileSize"/>
+				<Label fx:id="q3Txt">
+					<font>
+						<Font size="15.0"/>
+					</font>
+				</Label>
+			</HBox>
+			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Game Log" textAlignment="CENTER">
+				<VBox.margin>
+					<Insets bottom="5.0" top="5.0"/>
+				</VBox.margin>
+				<font>
+					<Font name="System Bold" size="18.0"/>
+				</font>
+			</Text>
+			<!--TODO - Try stretch this later-->
+			<ScrollPane hbarPolicy="NEVER" style="-fx-background-color: #3f443e" fitToHeight="true">
+				<padding>
+					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+				</padding>
+				<TextArea fx:id="gameLog" wrapText="true" prefWidth="225"/>
+			</ScrollPane>
+		</VBox>
+	</right>
+</BorderPane>

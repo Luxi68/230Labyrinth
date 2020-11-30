@@ -23,7 +23,7 @@
     - Must be indicated in some way
 - Tiles pushed over one space
     - Opposite tile ejected into silk bag
-    - Player piece moved to other side
+    - entity.Player piece moved to other side
 
 ### Play Action Tile
 - Play action from hand
@@ -71,7 +71,7 @@
     > • Details about each fixed tile: which tile it is (Straight, Corner. T-shaped, Goal),
     > its orientation and its location on the board (x, y).
     > 
-    > • The set of tiles (both Action Tiles and Floor Tiles) that go into the Silk Bag (these
+    > • The set of tiles (both Action Tiles and entity.Floor Tiles) that go into the Silk Bag (these
     > do not include the fixed tiles specified in the previous point).
     > 
     > • The starting location of the 4 player pieces (all 4 must be specified in the file,
@@ -83,7 +83,7 @@
 
 ## Leaderboard
 - Per board
-- Player profiles listed in order of wins
+- entity.Player profiles listed in order of wins
 
 ## Data
 - Data must persist across runs

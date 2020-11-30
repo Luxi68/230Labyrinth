@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="createProfilePane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateProfileController">
+   <children>
+      <MenuBar prefHeight="29.0" prefWidth="600.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TextField fx:id="profileName" layoutX="271.0" layoutY="102.0" />
+      <Label layoutX="177.0" layoutY="107.0" text="Profile Name" />
+      <Button layoutX="234.0" layoutY="149.0" mnemonicParsing="false" onAction="#createNewProfile" text="Create New Profile" />
+      <Button layoutX="216.0" layoutY="241.0" mnemonicParsing="false" onAction="#goBackToProfileSelection" text="Back to Profile Selection" />
+   </children>
+</AnchorPane>
