@@ -17,7 +17,27 @@ public class Player { // TODO - finish class + javadoc
 	private final ArrayList<Action> HAND;
 	private int xLoc;
 	private int yLoc;
+	private Tile currentTile;
+	private boolean isGoal;
 	// TODO - implement backtrack + bool check
+
+
+
+
+
+	public void movePlayer(Tile moveTo) {
+		if (possibleMoves().contains(moveTo)) {
+			this.currentTile = moveTo;
+			possibleMoves().clear();
+		}
+	}
+
+	public ArrayList<Tile> possibleMoves() {
+		//add stuff to possibleMoves
+		ArrayList<Tile> possibleMoves = new ArrayList<>();
+		return possibleMoves;
+	}
+
 
 	/**
 	 * Constructor to create new player object
