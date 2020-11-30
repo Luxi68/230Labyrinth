@@ -4,9 +4,9 @@ import javafx.scene.image.Image;
 
 /**
  * Floor.java
- * Class which created different types of floor tiles and to rotate the tiles.
- * @author Chris and Ryan
  *
+ * Class which created different types of floor tiles and to rotate the tiles.
+ * @author Chris, Ryan, Junjie
  */
 public class Floor extends Tile {
 	private final Type FLOOR_TYPE;
@@ -18,7 +18,10 @@ public class Floor extends Tile {
 	private boolean west;
 	private boolean isFire;
 	private boolean isIce;
+	private int rotation;
 	//private String floorType;
+
+	// TODO - finish javadoc
 
 	/**
 	 * Constructor initialising the the floor tile and checking if it has been affected by anything.
@@ -31,6 +34,7 @@ public class Floor extends Tile {
 		this.IS_FIXED = isFixed;
 		this.isFire = false;
 		this.isIce = false;
+		this.rotation = 0;
 		//this.floorType = floorType;
 
 		switch (tileType) {
@@ -106,38 +110,6 @@ public class Floor extends Tile {
 
 	/**
 	 * 
-	 * @return returns north
-	 */
-	public boolean getNorth() {
-		return north;
-	}
-	
-	/**
-	 * 
-	 * @return returns south
-	 */
-	public boolean getSouth() {
-		return south;
-	}
-	
-	/**
-	 * 
-	 * @return returns east
-	 */
-	public boolean getEast() {
-		return east;
-	}
-	
-	/**
-	 * 
-	 * @return returns west
-	 */
-	public boolean getWest() {
-		return west;
-	}
-	
-	/**
-	 * 
 	 * @return whether the tile is goal or not
 	 */
 	public boolean getIsGoal() {
@@ -167,7 +139,27 @@ public class Floor extends Tile {
 	public boolean getIsIce() {
 		return isIce;
 	}
-	
+
+	/**
+	 *
+	 * @return - The rotation in degrees
+	 */
+	public int getRotation() {
+		int realRotation;
+
+		if (rotation == 1) {
+			realRotation = 90;
+		} else if (rotation == 2) {
+			realRotation = 180;
+		} else if (rotation == 3) {
+			realRotation = 270;
+		} else {
+			realRotation = 0;
+		}
+
+		return realRotation;
+	}
+
 	/**
 	 * 
 	 * @return the floor type
@@ -176,16 +168,24 @@ public class Floor extends Tile {
 		return FLOOR_TYPE;
 	}
 
+
 	// Method that rotates the tile
 	public void rotate () {
 		boolean tempN = north;
-		boolean tempS = south;
-		boolean tempE = east;
+		north = east;
+		east = south;
+		south = west;
+		west = tempN;
 
-		north = west;
-		south = tempE;
-		east = tempN;
-		west = tempS;		
+		if (rotation == 0) {
+			this.rotation = 1;
+		} else if (rotation == 1) {
+			this.rotation = 2;
+		} else if (rotation == 2) {
+			this.rotation = 3;
+		} else {
+			this.rotation = 0;
+		}
 	}
 	
 	//Method that returns the exits points of a tile

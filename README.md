@@ -4,28 +4,28 @@
 - Multiple boards
 - A number of fixed tiles
     - Indicated in some way
-- entity.Board populated randomly
-- entity.Player profiles selected to play
+- Board populated randomly
+- Player profiles selected to play
 - Correct number of player pieces placed
 
 ## On Your Turn
 - Win if reach goal
-- entity.Player turn moves left (clockwise)
+- Player turn moves left (clockwise)
 
-### Draw a entity.Tile
+### Draw a Tile
 - Draw a random tile from silk bag
 
-**If entity.Action**
+**If Action**
 - Keep it but **cannot** play this round
 
-**If entity.Floor**
+**If Floor**
 - Slide from an available edge space
     - Must be indicated in some way
 - Tiles pushed over one space
     - Opposite tile ejected into silk bag
     - entity.Player piece moved to other side
 
-### Play entity.Action entity.Tile
+### Play Action Tile
 - Play action from hand
     - Don't have to
 - After using, it is removed from game
@@ -48,7 +48,7 @@
 
 **Backtrack**
 - Choose opponent
-- entity.Player Piece moves back 2 turns
+- Player Piece moves back 2 turns
     - Unless previous tile is on fire
 - Can only affect each player once per game
 
@@ -71,13 +71,13 @@
     > • Details about each fixed tile: which tile it is (Straight, Corner. T-shaped, Goal),
     > its orientation and its location on the board (x, y).
     > 
-    > • The set of tiles (both entity.Action Tiles and entity.Floor Tiles) that go into the Silk Bag (these
+    > • The set of tiles (both Action Tiles and entity.Floor Tiles) that go into the Silk Bag (these
     > do not include the fixed tiles specified in the previous point).
     > 
     > • The starting location of the 4 player pieces (all 4 must be specified in the file,
     > but fewer may be used in any particular game that uses this game board).
 
-## entity.Player Profile
+## Player Profile
 - Has player name
 - Tracks no games played, wins, looses
 

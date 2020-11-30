@@ -27,6 +27,15 @@ public class Board{
 		//add tiles setup...
 		//add players arraylist and their starting points...
 	}
+
+	public int getHEIGHT() {
+		return HEIGHT;
+	}
+
+	public int getLENGTH() {
+		return LENGTH;
+	}
+
 	/*
 	 * insertFloor inserts a Floor tile to the board and shifts relevant tiles
 	 * @param insert The Floor tile that needs to be inserted
@@ -40,7 +49,7 @@ public class Board{
 			insertFromRight(insert, x, y);
 		} else if (button says insert from top) {
 			insertFromTop(insert, x, y);
-		} else if (button says insert from botoom) {
+		} else if (button says insert from botom) {
 			insertFromBottom(insert, x, y);
 		}
 			
@@ -65,7 +74,7 @@ public class Board{
 		int reachedEnd = 0;
 		Floor curFloor = null; // current floor
 		int xCurFloor = LENGTH; //the x of the current floor
-		// insert board[length][y] in silk bag.. need to access silkbag somehow
+		// insert board[length][y] in silk bag.. need to access silk bag somehow
 		BOARD[LENGTH][y] = null;
 			while (reachedEnd != LENGTH) { //maybe change into for loop?
 				curFloor = BOARD[xCurFloor - 1][y];

@@ -2,6 +2,7 @@ package entity;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
+
 import java.util.ArrayList;
 
 /**
@@ -16,6 +17,7 @@ public class Player { // TODO - finish class + javadoc
 	private final ArrayList<Action> HAND;
 	private int xLoc;
 	private int yLoc;
+	// TODO - implement backtrack + bool check
 
 	/**
 	 * Constructor to create new player object
@@ -27,7 +29,7 @@ public class Player { // TODO - finish class + javadoc
 		this.NAME = name;
 		this.IMAGE = image;
 		this.COLOUR = Paint.valueOf(hexColour);
-		HAND = new ArrayList<>();
+		this.HAND = new ArrayList<>();
 		this.xLoc = xStart;
 		this.yLoc = yStart;
 	}
@@ -92,7 +94,7 @@ public class Player { // TODO - finish class + javadoc
 	}
 
 	public void moveN(Board board) throws Exception {
-		if (yLoc == board.getHEIGHT() -1) {
+		if (yLoc == board.getHEIGHT() - 1) {
 			throw new IndexOutOfBoundsException(this.NAME + " is already at the top of the board.");
 		} else {
 			this.yLoc++;
@@ -100,7 +102,7 @@ public class Player { // TODO - finish class + javadoc
 	}
 
 	public void moveE(Board board) throws Exception {
-		if (xLoc == board.getLENGTH() -1) {
+		if (xLoc == board.getLENGTH() - 1) {
 			throw new IndexOutOfBoundsException(this.NAME + " is already at the edge of the board.");
 		} else {
 			this.xLoc++;

@@ -9,7 +9,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -25,6 +24,10 @@ import java.util.ResourceBundle;
  * @author Junjie, Rhys
  */
 public class GameScreenController implements Initializable {
+	@FXML
+	public ImageView currPlayerImg;
+	@FXML
+	public TextArea gameLog;
 	// Game info
 	private int windowWidth;
 	private int windowHeight;
@@ -35,19 +38,19 @@ public class GameScreenController implements Initializable {
 	// Game info
 	private int totalPlayers;
 	private Player currPlayer;
-	private Player p1;
-	private Player p2;
-	private Player p3;
+	private Player queuePlayer1;
+	private Player queuePlayer2;
+	private Player queuePlayer3;
 	// Game checks
 	private boolean isTileDrawn;
 	// Colour Scheme
 	private Paint grey = Paint.valueOf("#3f443e");
 	private Paint red = Paint.valueOf("#b53232");
 	private Paint pink = Paint.valueOf("#c677b3");
+
+	// TODO - work out double move
 	private Paint green = Paint.valueOf("#55b54c");
 	private Paint gold = Paint.valueOf("#fdd14b");
-
-
 	@FXML
 	private BorderPane borderPane;
 	@FXML
@@ -77,19 +80,17 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private Text currPlayerTxt;
 	@FXML
-	private Label p1Txt;
+	private Label q1Txt;
 	@FXML
-	private Label p2Txt;
+	private Label q2Txt;
 	@FXML
-	private Label p3Txt;
+	private Label q3Txt;
 	@FXML
-	private ImageView p1Img;
+	private ImageView q1Img;
 	@FXML
-	private ImageView p2Img;
+	private ImageView q2Img;
 	@FXML
-	private ImageView p3Img;
-	@FXML
-	public TextArea gameLog;
+	private ImageView q3Img;
 
 	/**
 	 * Called to initialize a controller after its root element has been
@@ -105,8 +106,8 @@ public class GameScreenController implements Initializable {
 		Platform.runLater(() -> {
 			borderPane.setPrefSize(windowWidth, windowHeight);
 			setupGame();
-			actionTrackerDraw.setFill(Paint.valueOf("Red"));
-			gameLog.appendText("GAME START!\n" + currPlayer.getName() + "'s turn first.\n");
+			gameLog.appendText("GAME START!\n");
+			startNextTurn();
 		});
 		// TODO - Code that either loads past game or starts new game
 	}
@@ -165,7 +166,9 @@ public class GameScreenController implements Initializable {
 		} else {
 			gameLog.appendText("ERROR: You cannot draw more than 1 tile per turn.\n");
 		}
-	};	// TODO - img resources
+	}
+
+	;    // TODO - img resources
 
 	/**
 	 * Action that will rotate the tile nd its image if the rotate tile button is clicked.
@@ -180,15 +183,7 @@ public class GameScreenController implements Initializable {
 
 			// Rotates the image since it is not 'locked' to tile
 			double rotation = silkBagTileImg.getRotate();
-			if (rotation == 0) {
-				silkBagTileImg.setRotate(90);
-			} else if (rotation == 90) {
-				silkBagTileImg.setRotate(180);
-			} else if (rotation == 180) {
-				silkBagTileImg.setRotate(270);
-			} else {
-				silkBagTileImg.setRotate(0);
-			}
+			silkBagTileImg.setRotate(tempFloor.getRotation());
 			gameLog.appendText("Floor tile rotated 90 degrees.\n");
 
 		} else {
@@ -205,18 +200,19 @@ public class GameScreenController implements Initializable {
 		if (newTileType.equals("action")) {
 			Action tempAction = (Action) newTile;
 			currPlayer.addActionTile(tempAction);
-			gameLog.appendText(currPlayer + "'s tile has been added to their hand.\n");
+			gameLog.appendText(currPlayer.getName() + "'s tile has been added to their hand.\n");
 		}
 		silkBagTileImg.setFill(Paint.valueOf("#3f443e"));
 
-		// Change currPlayer to next player
-		if (currPlayer.getOrder() == totalPlayers) {
-			// TODO - method to get next player
-		} else {
-			// TODO - method to get next player
-		}
-		setupNextPlayer(currPlayer);
-		gameLog.appendText("NEXT PLAYER\nIt's now " + currPlayer.getName() + "'s turn.\n");
+		// Update the player turns
+		Player tempPlayer = queuePlayer1;
+		queuePlayer1 = queuePlayer2;
+		queuePlayer2 = queuePlayer3;
+		queuePlayer3 = currPlayer;
+		currPlayer = tempPlayer;
+
+		gameLog.appendText("NEXT PLAYER\n");
+		startNextTurn();
 	}
 
 	/**
@@ -224,22 +220,37 @@ public class GameScreenController implements Initializable {
 	 */
 	public void initData() {
 		// TODO - Need to link to newGameController
+		// Silk Bag; Players; Board
 	}
 
 	/**
 	 * Method to setup the beginning of the game and initialise all the needed variables
 	 */
 	private void setupGame() {
+		actionTrackerDraw.setFill(Paint.valueOf("Red"));
 		silkBag = new SilkBag();
-		silkBag.addTile(new Floor("corner", new Image("corner.png"), false));
-		silkBag.addTile(new Action("fire", new Image("fire.png")));
-		currPlayer = new Player("Aries", 1, new Image("aries.png"));
-		currPlayerFireImg.setImage(new Image("fire.png"));
-		currPlayerIceImg.setImage(new Image("ice.png"));
-		currPlayerDoubleMoveImg.setImage(new Image("doublemove.png"));
-		currPlayerBacktrackImg.setImage(new Image("backtrack.png"));
-		setupNextPlayer(currPlayer);
+		silkBag.addTile(new Floor("corner", new Image("/assets/corner.png"), false));
+		silkBag.addTile(new Action("fire", new Image("/assets/fire.png")));
+		currPlayer = new Player("Aries", new Image("/assets/aries.png"), "#b53232", 0, 0);
+		queuePlayer1 = new Player("Apollo", new Image("/assets/apollo.png"), "#c677b3", 0, 0);
+		queuePlayer2 = new Player("Artemis", new Image("/assets/artemis.png"), "#55b54c", 0, 0);
+		queuePlayer3 = new Player("Aphrodite", new Image("/assets/aphrodite.png"), "#fdd14b", 0, 0);
+		currPlayerFireImg.setImage(new Image("/assets/fire.png"));
+		currPlayerIceImg.setImage(new Image("/assets/ice.png"));
+		currPlayerDoubleMoveImg.setImage(new Image("/assets/doublemove.png"));
+		currPlayerBacktrackImg.setImage(new Image("/assets/backtrack.png"));
 		// TODO - do properly
+	}
+
+	/**
+	 * Loads the next turn of the game
+	 */
+	private void startNextTurn() {
+		updatePlayerQueue(q1Img, q1Txt, queuePlayer1);
+		updatePlayerQueue(q2Img, q2Txt, queuePlayer2);
+		updatePlayerQueue(q3Img, q3Txt, queuePlayer3);
+		setupNextPlayerDisplay(currPlayer);
+		gameLog.appendText("It's now " + currPlayer.getName() + "'s turn.\n");
 	}
 
 	/**
@@ -247,8 +258,9 @@ public class GameScreenController implements Initializable {
 	 *
 	 * @param player - player's hand that is being setup
 	 */
-	private void setupNextPlayer(Player player) {
+	private void setupNextPlayerDisplay(Player player) {
 		isTileDrawn = false;
+		currPlayerImg.setImage(currPlayer.getImage());
 		currPlayerTxt.setText(currPlayer.getName());
 
 		int fire = 0;
@@ -278,6 +290,18 @@ public class GameScreenController implements Initializable {
 		setupActionNum(currPlayerIceImg, currPlayerIceTxt, ice);
 		setupActionNum(currPlayerDoubleMoveImg, currPlayerDoubleMoveTxt, doubleMove);
 		setupActionNum(currPlayerBacktrackImg, currPlayerBacktrackTxt, backTrack);
+	}
+
+	/**
+	 * Setups the player tracker with the correct player details
+	 *
+	 * @param img    - The imageview displaying the image of the player
+	 * @param txt    - The label displaying the name assigned to the player
+	 * @param player - The player who is being displayed
+	 */
+	private void updatePlayerQueue(ImageView img, Label txt, Player player) {
+		img.setImage(player.getImage());
+		txt.setText(player.getName());
 	}
 
 	/**
