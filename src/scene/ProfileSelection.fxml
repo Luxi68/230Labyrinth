@@ -25,7 +25,7 @@
 	</MenuBar>
 	<AnchorPane VBox.vgrow="ALWAYS">
 		<Button layoutX="477.0" layoutY="138.0" mnemonicParsing="false" onAction="#goToCreateProfile" text="Create New Profile" />
-		<Button layoutX="461.0" layoutY="172.0" mnemonicParsing="false" text="View Profile Information" />
+		<Button layoutX="461.0" layoutY="172.0" mnemonicParsing="false" onAction="#viewProfileInformation" text="View Profile Information" />
 		<Button layoutX="577.0" layoutY="330.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Back" />
 	</AnchorPane>
 </VBox>
