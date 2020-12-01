@@ -83,7 +83,7 @@
 
 ## Leaderboard
 - Per board
-- entity.Player profiles listed in order of wins
+- Player profiles listed in order of wins
 
 ## Data
 - Data must persist across runs

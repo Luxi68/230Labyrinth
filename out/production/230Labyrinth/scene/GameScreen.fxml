@@ -38,7 +38,8 @@
 				</padding>
 				<VBox alignment="CENTER" spacing="5.0">
 					<Button mnemonicParsing="false" onMouseClicked="#takeTileClick" text="Take a new tile"/>
-					<Button mnemonicParsing="false" onMouseClicked="#rotateTileClick" text="Rotate Tile"/>
+					<Button fx:id="newTileRotate" mnemonicParsing="false" onMouseClicked="#rotateTileClick"
+							text="Rotate Tile"/>
 				</VBox>
 				<Rectangle fx:id="silkBagTileImg" fill="$Grey" height="150" width="150"/>
 			</HBox>
@@ -90,49 +91,59 @@
 					<padding>
 						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
 					</padding>
-					<!--TODO - Need to add 'click to use' action-->
+					<!--TODO - Probably should make action tile buttons toggle-->
 					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
-						<Rectangle height="$currActionTileSize" width="$currActionTileSize" fill="$Grey"/>
+						<Button prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
+								style="-fx-background-color: #3f443e" mnemonicParsing="false" onAction="#fireClick"/>
 						<ImageView fx:id="currPlayerFireImg" fitHeight="$currActionTileSize"
-								   fitWidth="$currActionTileSize"/>
-						<Label fx:id="currPlayerFireTxt" textAlignment="JUSTIFY" wrapText="true">
+								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
+						<!--TODO - <ImageView fx:id="currPlayerFireImg" fitHeight="48" fitWidth="48" mouseTransparent="true"/>-->
+						<Label fx:id="currPlayerFireTxt" textAlignment="JUSTIFY" wrapText="true"
+							   mouseTransparent="true">
 							<font>
 								<Font name="System Bold" size="12.0"/>
 							</font>
 						</Label>
 					</StackPane>
-					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
-						<Rectangle height="$currActionTileSize" width="$currActionTileSize" fill="$Grey"/>
+					<StackPane>
+						<Button prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
+								style="-fx-background-color: #3f443e" mnemonicParsing="false" onAction="#iceClick"/>
 						<ImageView fx:id="currPlayerIceImg" fitHeight="$currActionTileSize"
-								   fitWidth="$currActionTileSize"/>
-						<Label fx:id="currPlayerIceTxt" textAlignment="JUSTIFY" wrapText="true">
+								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
+						<Label fx:id="currPlayerIceTxt" textAlignment="JUSTIFY" wrapText="true" mouseTransparent="true">
 							<font>
 								<Font name="System Bold" size="12.0"/>
 							</font>
 						</Label>
 					</StackPane>
 					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
-						<Rectangle height="$currActionTileSize" width="$currActionTileSize" fill="$Grey"/>
+						<Button prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
+								style="-fx-background-color: #3f443e" mnemonicParsing="false" onAction="#doubleMoveClick"/>
 						<ImageView fx:id="currPlayerDoubleMoveImg" fitHeight="$currActionTileSize"
-								   fitWidth="$currActionTileSize"/>
-						<Label fx:id="currPlayerDoubleMoveTxt" textAlignment="JUSTIFY" wrapText="true">
+								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
+						<Label fx:id="currPlayerDoubleMoveTxt" textAlignment="JUSTIFY" wrapText="true" mouseTransparent="true">
 							<font>
 								<Font name="System Bold" size="12.0"/>
 							</font>
 						</Label>
 					</StackPane>
 					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
-						<Rectangle height="$currActionTileSize" width="$currActionTileSize" fill="$Grey"/>
+						<Button prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
+								style="-fx-background-color: #3f443e" mnemonicParsing="false" onAction="#backtrackClick"/>
 						<ImageView fx:id="currPlayerBacktrackImg" fitHeight="$currActionTileSize"
-								   fitWidth="$currActionTileSize"/>
-						<Label fx:id="currPlayerBacktrackTxt" textAlignment="JUSTIFY" wrapText="true">
+								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
+						<Label fx:id="currPlayerBacktrackTxt" textAlignment="JUSTIFY" wrapText="true" mouseTransparent="true">
 							<font>
 								<Font name="System Bold" size="12.0"/>
 							</font>
 						</Label>
 					</StackPane>
 				</HBox>
-				<Button mnemonicParsing="false" onMouseClicked="#endTurnClick" text="End Turn"/>
+				<HBox spacing="10" alignment="CENTER">
+					<!--TODO - Skip Action button click-->
+					<Button mnemonicParsing="false" onMouseClicked="#endTurnClick" text="Skip Action"/>
+					<Button mnemonicParsing="false" onMouseClicked="#endTurnClick" text="End Turn"/>
+				</HBox>
 			</VBox>
 		</VBox>
 	</left>
