@@ -37,9 +37,10 @@
 					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
 				</padding>
 				<VBox alignment="CENTER" spacing="5.0">
-					<Button mnemonicParsing="false" onMouseClicked="#takeTileClick" text="Take a new tile"/>
-					<Button fx:id="newTileRotate" mnemonicParsing="false" onMouseClicked="#rotateTileClick"
-							text="Rotate Tile"/>
+					<Button fx:id="takeSilkBagTileButton" mnemonicParsing="false" onMouseClicked="#takeTileClick"
+							text="Take a new tile" disable="true"/>
+					<Button fx:id="silkBagTileRotate" mnemonicParsing="false" onMouseClicked="#rotateTileClick"
+							text="Rotate Tile" disable="true"/>
 				</VBox>
 				<Rectangle fx:id="silkBagTileImg" fill="$Grey" height="150" width="150"/>
 			</HBox>
@@ -59,6 +60,7 @@
 						<Font size="17.0"/>
 					</font>
 				</Text>
+				<!--TODO - Implement move button-->
 				<HBox alignment="CENTER" spacing="10.0">
 					<fx:define>
 						<Double fx:id="moveArrowSize" fx:value="30"/>
@@ -87,14 +89,15 @@
 				<HBox alignment="CENTER" spacing="10.0">
 					<fx:define>
 						<Double fx:id="currActionTileSize" fx:value="50"/>
+						<Double fx:id="roundedCorners" fx:value="15"/>
 					</fx:define>
 					<padding>
 						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
 					</padding>
-					<!--TODO - Probably should make action tile buttons toggle-->
+					<!--TODO - Implement action button and popup-->
 					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
-						<Button prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
-								style="-fx-background-color: #3f443e" mnemonicParsing="false" onAction="#fireClick"/>
+						<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
+								   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
 						<ImageView fx:id="currPlayerFireImg" fitHeight="$currActionTileSize"
 								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
 						<!--TODO - <ImageView fx:id="currPlayerFireImg" fitHeight="48" fitWidth="48" mouseTransparent="true"/>-->
@@ -106,8 +109,8 @@
 						</Label>
 					</StackPane>
 					<StackPane>
-						<Button prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
-								style="-fx-background-color: #3f443e" mnemonicParsing="false" onAction="#iceClick"/>
+						<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
+								   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
 						<ImageView fx:id="currPlayerIceImg" fitHeight="$currActionTileSize"
 								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
 						<Label fx:id="currPlayerIceTxt" textAlignment="JUSTIFY" wrapText="true" mouseTransparent="true">
@@ -117,22 +120,24 @@
 						</Label>
 					</StackPane>
 					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
-						<Button prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
-								style="-fx-background-color: #3f443e" mnemonicParsing="false" onAction="#doubleMoveClick"/>
+						<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
+								   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
 						<ImageView fx:id="currPlayerDoubleMoveImg" fitHeight="$currActionTileSize"
 								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
-						<Label fx:id="currPlayerDoubleMoveTxt" textAlignment="JUSTIFY" wrapText="true" mouseTransparent="true">
+						<Label fx:id="currPlayerDoubleMoveTxt" textAlignment="JUSTIFY" wrapText="true"
+							   mouseTransparent="true">
 							<font>
 								<Font name="System Bold" size="12.0"/>
 							</font>
 						</Label>
 					</StackPane>
 					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
-						<Button prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
-								style="-fx-background-color: #3f443e" mnemonicParsing="false" onAction="#backtrackClick"/>
+						<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
+								   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
 						<ImageView fx:id="currPlayerBacktrackImg" fitHeight="$currActionTileSize"
 								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
-						<Label fx:id="currPlayerBacktrackTxt" textAlignment="JUSTIFY" wrapText="true" mouseTransparent="true">
+						<Label fx:id="currPlayerBacktrackTxt" textAlignment="JUSTIFY" wrapText="true"
+							   mouseTransparent="true">
 							<font>
 								<Font name="System Bold" size="12.0"/>
 							</font>
@@ -141,12 +146,21 @@
 				</HBox>
 				<HBox spacing="10" alignment="CENTER">
 					<!--TODO - Skip Action button click-->
-					<Button mnemonicParsing="false" onMouseClicked="#endTurnClick" text="Skip Action"/>
-					<Button mnemonicParsing="false" onMouseClicked="#endTurnClick" text="End Turn"/>
+					<Button fx:id="skipActionButton" mnemonicParsing="false" onMouseClicked="#skipActionClick"
+							text="Skip Action" disable="true"/>
+					<Button fx:id="endTurnButton" mnemonicParsing="false" onMouseClicked="#endTurnClick" text="End Turn"
+							disable="true"/>
 				</HBox>
 			</VBox>
 		</VBox>
 	</left>
+	<center>
+		<VBox alignment="CENTER">
+			<HBox alignment="CENTER">
+				<StackPane fx:id="borderPaneCentre"/>
+			</HBox>
+		</VBox>
+	</center>
 	<right>
 		<!--Right Sidebar: where all the player and game information is-->
 		<VBox alignment="CENTER" spacing="5.0">
@@ -167,20 +181,17 @@
 					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
 				</padding>
 				<StackPane prefHeight="50" prefWidth="50">
-					<Circle fx:id="actionTrackerDraw" fill="Grey" onMouseEntered="#actionTrackerDrawMouseEnter"
-							radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Circle fx:id="actionTrackerDraw" fill="Grey" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
 					<Label text="Draw" textAlignment="CENTER" wrapText="true"/>
 				</StackPane>
 				<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0"/>
 				<StackPane prefHeight="50" prefWidth="50">
-					<Circle fx:id="actionTrackerPlay" fill="Grey" onMouseEntered="#actionTrackerPlayMouseEnter"
-							radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Circle fx:id="actionTrackerPlay" fill="Grey" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
 					<Label text="Action" textAlignment="CENTER" wrapText="true"/>
 				</StackPane>
 				<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0"/>
 				<StackPane prefHeight="50" prefWidth="50">
-					<Circle fx:id="actionTrackerMove" fill="Grey" onMouseEntered="#actionTrackerMoveMouseEnter"
-							radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Circle fx:id="actionTrackerMove" fill="Grey" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
 					<Label text="Move" textAlignment="CENTER" wrapText="true"/>
 				</StackPane>
 			</HBox>

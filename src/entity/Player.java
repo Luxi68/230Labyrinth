@@ -57,7 +57,7 @@ public class Player { // TODO - finish class + javadoc
 	 *
 	 * @return - The colour as a paint value
 	 */
-	public Paint getCOLOUR() {
+	public Paint getColour() {
 		return COLOUR;
 	}
 
@@ -120,7 +120,7 @@ public class Player { // TODO - finish class + javadoc
 	 * @param board
 	 */
 	public void moveN(Board board) {
-		if (yLoc == board.getHEIGHT() - 1) {
+		if (yLoc == board.getHeight() - 1) {
 			throw new IndexOutOfBoundsException("ERROR: " + this.NAME + " is already at the top of the board.");
 		} else {
 			this.yLoc++;
@@ -132,7 +132,7 @@ public class Player { // TODO - finish class + javadoc
 	 * @param board
 	 */
 	public void moveE(Board board) {
-		if (xLoc == board.getLENGTH() - 1) {
+		if (xLoc == board.getLength() - 1) {
 			throw new IndexOutOfBoundsException("ERROR: " + this.NAME + " is already at the edge of the board.");
 		} else {
 			this.xLoc++;

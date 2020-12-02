@@ -46,6 +46,7 @@ public class NewGameController {
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(gameScreenScene);
 			window.show();
+			window.setMaximized(true);
 		} catch (IOException e) {
 			System.out.println("Error starting the Game Screen from new game screen.");
 			e.printStackTrace();
