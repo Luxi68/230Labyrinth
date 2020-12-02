@@ -132,7 +132,7 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Initialises data necessary to setup game
 	 */
-	public void initData() {// TODO - Need to link to newGameController
+	public void initData(SilkBag silkBay, Player[] players, Board board, int[] xNotFixed, int[]yNotFixed) {
 		// Silk Bag; Players; Board
 	}
 
@@ -140,11 +140,14 @@ public class GameScreenController implements Initializable {
 	 * Method to setup the beginning of the game and initialise all the needed variables
 	 */
 	private void setupGame() { // TODO - delete once initialise is setup
+		gameBoard = new Board(6, 6);
 		silkBag = new SilkBag();
 		silkBag.addTile(new Floor("corner", new Image("/assets/corner.png"), false));
 		silkBag.addTile(new Action("fire", new Image("/assets/fire.png")));
-		currPlayer = new Player("Aries", new Image("/assets/aries.png"), "#b53232", 0, 0);
-		queuePlayer1 = new Player("Apollo", new Image("/assets/apollo.png"), "#fdd14b", 0, 0);
+		Profile lucy = new Profile("Lucy");
+		Profile rhys = new Profile("Rhys");
+		currPlayer = new Player(new Image("/assets/aries.png"), "#b53232", 0, 0, gameBoard, lucy);
+		queuePlayer1 = new Player(new Image("/assets/apollo.png"), "#fdd14b", 0, 0, gameBoard, rhys);
 //		queuePlayer2 = new Player("Artemis", new Image("/assets/artemis.png"), "#55b54c", 0, 0);
 //		queuePlayer3 = new Player("Aphrodite", new Image("/assets/aphrodite.png"), "#c677b3", 0, 0);
 		totalPlayers = 2;
@@ -152,7 +155,6 @@ public class GameScreenController implements Initializable {
 		currPlayerIceImg.setImage(new Image("/assets/ice.png"));
 		currPlayerDoubleMoveImg.setImage(new Image("/assets/doublemove.png"));
 		currPlayerBacktrackImg.setImage(new Image("/assets/backtrack.png"));
-		gameBoard = new Board(6, 6);
 	}
 
 	/**

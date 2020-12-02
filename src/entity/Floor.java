@@ -13,9 +13,6 @@ public class Floor extends Tile {
 	private final boolean IS_FIXED;
 	private final boolean IS_GOAL;
 	private int x;
-
-
-
 	private int y;
 
 
@@ -37,14 +34,12 @@ public class Floor extends Tile {
 	 * @param image what the tile looks like
 	 * @param isFixed true if tile is fixed, false if not
 	 */
-	public Floor(String tileType, Image image, boolean isFixed, int x, int y)	{
+	public Floor(String tileType, Image image, boolean isFixed)	{
 		super(tileType, image);
 		this.IS_FIXED = isFixed;
 		this.isFire = false;
 		this.isIce = false;
 		this.rotation = 0;
-		this.x = x;
-		this.y = y;
 		//this.floorType = floorType;
 
 		switch (tileType) {

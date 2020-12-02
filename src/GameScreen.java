@@ -1,4 +1,5 @@
 import controller.GameScreenController;
+import core.FileReader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -41,7 +42,10 @@ public class GameScreen extends Application {
 			FXMLLoader loader = new FXMLLoader(url);
 			Pane root = loader.load();
 			GameScreenController controller = loader.getController();
-			controller.initData();
+
+			FileReader fileReader = new FileReader();
+			// RHYS
+			// controller.initData(); TODO - needs to be edited to input stuff to screen
 
 			// Display the scene on the stage
 			primaryStage.setTitle("Labyrinth");
@@ -53,5 +57,4 @@ public class GameScreen extends Application {
 			e.printStackTrace();
 		}
 	}
-
 }
