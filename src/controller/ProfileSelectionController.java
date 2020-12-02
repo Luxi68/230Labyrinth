@@ -50,4 +50,17 @@ public class ProfileSelectionController {
     public void viewProfileInformation(ActionEvent actionEvent) {
 
     }
+
+	public void goToLeaderboard(ActionEvent actionEvent) {
+		try {
+			Parent leaderboardParent = FXMLLoader.load(getClass().getResource("/scene/Leaderboard.fxml"));
+			Scene leaderboardScene = new Scene(leaderboardParent);
+			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+			window.setScene(leaderboardScene);
+			window.show();
+		} catch (IOException e) {
+			System.out.println("Error accessing leaderboard from profile selection");
+			e.printStackTrace();
+		}
+	}
 }

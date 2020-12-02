@@ -18,10 +18,10 @@ public class Profile {
         File createdFile = new File(filename);
         FileWriter writing = new FileWriter(filename);
         writing.write(name);
-        writing.write(System.lineSeparator());
-        writing.write(0);
-        writing.write(System.lineSeparator());
-        writing.write(0);
+        writing.write(",");
+        writing.write("0");
+        writing.write(",");
+        writing.write("0");
         writing.close();
     }
 
