@@ -28,11 +28,11 @@ public class Board{
 		//add players arraylist and their starting points...
 	}
 
-	public int getHEIGHT() {
+	public int getHeight() {
 		return HEIGHT;
 	}
 
-	public int getLENGTH() {
+	public int getLength() {
 		return LENGTH;
 	}
 

@@ -3,8 +3,13 @@ package core;
 Right now File reader will work as soon as other classes are implemented I will update it using the appropriate method
 names and fully implement it as soon as we decide how to integrate it with the ui and the rest of the java program.
  */
+
+
+import javafx.scene.image.Image;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.Scanner;
 
 /**
@@ -13,6 +18,12 @@ import java.util.Scanner;
  * @author Alberto Ortenzi
  */
 public class FileReader {
+
+	public FileReader() {
+		Image img = new Image("assets/backtrack.png");
+		System.out.println(img);
+		System.out.println("Error file not found");
+	}
     /**
      * Reads the data file used by the program and returns something not sure atm. Based on the first character of each line
      * of the file the method calls a specific method and creates specific objects which are part of the program

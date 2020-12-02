@@ -40,7 +40,8 @@ public class NewGameController {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/scene/GameScreen.fxml"));
 			Parent gameScreenParent = loader.load();
 			GameScreenController controller = loader.getController();
-			controller.initData(); // TODO - Fill in once ready
+
+			// controller.initData(); TODO - needs to be edited to input stuff to screen
 
 			Scene gameScreenScene = new Scene(gameScreenParent);
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

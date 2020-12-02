@@ -100,7 +100,7 @@
 								   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
 						<ImageView fx:id="currPlayerFireImg" fitHeight="$currActionTileSize"
 								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
-						<!--TODO - <ImageView fx:id="currPlayerFireImg" fitHeight="48" fitWidth="48" mouseTransparent="true"/>-->
+						<!--TODO - redundant mouse transparency maybe-->
 						<Label fx:id="currPlayerFireTxt" textAlignment="JUSTIFY" wrapText="true"
 							   mouseTransparent="true">
 							<font>
