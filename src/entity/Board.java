@@ -21,18 +21,18 @@ public class Board{
 	 * @param LENGTH The length of the board (i.e. how many tiles it will hold horizontally)
 	 */
 	public Board (int HEIGHT, int LENGTH) {
-		this.BOARD = new Floor[HEIGHT][LENGTH];//do we need -1?
+		this.BOARD = new Floor[HEIGHT -1][LENGTH -1];//do we need -1?
 		this.LENGTH = LENGTH;
 		this.HEIGHT = HEIGHT;
 		//add tiles setup...
 		//add players arraylist and their starting points...
 	}
 
-	public int getHeight() {
+	public int getHEIGHT() {
 		return HEIGHT;
 	}
 
-	public int getLength() {
+	public int getLENGTH() {
 		return LENGTH;
 	}
 
