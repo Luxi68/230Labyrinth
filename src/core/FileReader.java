@@ -18,12 +18,6 @@ import java.util.Scanner;
  * @author Alberto Ortenzi
  */
 public class FileReader {
-
-	public FileReader() {
-		Image img = new Image("assets/backtrack.png");
-		System.out.println(img);
-		System.out.println("Error file not found");
-	}
     /**
      * Reads the data file used by the program and returns something not sure atm. Based on the first character of each line
      * of the file the method calls a specific method and creates specific objects which are part of the program

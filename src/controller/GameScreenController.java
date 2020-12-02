@@ -105,6 +105,8 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private ImageView q3Img;
 	@FXML
+	private Button moveButton;
+	@FXML
 	private Button endTurnButton;
 	@FXML
 	private TextArea gameLog;
@@ -135,8 +137,19 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Initialises data necessary to setup game
 	 */
-	public void initData(SilkBag silkBay, Board board, Player[] players, int[] xNotFixed, int[]yNotFixed) {
-		// Silk Bag; Players; Board
+	public void initData(SilkBag bag, Board board, Player[] players, int[] xNotFixed, int[]yNotFixed) {
+		silkBag = bag;
+		gameBoard = board;
+		totalPlayers = players.length;
+		currPlayer = players[0];
+		queuePlayer1 = players[1];
+		if (totalPlayers >= 3) {
+			queuePlayer2 = players[2];
+		}
+		if (totalPlayers >= 4) {
+			queuePlayer3 = players[3];
+		}
+		// TODO - int[] xNotFixed, int[]yNotFixed
 	}
 
 	/**
@@ -150,7 +163,7 @@ public class GameScreenController implements Initializable {
 		Profile lucy = new Profile("Lucy");
 		Profile rhys = new Profile("Rhys");
 		currPlayer = new Player(new Image("/assets/aries.png"), "#b53232", 0, 0, gameBoard, lucy);
-		queuePlayer1 = new Player(new Image("/assets/apollo.png"), "#fdd14b", 0, 0, gameBoard, rhys);
+		queuePlayer1 = new Player(new Image("/assets/apollo.png"), "#fdd14b", 5, 5, gameBoard, rhys);
 //		queuePlayer2 = new Player(new Image("/assets/artemis.png"), "#55b54c", 0, 0, gameBoard, lucy);
 //		queuePlayer3 = new Player(new Image("/assets/aphrodite.png"), "#c677b3", 0, 0, gameBoard, rhys);
 		totalPlayers = 2;
@@ -265,9 +278,9 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Loads the movement section of the game
 	 */
-	private void startMoveActionTurn() { // TODO - Disable 'Play action'; Enable 'move'
+	private void startMoveActionTurn() { // TODO - Disable 'Play action'
 		skipActionButton.setDisable(true);
-//		setDisableBoardTiles(false); TODO - enable once move is implemented
+		moveButton.setDisable(false); // LUCY - need to finish checks for this and sort out where it and tiles are disabled again
 
 		endTurnButton.setDisable(false); // TODO - need to move after move implemented
 

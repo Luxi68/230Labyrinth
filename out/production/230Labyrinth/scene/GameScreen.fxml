@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
+<?import javafx.scene.paint.Paint?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.Double?>
@@ -12,10 +12,10 @@
 			xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameScreenController">
 	<fx:define>
 		<Paint fx:id="grey" fx:value="#3f443e"/>
-<!--		<Paint fx:id="Red" fx:value="#b53232"/>-->
-<!--		<Paint fx:id="Pink" fx:value="#c677b3"/>-->
-<!--		<Paint fx:id="Green" fx:value="#55b54c"/>-->
-<!--		<Paint fx:id="Gold" fx:value="#fdd14b"/>-->
+		<!--		<Paint fx:id="Red" fx:value="#b53232"/>-->
+		<!--		<Paint fx:id="Pink" fx:value="#c677b3"/>-->
+		<!--		<Paint fx:id="Green" fx:value="#55b54c"/>-->
+		<!--		<Paint fx:id="Gold" fx:value="#fdd14b"/>-->
 	</fx:define>
 	<left>
 		<!--Left Sidebar: where all the buttons and user interaction is-->
@@ -24,7 +24,7 @@
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
 			</padding>
 			<!--Silk Bag: Area that shows the current taken tile and the options for it-->
-			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Silk Bag" textAlignment="CENTER">
+			<Text text="Silk Bag" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
 				<VBox.margin>
 					<Insets bottom="5.0" top="5.0"/>
 				</VBox.margin>
@@ -32,20 +32,19 @@
 					<Font name="System Bold" size="18.0"/>
 				</font>
 			</Text>
+			<Rectangle fx:id="silkBagTileImg" fill="$grey" height="150" width="150"/>
 			<HBox alignment="CENTER" spacing="10.0">
 				<padding>
 					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
 				</padding>
-				<VBox alignment="CENTER" spacing="5.0">
-					<Button fx:id="takeSilkBagTileButton" mnemonicParsing="false" onMouseClicked="#takeTileClick"
-							text="Take a new tile" disable="true"/>
-					<Button fx:id="silkBagTileRotate" mnemonicParsing="false" onMouseClicked="#rotateTileClick"
-							text="Rotate Tile" disable="true"/>
-				</VBox>
-				<Rectangle fx:id="silkBagTileImg" fill="$grey" height="150" width="150"/>
+
+				<Button fx:id="takeSilkBagTileButton" mnemonicParsing="false" onMouseClicked="#takeTileClick"
+						text="Take a new tile" disable="true"/>
+				<Button fx:id="silkBagTileRotate" mnemonicParsing="false" onMouseClicked="#rotateTileClick"
+						text="Rotate Tile" disable="true"/>
 			</HBox>
 			<!--Current player: Area that shows the current player's items-->
-			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current Player" textAlignment="CENTER">
+			<Text text="Current Player" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
 				<VBox.margin>
 					<Insets bottom="5.0" top="5.0"/>
 				</VBox.margin>
@@ -53,105 +52,79 @@
 					<Font name="System Bold" size="18.0"/>
 				</font>
 			</Text>
-			<VBox alignment="CENTER" spacing="5.0">
-				<!--Text will display name of the current player token-->
-				<Text fx:id="currPlayerTxt" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
-					<font>
-						<Font size="17.0"/>
-					</font>
-				</Text>
-				<!--TODO - Implement move button-->
-				<HBox alignment="CENTER" spacing="10.0">
-					<fx:define>
-						<Double fx:id="moveArrowSize" fx:value="30"/>
-					</fx:define>
-					<ImageView fx:id="currPlayerImg" fitWidth="120" fitHeight="120"/>
-					<GridPane alignment="CENTER" hgap="5" vgap="5">
-						<columnConstraints>
-							<ColumnConstraints prefWidth="$moveArrowSize" hgrow="NEVER"/>
-							<ColumnConstraints prefWidth="$moveArrowSize" hgrow="NEVER"/>
-							<ColumnConstraints prefWidth="$moveArrowSize" hgrow="NEVER"/>
-						</columnConstraints>
-						<rowConstraints>
-							<RowConstraints prefHeight="$moveArrowSize" vgrow="NEVER"/>
-							<RowConstraints prefHeight="$moveArrowSize" vgrow="NEVER"/>
-							<RowConstraints prefHeight="$moveArrowSize" vgrow="NEVER"/>
-						</rowConstraints>
-						<Polygon points="15, 45, 45, 45, 30, 15" fill="$grey" GridPane.columnIndex="1"/>
-						<Polygon points="15, 45, 45, 45, 30, 15" fill="$grey" GridPane.rowIndex="1"
-								 rotate="270"/>
-						<Polygon points="15, 45, 45, 45, 30, 15" fill="$grey" GridPane.columnIndex="2"
-								 GridPane.rowIndex="1" rotate="90"/>
-						<Polygon points="15, 45, 45, 45, 30, 15" fill="$grey" GridPane.columnIndex="1"
-								 GridPane.rowIndex="2" rotate="180"/>
-					</GridPane>
-				</HBox>
-				<HBox alignment="CENTER" spacing="10.0">
-					<fx:define>
-						<Double fx:id="currActionTileSize" fx:value="50"/>
-						<Double fx:id="roundedCorners" fx:value="15"/>
-					</fx:define>
-					<padding>
-						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-					</padding>
-					<!--TODO - Implement action button and popup-->
-					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
-						<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
-								   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
-						<ImageView fx:id="currPlayerFireImg" fitHeight="$currActionTileSize"
-								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
-						<!--TODO - redundant mouse transparency maybe-->
-						<Label fx:id="currPlayerFireTxt" textAlignment="JUSTIFY" wrapText="true"
-							   mouseTransparent="true">
-							<font>
-								<Font name="System Bold" size="12.0"/>
-							</font>
-						</Label>
-					</StackPane>
-					<StackPane>
-						<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
-								   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
-						<ImageView fx:id="currPlayerIceImg" fitHeight="$currActionTileSize"
-								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
-						<Label fx:id="currPlayerIceTxt" textAlignment="JUSTIFY" wrapText="true" mouseTransparent="true">
-							<font>
-								<Font name="System Bold" size="12.0"/>
-							</font>
-						</Label>
-					</StackPane>
-					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
-						<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
-								   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
-						<ImageView fx:id="currPlayerDoubleMoveImg" fitHeight="$currActionTileSize"
-								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
-						<Label fx:id="currPlayerDoubleMoveTxt" textAlignment="JUSTIFY" wrapText="true"
-							   mouseTransparent="true">
-							<font>
-								<Font name="System Bold" size="12.0"/>
-							</font>
-						</Label>
-					</StackPane>
-					<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
-						<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
-								   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
-						<ImageView fx:id="currPlayerBacktrackImg" fitHeight="$currActionTileSize"
-								   fitWidth="$currActionTileSize" mouseTransparent="true"/>
-						<Label fx:id="currPlayerBacktrackTxt" textAlignment="JUSTIFY" wrapText="true"
-							   mouseTransparent="true">
-							<font>
-								<Font name="System Bold" size="12.0"/>
-							</font>
-						</Label>
-					</StackPane>
-				</HBox>
-				<HBox spacing="10" alignment="CENTER">
-					<!--TODO - Skip Action button click-->
-					<Button fx:id="skipActionButton" mnemonicParsing="false" onMouseClicked="#skipActionClick"
-							text="Skip Action" disable="true"/>
-					<Button fx:id="endTurnButton" mnemonicParsing="false" onMouseClicked="#endTurnClick" text="End Turn"
-							disable="true"/>
-				</HBox>
-			</VBox>
+			<!--Text will display name of the current player token-->
+			<Text fx:id="currPlayerTxt" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
+				<font>
+					<Font size="17.0"/>
+				</font>
+			</Text>
+			<ImageView fx:id="currPlayerImg" fitWidth="120" fitHeight="120"/>
+			<HBox alignment="CENTER" spacing="10.0">
+				<fx:define>
+					<Double fx:id="currActionTileSize" fx:value="50"/>
+					<Double fx:id="roundedCorners" fx:value="15"/>
+				</fx:define>
+				<padding>
+					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+				</padding>
+				<!--TODO - Implement action button and popup-->
+				<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
+					<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
+							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
+					<ImageView fx:id="currPlayerFireImg" fitHeight="$currActionTileSize"
+							   fitWidth="$currActionTileSize"/>
+					<Label fx:id="currPlayerFireTxt" textAlignment="JUSTIFY" wrapText="true">
+						<font>
+							<Font name="System Bold" size="12.0"/>
+						</font>
+					</Label>
+				</StackPane>
+				<StackPane>
+					<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
+							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
+					<ImageView fx:id="currPlayerIceImg" fitHeight="$currActionTileSize"
+							   fitWidth="$currActionTileSize"/>
+					<Label fx:id="currPlayerIceTxt" textAlignment="JUSTIFY" wrapText="true">
+						<font>
+							<Font name="System Bold" size="12.0"/>
+						</font>
+					</Label>
+				</StackPane>
+				<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
+					<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
+							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
+					<ImageView fx:id="currPlayerDoubleMoveImg" fitHeight="$currActionTileSize"
+							   fitWidth="$currActionTileSize"/>
+					<Label fx:id="currPlayerDoubleMoveTxt" textAlignment="JUSTIFY" wrapText="true">
+						<font>
+							<Font name="System Bold" size="12.0"/>
+						</font>
+					</Label>
+				</StackPane>
+				<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
+					<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
+							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
+					<ImageView fx:id="currPlayerBacktrackImg" fitHeight="$currActionTileSize"
+							   fitWidth="$currActionTileSize"/>
+					<Label fx:id="currPlayerBacktrackTxt" textAlignment="JUSTIFY" wrapText="true">
+						<font>
+							<Font name="System Bold" size="12.0"/>
+						</font>
+					</Label>
+				</StackPane>
+			</HBox>
+			<HBox spacing="10" alignment="CENTER">
+				<!--TODO - Use Action button click-->
+				<Button fx:id="takeAction" mnemonicParsing="false" onMouseClicked="#skipActionClick"
+						text="Use Action" disable="true"/>
+				<Button fx:id="skipActionButton" mnemonicParsing="false" onMouseClicked="#skipActionClick"
+						text="Skip Action" disable="true"/>
+			</HBox>
+			<Button fx:id="moveButton" mnemonicParsing="false" onMouseClicked="#endTurnClick"
+					text="See movement options"
+					disable="true"/>
+			<Button fx:id="endTurnButton" mnemonicParsing="false" onMouseClicked="#endTurnClick" text="End Turn"
+					disable="true"/>
 		</VBox>
 	</left>
 	<center>
