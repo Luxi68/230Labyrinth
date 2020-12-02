@@ -12,7 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -35,23 +34,24 @@ public class GameScreenController implements Initializable {
 	private Board gameBoard;
 	private SilkBag silkBag;
 	private Tile silkBagTile;
-	private String silkBagTileType;
 	private Action actionToUse;
 	// Game info
+	private int boardRows;
+	private int boardColumns;
+	private Rectangle[][] boardImg; // A 2D array so the tiles on the board can be referenced
 	private int totalPlayers;
 	private Player currPlayer;
 	private Player queuePlayer1;
 	private Player queuePlayer2;
 	private Player queuePlayer3;
-	// TODO - Game checks
-	private boolean isTileDrawn;
-	private boolean isFloorPlayed;
+	// Game checks TODO
+	private boolean isNewTileAction;
 	// Colour Scheme
-	private Paint grey = Paint.valueOf("#3f443e");
-	private Paint red = Paint.valueOf("#b53232");
-	private Paint pink = Paint.valueOf("#c677b3");
-	private Paint green = Paint.valueOf("#55b54c");
-	private Paint gold = Paint.valueOf("#fdd14b");
+	private final Paint GREY = Paint.valueOf("#3f443e");
+//	private Paint red = Paint.valueOf("#b53232");
+//	private Paint pink = Paint.valueOf("#c677b3");
+//	private Paint green = Paint.valueOf("#55b54c");
+//	private Paint gold = Paint.valueOf("#fdd14b");
 
 	@FXML
 	private BorderPane borderPane;
@@ -64,17 +64,15 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private Circle actionTrackerMove;
 	@FXML
+	private Button takeSilkBagTileButton;
+	@FXML
 	private Rectangle silkBagTileImg;
 	@FXML
 	private Button silkBagTileRotate;
 	@FXML
-	private ImageView currPlayerFireImg;
+	private Text currPlayerTxt;
 	@FXML
-	private ImageView currPlayerIceImg;
-	@FXML
-	private ImageView currPlayerDoubleMoveImg;
-	@FXML
-	private ImageView currPlayerBacktrackImg;
+	private ImageView currPlayerImg;
 	@FXML
 	private Label currPlayerFireTxt;
 	@FXML
@@ -84,7 +82,15 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private Label currPlayerBacktrackTxt;
 	@FXML
-	private Text currPlayerTxt;
+	private ImageView currPlayerFireImg;
+	@FXML
+	private ImageView currPlayerIceImg;
+	@FXML
+	private ImageView currPlayerDoubleMoveImg;
+	@FXML
+	private ImageView currPlayerBacktrackImg;
+	@FXML
+	private Button skipActionButton;
 	@FXML
 	private Label q1Txt;
 	@FXML
@@ -92,13 +98,13 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private Label q3Txt;
 	@FXML
-	private ImageView currPlayerImg;
-	@FXML
 	private ImageView q1Img;
 	@FXML
 	private ImageView q2Img;
 	@FXML
 	private ImageView q3Img;
+	@FXML
+	private Button endTurnButton;
 	@FXML
 	private TextArea gameLog;
 
@@ -117,7 +123,7 @@ public class GameScreenController implements Initializable {
 			setupGame();
 			setupBoard(gameBoard);
 
-			gameLog.appendText("GAME START!\n");
+			gameLog.appendText("GAME START!\n" + currPlayer.getName() + "'s turn.\n");
 			startNextTurn();
 		});
 		// TODO - Code that either loads past game or starts new game
@@ -126,24 +132,21 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Initialises data necessary to setup game
 	 */
-	public void initData() {
-		// TODO - Need to link to newGameController
+	public void initData() {// TODO - Need to link to newGameController
 		// Silk Bag; Players; Board
 	}
 
 	/**
-	 * TODO - delete once initialise is setup
 	 * Method to setup the beginning of the game and initialise all the needed variables
 	 */
-	private void setupGame() {
-		actionTrackerDraw.setFill(Paint.valueOf("Red"));
+	private void setupGame() { // TODO - delete once initialise is setup
 		silkBag = new SilkBag();
 		silkBag.addTile(new Floor("corner", new Image("/assets/corner.png"), false));
 		silkBag.addTile(new Action("fire", new Image("/assets/fire.png")));
 		currPlayer = new Player("Aries", new Image("/assets/aries.png"), "#b53232", 0, 0);
-		queuePlayer1 = new Player("Apollo", new Image("/assets/apollo.png"), "#c677b3", 0, 0);
+		queuePlayer1 = new Player("Apollo", new Image("/assets/apollo.png"), "#fdd14b", 0, 0);
 //		queuePlayer2 = new Player("Artemis", new Image("/assets/artemis.png"), "#55b54c", 0, 0);
-//		queuePlayer3 = new Player("Aphrodite", new Image("/assets/aphrodite.png"), "#fdd14b", 0, 0);
+//		queuePlayer3 = new Player("Aphrodite", new Image("/assets/aphrodite.png"), "#c677b3", 0, 0);
 		totalPlayers = 2;
 		currPlayerFireImg.setImage(new Image("/assets/fire.png"));
 		currPlayerIceImg.setImage(new Image("/assets/ice.png"));
@@ -153,55 +156,72 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
+	 * Setups the necessary components for the board to function.
+	 * This includes the grid pane displaying the board tiles and the 2d array referencing said tiles.
 	 *
-	 * @param boardObj
+	 * @param boardObj - The board object that already holds all the Floor tiles to start a game.
 	 */
 	private void setupBoard(Board boardObj) {
+		boardRows = boardObj.getHeight();
+		boardColumns = boardObj.getLength();
+
 		// Make board for gui
-		GridPane boardImg = new GridPane();
-		boardImg.setPrefSize(500, 500);
+		GridPane board = new GridPane();
+		board.setPrefSize(500, 500);
 		//Padding around the board
-		boardImg.setPadding(new Insets(10, 10, 10, 10));
+		board.setPadding(new Insets(10, 10, 10, 10));
 		// Setting gaps between tiles
-		boardImg.setVgap(10);
-		boardImg.setHgap(10);
+		board.setVgap(10);
+		board.setHgap(10);
 
-		final int BOARD_ROWS = boardObj.getHEIGHT();
-		final int BOARD_COLUMNS = boardObj.getLENGTH();
+		// Setting up the board image
+		boardImg = new Rectangle[boardRows][boardColumns];
 
-		for (int i = 0; i < BOARD_ROWS; i++) {
-			for (int j = 0; j < BOARD_COLUMNS; j++) {
-
+		for (int i = 0; i < boardRows; i++) {
+			for (int j = 0; j < boardColumns; j++) {
 				Rectangle tile = new Rectangle(50, 50);
 				tile.setFill(Color.WHITE);
 				tile.setStroke(Color.BLACK);
 
 				GridPane.setRowIndex(tile, i);
 				GridPane.setColumnIndex(tile, j);
-				boardImg.getChildren().addAll(tile);
-				tile.setOnMouseClicked(event -> {
-					if (silkBagTileType.equalsIgnoreCase("floor")) {
-						if (!isFloorPlayed) {
-							tile.setFill(new ImagePattern(silkBagTile.getImage()));
-							tile.setRotate(silkBagTileImg.getRotate());
-							isFloorPlayed = true;
-						} else {
-							gameLog.appendText("ERROR: Floor tile has already been placed on the board.\n");
-						}
-					} else {
-						gameLog.appendText("ERROR: Cannot slide action tile onto game board.\n");
-					}
+
+				board.getChildren().addAll(tile);
+				boardImg[i][j] = tile;
+
+				int finalI = i;
+				int finalJ = j;
+				tile.setOnMouseClicked(event -> { // TODO - Move to 'place tile' + adapt for move
+					tile.setFill(new ImagePattern(silkBagTile.getImage()));
+					tile.setRotate(silkBagTileImg.getRotate());
+					silkBagTileImg.setFill(GREY);
+					gameLog.appendText("Floor tile placed on board at (" + finalI + "," + finalJ + ").\n");
+					silkBagTileRotate.setDisable(true);
+					startPlayActionTurn();
 				});
 			}
 		}
-		borderPaneCentre.getChildren().add(boardImg);
+		borderPaneCentre.getChildren().add(board);
 	}
 
 	/**
-	 * Loads the next turn of the game
+	 * Changes if the board tiles displayed can be clicked or not.
+	 *
+	 * @param bool - The boolean value desired for the tile disable state.
+	 */
+	private void setDisableBoardTiles(Boolean bool) {
+		for (int i = 0; i < boardRows; i++) {
+			for (int j = 0; j < boardColumns; j++) {
+				boardImg[i][j].setDisable(bool);
+			}
+		}
+	}
+
+	/**
+	 * Loads in a new player and the 'take an tile' section of the game
 	 */
 	private void startNextTurn() {
-		setupNextPlayerDisplay(currPlayer);
+		setupCurrPlayerDisplay();
 		updatePlayerQueue(q1Img, q1Txt, queuePlayer1);
 		if (totalPlayers >= 3) {
 			updatePlayerQueue(q2Img, q2Txt, queuePlayer2);
@@ -209,7 +229,39 @@ public class GameScreenController implements Initializable {
 		if (totalPlayers >= 4) {
 			updatePlayerQueue(q3Img, q3Txt, queuePlayer3);
 		}
-		gameLog.appendText("It's now " + currPlayer.getName() + "'s turn.\n");
+
+		takeSilkBagTileButton.setDisable(false);
+
+		actionTrackerMove.setFill(GREY);
+		actionTrackerDraw.setFill(currPlayer.getColour());
+		gameLog.appendText("Take a Tile!\n");
+	}
+
+	/**
+	 * Loads the 'play action tiles' section of the game
+	 */
+	private void startPlayActionTurn() {
+		setDisableBoardTiles(true); // TODO - change to arrows
+		// TODO - Enable play action button
+		skipActionButton.setDisable(false);
+
+		actionTrackerDraw.setFill(GREY);
+		actionTrackerPlay.setFill(currPlayer.getColour());
+		gameLog.appendText("Play an Action!\n");
+	}
+
+	/**
+	 * Loads the movement section of the game
+	 */
+	private void startMoveActionTurn() { // TODO - Disable 'Play action'; Enable 'move'
+		skipActionButton.setDisable(true);
+		setDisableBoardTiles(false);
+
+		endTurnButton.setDisable(false); // TODO - need to move after move implemented
+
+		actionTrackerPlay.setFill(GREY);
+		actionTrackerMove.setFill(currPlayer.getColour());
+		gameLog.appendText("Move your character!\n");
 	}
 
 	/**
@@ -231,18 +283,16 @@ public class GameScreenController implements Initializable {
 				queuePlayer3 = currPlayer;
 				break;
 			default:
-				gameLog.appendText("ERROR: Player order disrupted. Please reload from last save file.");
+				gameLog.appendText("ERROR: Player order disrupted. Please reload from last save file.\n");
 				break;
 		}
 		currPlayer = tempPlayer;
 	}
 
 	/**
-	 * Setups the next player's hand including the correct number of each action tile
-	 *
-	 * @param player - player's hand that is being setup
+	 * Setups the current player's hand including the correct number of each action tile
 	 */
-	private void setupNextPlayerDisplay(Player player) {
+	private void setupCurrPlayerDisplay() {
 		currPlayerImg.setImage(currPlayer.getImage());
 		currPlayerTxt.setText(currPlayer.getName());
 
@@ -305,59 +355,36 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
-	 * Action that happens when player mouse over the Draw shape in the action tracker
-	 */
-	@FXML
-	private void actionTrackerDrawMouseEnter() {
-		actionTrackerDraw.setFill(Paint.valueOf("Grey"));
-		actionTrackerPlay.setFill(Paint.valueOf("Red"));
-	}
-
-	/**
-	 * Action that happens when player mouse over the Play shape in the action tracker
-	 */
-	@FXML
-	private void actionTrackerPlayMouseEnter() {
-		actionTrackerPlay.setFill(Paint.valueOf("Grey"));
-		actionTrackerMove.setFill(Paint.valueOf("Red"));
-	}
-
-	/**
-	 * Action that happens when player mouse over the Move shape in the action tracker
-	 */
-	@FXML
-	private void actionTrackerMoveMouseEnter() {
-		actionTrackerMove.setFill(Paint.valueOf("Grey"));
-		actionTrackerDraw.setFill(Paint.valueOf("Red"));
-	} // TODO - Actually integrate this
-
-	/**
 	 * Button that will display a new tile after the take tile button is clicked
 	 */
 	@FXML
 	private void takeTileClick() {
-		if (!isTileDrawn) {
-			silkBagTileImg.setRotate(0);
-			silkBagTile = silkBag.drawTile();
-			silkBagTileImg.setFill(new ImagePattern(silkBagTile.getImage()));
+		silkBagTileImg.setRotate(0);
+		silkBagTile = silkBag.drawTile();
+		silkBagTileImg.setFill(new ImagePattern(silkBagTile.getImage()));
 
-			// Check the type of the tile for future use
-			silkBagTileType = silkBagTile.getTileType();
-			if (silkBagTileType.equals("corner") || silkBagTileType.equals("straight") || silkBagTileType.equals("tee")) {
-				silkBagTileType = "floor";
-				gameLog.appendText(currPlayer.getName() + " drew a Floor Tile!\n");
-				silkBagTileRotate.setDisable(false);
-				isTileDrawn = true;
-			} else if (silkBagTileType.equals("fire") || silkBagTileType.equals("ice") ||
-					silkBagTileType.equals("doubleMove") || silkBagTileType.equals("backTrack")) {
-				silkBagTileType = "action";
-				gameLog.appendText(currPlayer.getName() + " drew an Action Tile!\n");
-				isTileDrawn = true;
-			} else {
-				gameLog.appendText("ERROR: Tile type " + silkBagTileType + " is unknown, please take a different tile.\n");
-			}
+		// Check the type of the tile
+		String tempTileType = silkBagTile.getTileType();
+		if (tempTileType.equalsIgnoreCase("corner")
+				|| tempTileType.equalsIgnoreCase("straight")
+				|| tempTileType.equalsIgnoreCase("tee")) {
+			// If is a floor type
+			isNewTileAction = false;
+			gameLog.appendText(currPlayer.getName() + " drew a Floor Tile!\n");
+			takeSilkBagTileButton.setDisable(true);
+			silkBagTileRotate.setDisable(false);
+			setDisableBoardTiles(false); // TODO - change to arrows
+		} else if (tempTileType.equalsIgnoreCase("fire")
+				|| tempTileType.equalsIgnoreCase("ice")
+				|| tempTileType.equalsIgnoreCase("doubleMove")
+				|| tempTileType.equalsIgnoreCase("backTrack")) {
+			// If is action type
+			isNewTileAction = true;
+			gameLog.appendText(currPlayer.getName() + " drew an Action Tile!\n");
+			takeSilkBagTileButton.setDisable(true);
+			startPlayActionTurn();
 		} else {
-			gameLog.appendText("ERROR: You cannot draw more than 1 tile per turn.\n");
+			gameLog.appendText("ERROR: Unknown tile has been drawn, please redraw a new tile.\n");
 		}
 	}
 
@@ -368,51 +395,46 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void rotateTileClick() {
 		// Checking if tile is one of the floor tiles
-		if (silkBagTileType.equals("floor")) { // TODO - sort out rest of button disable so i can delete this
-			Floor tempFloor = (Floor) silkBagTile;
-			tempFloor.rotate();
+		Floor tempFloor = (Floor) silkBagTile;
+		tempFloor.rotate();
 
-			// Rotates the image since it is not 'locked' to tile
-			double rotation = silkBagTileImg.getRotate();
-			silkBagTileImg.setRotate(tempFloor.getRotation());
-			gameLog.appendText("Floor tile rotated 90 degrees.\n");
+		// Rotates the image since it is not 'locked' to tile // TODO - try to 'lock' tile onto rectangle (setdata)
+		silkBagTileImg.setRotate(tempFloor.getRotation());
+		gameLog.appendText("Floor tile rotated 90 degrees.\n");
 
-		} else {
-			gameLog.appendText("ERROR: Cannot rotate non-floor tiles.\n");
-		}
 	}
 
-	/**
-	 * Button that will use a fire action tile
-	 */
-	@FXML
-	private void fireClick() {
-		useActionTile("fire");
-	}
-
-	/**
-	 * Button that will use a ice action tile
-	 */
-	@FXML
-	private void iceClick() {
-		useActionTile("ice");
-	}
-
-	/**
-	 * Button that will use a double move action tile
-	 */
-	@FXML
-	private void doubleMoveClick() {
-		useActionTile("doubleMove");
-	}
-
-	/**
-	 * Button that will use a backtrack action tile
-	 */
-	@FXML
-	private void backtrackClick() {
-		useActionTile("backTrack");
-	}
+//	/**
+//	 * Button that will use a fire action tile
+//	 */
+//	@FXML
+//	private void fireClick() {
+//		useActionTile("fire");
+//	}
+//
+//	/**
+//	 * Button that will use a ice action tile
+//	 */
+//	@FXML
+//	private void iceClick() {
+//		useActionTile("ice");
+//	}
+//
+//	/**
+//	 * Button that will use a double move action tile
+//	 */
+//	@FXML
+//	private void doubleMoveClick() {
+//		useActionTile("doubleMove");
+//	}
+//
+//	/**
+//	 * Button that will use a backtrack action tile
+//	 */
+//	@FXML
+//	private void backtrackClick() {
+//		useActionTile("backTrack");
+//	}
 
 	/**
 	 * Sets the action that will be used on this turn
@@ -429,32 +451,31 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
+	 * Button to skip the play action turn and move onto the movement turn.
+	 */
+	@FXML
+	private void skipActionClick() {
+		gameLog.appendText(currPlayer.getName() + " skipped playing an action tile.\n");
+		startMoveActionTurn();
+	}
+
+	/**
 	 * Button that will wraps up the current players turn and start the next player's turn
 	 */
 	@FXML
 	private void endTurnClick() {
-		if (!isTileDrawn) {
-			gameLog.appendText("ERROR: New tile has not been drawn. Cannot end your turn yet.\n");
-		} else if (!isFloorPlayed) {
-			gameLog.appendText("ERROR: Floor tile has not been placed on the board. Please place your floor tile\n");
-		} else {
-			// Add tile to hand if tile is an action tile and remove from screen
-			if (silkBagTileType.equals("action")) {
-				Action tempAction = (Action) silkBagTile;
-				currPlayer.addActionTile(tempAction);
-				gameLog.appendText(currPlayer.getName() + "'s tile has been added to their hand.\n");
-			}
-			silkBagTileImg.setFill(Paint.valueOf("#3f443e"));
+		endTurnButton.setDisable(true);
 
-			// Resetting game state
-			silkBagTileRotate.setDisable(true);
-			isTileDrawn = false;
-			isFloorPlayed = false;
-
-			updatePlayerOrder();
-			gameLog.appendText("NEXT PLAYER\n");
-			startNextTurn();
+		// Add tile to hand if tile is an action tile and remove from screen
+		if (isNewTileAction) {
+			Action tempAction = (Action) silkBagTile;
+			currPlayer.addActionTile(tempAction);
+			silkBagTileImg.setFill(GREY);
+			gameLog.appendText(currPlayer.getName() + "'s tile has been added to their hand.\n");
 		}
-	}
 
+		updatePlayerOrder();
+		gameLog.appendText("NEXT PLAYER: " + currPlayer.getName() + "!\n");
+		startNextTurn();
+	}
 }
