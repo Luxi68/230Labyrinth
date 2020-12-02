@@ -31,23 +31,10 @@ public abstract class Tile {
 	}
 
 	/**
-	 * @param tileType sets the tile type
-	 */
-	public void setTileType(String tileType) {
-		this.tileType = tileType;
-	}
-
-	/**
 	 * @return the image associated with the tile
 	 */
 	public Image getImage() {
 		return image;
 	}
 
-	/**
-	 * @param image the image that reflects the tile type
-	 */
-	public void setImage(Image image) {
-		this.image = image;
-	}
 }

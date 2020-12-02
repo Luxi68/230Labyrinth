@@ -38,7 +38,7 @@
 				</padding>
 				<VBox alignment="CENTER" spacing="5.0">
 					<Button mnemonicParsing="false" onMouseClicked="#takeTileClick" text="Take a new tile"/>
-					<Button fx:id="newTileRotate" mnemonicParsing="false" onMouseClicked="#rotateTileClick"
+					<Button fx:id="silkBagTileRotate" mnemonicParsing="false" onMouseClicked="#rotateTileClick"
 							text="Rotate Tile"/>
 				</VBox>
 				<Rectangle fx:id="silkBagTileImg" fill="$Grey" height="150" width="150"/>
@@ -147,6 +147,13 @@
 			</VBox>
 		</VBox>
 	</left>
+	<center>
+		<VBox alignment="CENTER">
+			<HBox alignment="CENTER">
+				<StackPane fx:id="borderPaneCentre"/>
+			</HBox>
+		</VBox>
+	</center>
 	<right>
 		<!--Right Sidebar: where all the player and game information is-->
 		<VBox alignment="CENTER" spacing="5.0">
