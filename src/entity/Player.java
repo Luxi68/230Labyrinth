@@ -14,29 +14,17 @@ public class Player { // TODO - finish class + javadoc
 	private final String NAME;
 	private final Image IMAGE;
 	private final Paint COLOUR;
+	private final Profile PROFILE;
 	private final ArrayList<Action> HAND;
 	private int xLoc;
 	private int yLoc;
 	private Tile currentTile;
 	private boolean isGoal;
+	private Board board;
+	private int[] lastPosiX = new int[3];
+	private int[] lastPosiY = new int[3];
+
 	// TODO - implement backtrack + bool check
-
-
-
-
-
-	public void movePlayer(Tile moveTo) {
-		if (possibleMoves().contains(moveTo)) {
-			this.currentTile = moveTo;
-			possibleMoves().clear();
-		}
-	}
-
-	public ArrayList<Tile> possibleMoves() {
-		//add stuff to possibleMoves
-		ArrayList<Tile> possibleMoves = new ArrayList<>();
-		return possibleMoves;
-	}
 
 
 	/**
@@ -45,14 +33,17 @@ public class Player { // TODO - finish class + javadoc
 	 * @param name  - In-game name of the player token
 	 * @param image - Image representing the player token
 	 */
-	public Player(String name, Image image, String hexColour, int xStart, int yStart) {
+	public Player(String name, Image image, String hexColour, int xStart, int yStart, Board board, Profile profile) {
 		this.NAME = name;
 		this.IMAGE = image;
 		this.COLOUR = Paint.valueOf(hexColour);
 		this.HAND = new ArrayList<>();
 		this.xLoc = xStart;
 		this.yLoc = yStart;
+		this.board = board;
+		this.PROFILE = profile;
 	}
+
 
 	/**
 	 * Returns the in-game name of the player token
@@ -113,6 +104,73 @@ public class Player { // TODO - finish class + javadoc
 		HAND.add(action);
 	}
 
+
+	public void movePlayer(Floor moveTo) {
+		if (possibleMoves().contains(moveTo)) {
+			this.currentTile = moveTo;
+			storePosi();
+		} else {
+			throw new IndexOutOfBoundsException("ERROR: " + this.NAME + " cannot make this move");
+		}
+	}
+
+	public void storePosi(){
+		lastPosiX[2] = lastPosiX[1];
+		lastPosiY[2] = lastPosiX[1];
+	}
+
+	public ArrayList<Floor> possibleMoves() {
+		ArrayList<Floor> possibleMoves = new ArrayList<>();
+		if (isEastPossible()){
+			possibleMoves.add(board.getTileAt(xLoc+1, yLoc));
+		}
+		if (isWestPossible()) {
+			possibleMoves.add(board.getTileAt(xLoc-1, yLoc));
+		}
+		if (isNorthPossible()){
+			possibleMoves.add(board.getTileAt(xLoc, yLoc-1));
+		}
+		if (isSouthPossible()){
+			possibleMoves.add(board.getTileAt(xLoc, yLoc+1));
+		}
+		return possibleMoves;
+	}
+
+	public boolean isEastPossible() { //right
+		if (xLoc < board.getLENGTH() - 1) {
+			return board.getTileAt(xLoc,yLoc).isWest() == true && board.getTileAt(xLoc + 1, yLoc).isEast() == true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isWestPossible(){ //left
+		if (xLoc > 0) {
+			return board.getTileAt(xLoc,yLoc).isEast() == true && board.getTileAt(xLoc - 1, yLoc).isWest() == true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isNorthPossible(){
+		if (yLoc > 0) {
+			return board.getTileAt(xLoc,yLoc).isSouth() == true && board.getTileAt(xLoc, yLoc - 1).isNorth() == true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isSouthPossible(){
+		if (yLoc < board.getHEIGHT() - 1) {
+			return board.getTileAt(xLoc,yLoc).isNorth() == true && board.getTileAt(xLoc, yLoc + 1).isSouth() == true;
+		} else {
+			return false;
+		}
+	}
+
+
+
+
 	/**
 	 *
 	 * @param type
@@ -121,19 +179,32 @@ public class Player { // TODO - finish class + javadoc
 	public Action playActionTile(String type) {
 		Action tempAction = null;
 		for (Action actionTile: HAND) {
-			if (actionTile.tileType.equals(type)) {
+			if (actionTile.tileType.equalsIgnoreCase(type)) {
 				tempAction = actionTile;
-				break;
 			}
+			break;
 		}
 
 		if (tempAction == null) {
 			throw new NullPointerException("ERROR: " + this.NAME + " does not hold any " + type + " action tiles.");
 		} else {
 			HAND.remove(tempAction);
+			//add tempAction to discarded section in silkbag
 		}
 		return tempAction;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/**
 	 *
@@ -143,7 +214,7 @@ public class Player { // TODO - finish class + javadoc
 		if (yLoc == board.getHEIGHT() - 1) {
 			throw new IndexOutOfBoundsException("ERROR: " + this.NAME + " is already at the top of the board.");
 		} else {
-			this.yLoc++;
+			this.yLoc--;
 		}
 	}
 
@@ -166,7 +237,7 @@ public class Player { // TODO - finish class + javadoc
 		if (yLoc == 0) {
 			throw new IndexOutOfBoundsException("ERROR: " + this.NAME + " is already at the bottom of the board.");
 		} else {
-			this.yLoc--;
+			this.yLoc++;
 		}
 	}
 
@@ -181,4 +252,5 @@ public class Player { // TODO - finish class + javadoc
 			this.xLoc--;
 		}
 	}
+
 }

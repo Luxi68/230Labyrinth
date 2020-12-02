@@ -60,15 +60,15 @@ public class Action extends Tile {
 		}
 	}
 	
-//	/**
-//	 * Method that uses action tiles which affect the player.
-//	 * @param player
-//	 */
-//	public void useBackDouble(Player player) {
-//		if (actionType.equals(Type.doubleMove)) {
-//			//player.doubleMove();
-//		} else if (actionType.equals(Type.backTrack)){
-//			//player.backTrack();
-//		}
-//	}
+	/**
+	 * Method that uses action tiles which affect the player.
+	 * @param player
+	 */
+	//public void useBackDouble(Player player) {
+	//	if (ACTION_TYPE.equals(Type.doubleMove)) {
+	//		player.doubleMove();
+	//	} else if (ACTION_TYPE.equals(Type.backTrack)){
+	//		player.backTrack();
+	//	}
+	//}
 }

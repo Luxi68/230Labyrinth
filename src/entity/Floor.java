@@ -12,6 +12,14 @@ public class Floor extends Tile {
 	private final Type FLOOR_TYPE;
 	private final boolean IS_FIXED;
 	private final boolean IS_GOAL;
+	private int x;
+
+
+
+	private int y;
+
+
+
 	private boolean north;
 	private boolean south;
 	private boolean east;
@@ -29,12 +37,14 @@ public class Floor extends Tile {
 	 * @param image what the tile looks like
 	 * @param isFixed true if tile is fixed, false if not
 	 */
-	public Floor(String tileType, Image image, boolean isFixed)	{
+	public Floor(String tileType, Image image, boolean isFixed, int x, int y)	{
 		super(tileType, image);
 		this.IS_FIXED = isFixed;
 		this.isFire = false;
 		this.isIce = false;
 		this.rotation = 0;
+		this.x = x;
+		this.y = y;
 		//this.floorType = floorType;
 
 		switch (tileType) {
@@ -92,6 +102,52 @@ public class Floor extends Tile {
 		corner, straight, tee, goal
 	}
 
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+	public boolean isNorth() {
+		return north;
+	}
+
+	public void setNorth(boolean north) {
+		this.north = north;
+	}
+
+	public boolean isSouth() {
+		return south;
+	}
+
+	public void setSouth(boolean south) {
+		this.south = south;
+	}
+
+	public boolean isEast() {
+		return east;
+	}
+
+	public void setEast(boolean east) {
+		this.east = east;
+	}
+
+	public boolean isWest() {
+		return west;
+	}
+
+	public void setWest(boolean west) {
+		this.west = west;
+	}
 	/**
 	 * 
 	 * @param isFire set to itself

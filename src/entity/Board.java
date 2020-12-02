@@ -14,16 +14,18 @@ public class Board{
 	private final Floor[][] BOARD;
 	private final int LENGTH;
 	private final int HEIGHT;
+	private final SilkBag SILKBAG;
 
 	/**
 	 * Constructor used to create a new instance of Board.
 	 * @param HEIGHT The height of the board (i.e. how many tiles it will hold vertically)
 	 * @param LENGTH The length of the board (i.e. how many tiles it will hold horizontally)
 	 */
-	public Board (int HEIGHT, int LENGTH) {
+	public Board (int HEIGHT, int LENGTH, SilkBag silkBag) {
 		this.BOARD = new Floor[HEIGHT -1][LENGTH -1];//do we need -1?
 		this.LENGTH = LENGTH;
 		this.HEIGHT = HEIGHT;
+		this.SILKBAG = silkBag;
 		//add tiles setup...
 		//add players arraylist and their starting points...
 	}
@@ -74,7 +76,7 @@ public class Board{
 		int reachedEnd = 0;
 		Floor curFloor = null; // current floor
 		int xCurFloor = LENGTH; //the x of the current floor
-		// insert board[length][y] in silk bag.. need to access silk bag somehow
+		SILKBAG.addTile(BOARD[LENGTH][y]);
 		BOARD[LENGTH][y] = null;
 		while (reachedEnd != LENGTH) { //maybe change into for loop?
 			curFloor = BOARD[xCurFloor - 1][y];
@@ -96,7 +98,7 @@ public class Board{
 		int reachedEnd = 0;
 		Floor curFloor = null; // current floor
 		int xCurFloor = 0; //the x of the current floor
-		// insert board[length][y] in silk bag
+		SILKBAG.addTile(BOARD[0][y]);
 		BOARD[0][y] = null;
 		while (reachedEnd != LENGTH) { //maybe change into for loop?
 			curFloor = BOARD[xCurFloor + 1][y];
@@ -119,7 +121,7 @@ public class Board{
 		int reachedEnd = 0;
 		Floor curFloor = null; // current floor
 		int yCurFloor = HEIGHT; //the y of the current floor
-		// insert board[x][height] in silk bag
+		SILKBAG.addTile(BOARD[x][HEIGHT]);
 		BOARD[x][HEIGHT] = null;
 		while (reachedEnd != HEIGHT) { //maybe change into for loop?
 			curFloor = BOARD[x][yCurFloor - 1];
@@ -141,7 +143,7 @@ public class Board{
 			int reachedEnd = 0;
 			Floor curFloor = null; // current floor
 			int yCurFloor = 0; //the y of the current floor
-			// insert board[x][height] in silk bag
+			SILKBAG.addTile(BOARD[x][0]);
 			BOARD[x][0] = null;
 			while (reachedEnd != HEIGHT) { //maybe change into for loop?
 				curFloor = BOARD[x][yCurFloor + 1];
@@ -187,33 +189,47 @@ public class Board{
 	}
 	/*
 	public void useActionTiles(int x, int y) {
-		//useFireTile(board[x][y]),
+		useFireTile(board[x][y]),
 	}
 	*/
 
 	public Floor[] getSurroundingTiles(Floor inflictedTile) {
-		Floor affectedTiles[];
+		Floor affectedTiles[] = null;
 
-		if (inflictedTile.equals(BOARD[0][0])) {
-			affectedTiles = new Floor[4];
-			affectedTiles[0] = BOARD[0][0];
-			affectedTiles[1] = BOARD[1][0];
-			affectedTiles[2] = BOARD[0][1];
-			affectedTiles[3] = BOARD[1][1];
+		if (inflictedTile.getX() == 0) {
+			if (inflictedTile.getY() == 0) {
+				affectedTiles = new Floor[4];
+				affectedTiles[0] = BOARD[0][0];
+				affectedTiles[1] = BOARD[1][0];
+				affectedTiles[2] = BOARD[0][1];
+				affectedTiles[3] = BOARD[1][1];
+			} else if (inflictedTile.getY() == HEIGHT -1) {
+				affectedTiles = new Floor[4];
+				affectedTiles[0] = BOARD[0][HEIGHT -1];
+				affectedTiles[1] = BOARD[0][HEIGHT -2];
+				affectedTiles[2] = BOARD[1][HEIGHT -1];
+				affectedTiles[3] = BOARD[1][HEIGHT -2];
+			} else if  (inflictedTile.getY() > 0 && inflictedTile.getY() < HEIGHT - 1) {
+				affectedTiles = new Floor[6];
+				affectedTiles[0] = BOARD[inflictedTile.getX()][inflictedTile.getY()];
+				affectedTiles[1] = BOARD[inflictedTile.getX()][inflictedTile.getY() + 1];
+				affectedTiles[2] = BOARD[inflictedTile.getX() + 1][inflictedTile.getY()];
+				affectedTiles[3] = BOARD[inflictedTile.getX()][inflictedTile.getY() + 1];
+				affectedTiles[4] = BOARD[inflictedTile.getX() + 1][inflictedTile.getY() - 1];
+				affectedTiles[5] = BOARD[inflictedTile.getX()][inflictedTile.getY() - 1];
+			}
+		} else if (inflictedTile.getX() == LENGTH -1) {
+			if (inflictedTile.getY() == 0) {
+				affectedTiles = new Floor[4];
+				affectedTiles[0] = BOARD[LENGTH - 1][0];
+				affectedTiles[1] = BOARD[LENGTH - 2][0];
+				affectedTiles[2] = BOARD[LENGTH - 1][1];
+				affectedTiles[3] = BOARD[LENGTH - 2][1];
+			} else if (inflictedTile.getY() == HEIGHT - 1) {
+				
+			}
 
-		} else if (inflictedTile.equals(BOARD[LENGTH -1][0])) {
-			affectedTiles = new Floor[4];
-			affectedTiles[0] = BOARD[LENGTH -1][0];
-			affectedTiles[1] = BOARD[LENGTH -2][0];
-			affectedTiles[2] = BOARD[LENGTH -1][1];
-			affectedTiles[3] = BOARD[LENGTH -2][1];
 
-		} else if (inflictedTile.equals(BOARD[0][HEIGHT -1])) {
-			affectedTiles = new Floor[4];
-			affectedTiles[0] = BOARD[0][HEIGHT -1];
-			affectedTiles[1] = BOARD[0][HEIGHT -2];
-			affectedTiles[2] = BOARD[1][HEIGHT -1];
-			affectedTiles[3] = BOARD[1][HEIGHT -2];
 
 		} else if (inflictedTile.equals(BOARD[LENGTH -1][HEIGHT -1])) {
 			affectedTiles = new Floor[4];
