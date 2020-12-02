@@ -3,7 +3,7 @@ package core;
 Right now File reader will work as soon as other classes are implemented I will update it using the appropriate method
 names and fully implement it as soon as we decide how to integrate it with the ui and the rest of the java program.
  */
-import com.sun.org.apache.bcel.internal.generic.SWITCH;
+
 import entity.*;
 
 import java.io.File;
@@ -26,11 +26,11 @@ public class FileReader {
      * @param a a list of profiles to be used for creating players
      * @return gameData an array of different objects(boards w/ tiles placed, silk bag with tiles in and then four players) used to create the game
      */
-    private static ArrayList<Object> dataFile(Scanner in, Profile[] a) {
-        ArrayList<Object> gameData = null;
-        ArrayList<Player> players = null;
-        Board gBoard = null;
-        SilkBag bag = null;
+    private static ArrayList<Object> dataFile(Scanner in, ArrayList<Profile> a) {
+        ArrayList<Object> gameData = new ArrayList<>();
+        ArrayList<Player> players = new ArrayList<>();
+        Board gBoard = new Board(0, 0);
+        SilkBag bag = new SilkBag();
         while (in.hasNextLine()) {
             String data = in.nextLine();
             String[] splitted = data.split(",");// splits the line of the program using the comma delimiter
@@ -67,7 +67,7 @@ public class FileReader {
                                 hex = "#fdd14b";
                                 break;
                         }
-                        players.add(new Player(img, hex, px, py, gBoard ,a[pn-1]));
+                        players.add(new Player(img, hex, px, py, gBoard ,a.get(pn-1)));
                 }
 
             } else {
@@ -153,8 +153,8 @@ public class FileReader {
 
         //get non fixed rows and coloumns
 
-        ArrayList<Integer> xNoFixed = null;
-        ArrayList<Integer> yNoFixed = null;
+        ArrayList<Integer> xNoFixed = new ArrayList<>();
+        ArrayList<Integer> yNoFixed = new ArrayList<>();
 
         for (int i = 0 ; i < gBoard.getHeight(); i++){
             boolean empty = true;
@@ -164,6 +164,7 @@ public class FileReader {
                 }
             }
             if (empty){
+
                 yNoFixed.add(i);
             }
         }
@@ -176,6 +177,7 @@ public class FileReader {
                 }
             }
             if (empty){
+
                 xNoFixed.add(i);
             }
         }
@@ -207,9 +209,11 @@ public class FileReader {
     /**
      * Method to read the file name which is asked in the main method. initialised a scanner and checks if the file exists
      * @param filename the name of the file
+     * @param a is a list of profiles to be used in creating players for the game
      * @return method call to readDatafile(in) where in contains the file
      */
-    public static ArrayList<Object> readDataFile(String filename, Profile[] a) {
+    public static ArrayList<Object> readDataFile(String filename, ArrayList<Profile> a) {
+        //Scanner in = new Scanner();
         Scanner in = null;
         try {
             File input = new File(filename);
@@ -218,7 +222,8 @@ public class FileReader {
             System.out.println("Error file not found");
         }
 
-        return FileReader.dataFile(in, a);
+        assert in != null;
+        return dataFile(in, a);
     }
 
 }
