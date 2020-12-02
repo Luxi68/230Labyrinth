@@ -11,11 +11,11 @@
 <BorderPane fx:id="borderPane" prefWidth="1200" prefHeight="630" xmlns="http://javafx.com/javafx/8.0.241"
 			xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameScreenController">
 	<fx:define>
-		<Paint fx:id="Grey" fx:value="#3f443e"/>
-		<Paint fx:id="Red" fx:value="#b53232"/>
-		<Paint fx:id="Pink" fx:value="#c677b3"/>
-		<Paint fx:id="Green" fx:value="#55b54c"/>
-		<Paint fx:id="Gold" fx:value="#fdd14b"/>
+		<Paint fx:id="grey" fx:value="#3f443e"/>
+<!--		<Paint fx:id="Red" fx:value="#b53232"/>-->
+<!--		<Paint fx:id="Pink" fx:value="#c677b3"/>-->
+<!--		<Paint fx:id="Green" fx:value="#55b54c"/>-->
+<!--		<Paint fx:id="Gold" fx:value="#fdd14b"/>-->
 	</fx:define>
 	<left>
 		<!--Left Sidebar: where all the buttons and user interaction is-->
@@ -42,7 +42,7 @@
 					<Button fx:id="silkBagTileRotate" mnemonicParsing="false" onMouseClicked="#rotateTileClick"
 							text="Rotate Tile" disable="true"/>
 				</VBox>
-				<Rectangle fx:id="silkBagTileImg" fill="$Grey" height="150" width="150"/>
+				<Rectangle fx:id="silkBagTileImg" fill="$grey" height="150" width="150"/>
 			</HBox>
 			<!--Current player: Area that shows the current player's items-->
 			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current Player" textAlignment="CENTER">
@@ -77,12 +77,12 @@
 							<RowConstraints prefHeight="$moveArrowSize" vgrow="NEVER"/>
 							<RowConstraints prefHeight="$moveArrowSize" vgrow="NEVER"/>
 						</rowConstraints>
-						<Polygon points="15, 45, 45, 45, 30, 15" fill="$Grey" GridPane.columnIndex="1"/>
-						<Polygon points="15, 45, 45, 45, 30, 15" fill="$Grey" GridPane.rowIndex="1"
+						<Polygon points="15, 45, 45, 45, 30, 15" fill="$grey" GridPane.columnIndex="1"/>
+						<Polygon points="15, 45, 45, 45, 30, 15" fill="$grey" GridPane.rowIndex="1"
 								 rotate="270"/>
-						<Polygon points="15, 45, 45, 45, 30, 15" fill="$Grey" GridPane.columnIndex="2"
+						<Polygon points="15, 45, 45, 45, 30, 15" fill="$grey" GridPane.columnIndex="2"
 								 GridPane.rowIndex="1" rotate="90"/>
-						<Polygon points="15, 45, 45, 45, 30, 15" fill="$Grey" GridPane.columnIndex="1"
+						<Polygon points="15, 45, 45, 45, 30, 15" fill="$grey" GridPane.columnIndex="1"
 								 GridPane.rowIndex="2" rotate="180"/>
 					</GridPane>
 				</HBox>
@@ -181,17 +181,17 @@
 					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
 				</padding>
 				<StackPane prefHeight="50" prefWidth="50">
-					<Circle fx:id="actionTrackerDraw" fill="Grey" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Circle fx:id="actionTrackerDraw" fill="$grey" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
 					<Label text="Draw" textAlignment="CENTER" wrapText="true"/>
 				</StackPane>
 				<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0"/>
 				<StackPane prefHeight="50" prefWidth="50">
-					<Circle fx:id="actionTrackerPlay" fill="Grey" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Circle fx:id="actionTrackerPlay" fill="$grey" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
 					<Label text="Action" textAlignment="CENTER" wrapText="true"/>
 				</StackPane>
 				<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0"/>
 				<StackPane prefHeight="50" prefWidth="50">
-					<Circle fx:id="actionTrackerMove" fill="Grey" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+					<Circle fx:id="actionTrackerMove" fill="$grey" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
 					<Label text="Move" textAlignment="CENTER" wrapText="true"/>
 				</StackPane>
 			</HBox>

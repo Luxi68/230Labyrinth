@@ -36,6 +36,7 @@ public class GameScreenController implements Initializable {
 	private Tile silkBagTile;
 	private Action actionToUse;
 	// Game info
+	private int turn;
 	private int boardRows;
 	private int boardColumns;
 	private Rectangle[][] boardImg; // A 2D array so the tiles on the board can be referenced
@@ -123,7 +124,9 @@ public class GameScreenController implements Initializable {
 			setupGame();
 			setupBoard(gameBoard);
 
-			gameLog.appendText("GAME START!\n" + currPlayer.getName() + "'s turn.\n");
+			turn = 0;
+			gameLog.appendText("GAME START!\n");
+			gameLog.appendText("Round 1: First Player - " + currPlayer.getName() + "!\n");
 			startNextTurn();
 		});
 		// TODO - Code that either loads past game or starts new game
@@ -132,7 +135,7 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Initialises data necessary to setup game
 	 */
-	public void initData(SilkBag silkBay, Player[] players, Board board, int[] xNotFixed, int[]yNotFixed) {
+	public void initData(SilkBag silkBay, Board board, Player[] players, int[] xNotFixed, int[]yNotFixed) {
 		// Silk Bag; Players; Board
 	}
 
@@ -148,8 +151,8 @@ public class GameScreenController implements Initializable {
 		Profile rhys = new Profile("Rhys");
 		currPlayer = new Player(new Image("/assets/aries.png"), "#b53232", 0, 0, gameBoard, lucy);
 		queuePlayer1 = new Player(new Image("/assets/apollo.png"), "#fdd14b", 0, 0, gameBoard, rhys);
-//		queuePlayer2 = new Player("Artemis", new Image("/assets/artemis.png"), "#55b54c", 0, 0);
-//		queuePlayer3 = new Player("Aphrodite", new Image("/assets/aphrodite.png"), "#c677b3", 0, 0);
+//		queuePlayer2 = new Player(new Image("/assets/artemis.png"), "#55b54c", 0, 0, gameBoard, lucy);
+//		queuePlayer3 = new Player(new Image("/assets/aphrodite.png"), "#c677b3", 0, 0, gameBoard, rhys);
 		totalPlayers = 2;
 		currPlayerFireImg.setImage(new Image("/assets/fire.png"));
 		currPlayerIceImg.setImage(new Image("/assets/ice.png"));
@@ -188,6 +191,7 @@ public class GameScreenController implements Initializable {
 				GridPane.setRowIndex(tile, i);
 				GridPane.setColumnIndex(tile, j);
 
+				tile.setDisable(true);
 				board.getChildren().addAll(tile);
 				boardImg[i][j] = tile;
 
@@ -196,7 +200,11 @@ public class GameScreenController implements Initializable {
 				tile.setOnMouseClicked(event -> { // TODO - Move to 'place tile' + adapt for move
 					tile.setFill(new ImagePattern(silkBagTile.getImage()));
 					tile.setRotate(silkBagTileImg.getRotate());
+
 					silkBagTileImg.setFill(GREY);
+					Floor tempFloor = (Floor) silkBagTile;
+					tempFloor.setRotation(0);
+
 					gameLog.appendText("Floor tile placed on board at (" + finalI + "," + finalJ + ").\n");
 					silkBagTileRotate.setDisable(true);
 					startPlayActionTurn();
@@ -223,6 +231,8 @@ public class GameScreenController implements Initializable {
 	 * Loads in a new player and the 'take an tile' section of the game
 	 */
 	private void startNextTurn() {
+		++turn;
+//		System.out.println((turn+totalPlayers-1)/totalPlayers);
 		setupCurrPlayerDisplay();
 		updatePlayerQueue(q1Img, q1Txt, queuePlayer1);
 		if (totalPlayers >= 3) {
@@ -257,7 +267,7 @@ public class GameScreenController implements Initializable {
 	 */
 	private void startMoveActionTurn() { // TODO - Disable 'Play action'; Enable 'move'
 		skipActionButton.setDisable(true);
-		setDisableBoardTiles(false);
+//		setDisableBoardTiles(false); TODO - enable once move is implemented
 
 		endTurnButton.setDisable(false); // TODO - need to move after move implemented
 
@@ -400,6 +410,7 @@ public class GameScreenController implements Initializable {
 		Floor tempFloor = (Floor) silkBagTile;
 		tempFloor.rotate();
 
+
 		// Rotates the image since it is not 'locked' to tile // TODO - try to 'lock' tile onto rectangle (setdata)
 		silkBagTileImg.setRotate(tempFloor.getRotation());
 		gameLog.appendText("Floor tile rotated 90 degrees.\n");
@@ -477,7 +488,7 @@ public class GameScreenController implements Initializable {
 		}
 
 		updatePlayerOrder();
-		gameLog.appendText("NEXT PLAYER: " + currPlayer.getName() + "!\n");
+		gameLog.appendText("Round " + turn + ": Next Player - " + currPlayer.getName() + "!\n");
 		startNextTurn();
 	}
 }

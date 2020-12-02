@@ -30,10 +30,9 @@ public class Player {
 
 	/**
 	 * Constructor to create new player object
-	 * @param name  - In-game name of the player token
 	 * @param image - Image representing the player token
 	 */
-	public Player(String name, Image image, String hexColour, int xStart, int yStart, Board board, Profile profile) {
+	public Player(Image image, String hexColour, int xStart, int yStart, Board board, Profile profile) {
 		this.NAME = profile.getPlayerName();
 		this.IMAGE = image;
 		this.COLOUR = Paint.valueOf(hexColour);
