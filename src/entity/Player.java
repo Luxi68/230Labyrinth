@@ -34,7 +34,7 @@ public class Player { // TODO - finish class + javadoc
 	 * @param image - Image representing the player token
 	 */
 	public Player(String name, Image image, String hexColour, int xStart, int yStart, Board board, Profile profile) {
-		this.NAME = name;
+		this.NAME = profile.getPlayerName();
 		this.IMAGE = image;
 		this.COLOUR = Paint.valueOf(hexColour);
 		this.HAND = new ArrayList<>();
