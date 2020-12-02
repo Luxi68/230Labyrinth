@@ -15,8 +15,6 @@ public class Floor extends Tile {
 	private int x;
 	private int y;
 
-
-
 	private boolean north;
 	private boolean south;
 	private boolean east;
@@ -112,37 +110,26 @@ public class Floor extends Tile {
 	public void setY(int y) {
 		this.y = y;
 	}
+
 	public boolean isNorth() {
 		return north;
 	}
 
-	public void setNorth(boolean north) {
-		this.north = north;
-	}
 
 	public boolean isSouth() {
 		return south;
 	}
 
-	public void setSouth(boolean south) {
-		this.south = south;
-	}
 
 	public boolean isEast() {
 		return east;
 	}
 
-	public void setEast(boolean east) {
-		this.east = east;
-	}
 
 	public boolean isWest() {
 		return west;
 	}
 
-	public void setWest(boolean west) {
-		this.west = west;
-	}
 	/**
 	 * 
 	 * @param isFire set to itself
@@ -196,19 +183,23 @@ public class Floor extends Tile {
 	 * @return - The rotation in degrees
 	 */
 	public int getRotation() {
-		int realRotation;
-
 		if (rotation == 1) {
-			realRotation = 90;
+			return 90;
 		} else if (rotation == 2) {
-			realRotation = 180;
+			return 180;
 		} else if (rotation == 3) {
-			realRotation = 270;
+			return 270;
 		} else {
-			realRotation = 0;
+			return 0;
 		}
+	}
 
-		return realRotation;
+	/**
+	 *
+	 * @param rotation
+	 */
+	public void setRotation(int rotation) {
+		this.rotation = rotation;
 	}
 
 	/**
