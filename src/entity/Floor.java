@@ -172,7 +172,7 @@ public class Floor extends Tile {
 	
 	/**
 	 * 
-	 * @return whether the tile is frozen or not
+	 * @return true if floor is covered in ice
 	 */
 	public boolean getIsIce() {
 		return isIce;

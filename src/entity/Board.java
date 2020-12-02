@@ -1,5 +1,7 @@
 package entity;//package game;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 /**
  * <P>Purpose: Setting out tiles by collaborating with Floor in order to create the game board.
  * It is also responsible for managing the tiles movements</p>
@@ -23,7 +25,7 @@ public class Board{
 
 
 	public Board (int HEIGHT, int LENGTH) {
-		this.BOARD = new Floor[HEIGHT][LENGTH];//do we need -1?
+		this.BOARD = new Floor[HEIGHT][LENGTH];
 		this.LENGTH = LENGTH;
 		this.HEIGHT = HEIGHT;
 		//add tiles setup...
@@ -67,25 +69,32 @@ public class Board{
 
 
 	/**
-	 * insertFromLeft inserts a Floor tile to the board and shifts relevant tiles from the left side
+	 * insertFromLeft inserts a Floor tile to the board and shifts relevant tiles from the left side.
+	 * returns the rejected tile.
 	 * @param insert The Floor tile that needs to be inserted
-	 * @param y The y coordinate of the row we need to insert the tile to
+	 * @param row The y coordinate of the row we need to insert the tile to
 	 */
-	public void insertFromLeft(Floor insert,int y) {
+	public Floor insertFromLeft(Floor insert,int row) {
 		//make sure we can insert the tile
-		int reachedEnd = 0;
-		Floor curFloor = null; // current floor
-		int xCurFloor = LENGTH; //the x of the current floor
-		//SILKBAG.addTile(BOARD[LENGTH][y]); //TODO remove silk bag
-		BOARD[LENGTH][y] = null; // TODO remove null
-		while (reachedEnd != LENGTH) { //maybe change into for loop?
-			curFloor = BOARD[xCurFloor - 1][y];
-			BOARD[xCurFloor][y] = curFloor;
-			xCurFloor --;
-			reachedEnd ++;
+		boolean isSlidable = true;
+
+		for (int i = 0; i < LENGTH; i++) {
+			if (BOARD[i][row].getIsIce()) {
+				isSlidable = false;
+				break;
+			}
 		}
-		BOARD[0][y] = insert;
-		//we need to add conditions to deal with fixed tile n all
+
+		if (isSlidable) {
+			Floor ejectedTile = BOARD[LENGTH - 1][row];
+			for (int i = LENGTH - 1; i == 1; i--) {
+				BOARD[i][row] = BOARD[i - 1][row];
+			}
+			BOARD[0][row] = insert;
+			return ejectedTile;
+		} else {
+			throw new IllegalStateException("ERROR: This row cannot be moved as there are iced tiles in the way.");
+		}
 	}
 
 	/**
@@ -96,9 +105,9 @@ public class Board{
 	public void insertFromRight(Floor insert, int y) {
 		//make sure we can insert the tile
 		int reachedEnd = 0;
-		Floor curFloor = null; // current floor
+		Floor curFloor; // current floor
 		int xCurFloor = 0; //the x of the current floor
-		SILKBAG.addTile(BOARD[0][y]);
+		// SILKBAG.addTile(BOARD[0][y]); TODO remove silk bag
 		BOARD[0][y] = null;
 		while (reachedEnd != LENGTH) { //maybe change into for loop?
 			curFloor = BOARD[xCurFloor + 1][y];
@@ -121,7 +130,7 @@ public class Board{
 		int reachedEnd = 0;
 		Floor curFloor = null; // current floor
 		int yCurFloor = HEIGHT; //the y of the current floor
-		SILKBAG.addTile(BOARD[x][HEIGHT]);
+		// SILKBAG.addTile(BOARD[x][HEIGHT]); TODO remove silk bag
 		BOARD[x][HEIGHT] = null;
 		while (reachedEnd != HEIGHT) { //maybe change into for loop?
 			curFloor = BOARD[x][yCurFloor - 1];
@@ -143,7 +152,7 @@ public class Board{
 			int reachedEnd = 0;
 			Floor curFloor = null; // current floor
 			int yCurFloor = 0; //the y of the current floor
-			SILKBAG.addTile(BOARD[x][0]);
+			// SILKBAG.addTile(BOARD[x][0]); TODO remove silk bag
 			BOARD[x][0] = null;
 			while (reachedEnd != HEIGHT) { //maybe change into for loop?
 				curFloor = BOARD[x][yCurFloor + 1];
@@ -154,7 +163,7 @@ public class Board{
 			BOARD[x][0] = insert;
 		} else {
 		}
-		//we need to add conditions to deal with fixed tile n all
+		// TODO - we need to add conditions to deal with fixed tile n all
 	}
 
 	/**
@@ -165,7 +174,7 @@ public class Board{
 	public boolean checkIfRowMovable(int y, Floor curTile) {//x starts at 0
 		for (int i = 0; i<= LENGTH -1; i++) {
 			if ( i <= LENGTH -1) {
-				if (curTile.getIsIce() == true || curTile.getIsFixed() == true) {
+				if (curTile.getIsIce() || curTile.getIsFixed()) {
 					return false;
 				} else {
 					curTile = BOARD[i][y];
@@ -178,7 +187,7 @@ public class Board{
 	public boolean checkIfColumnMovable(int x, Floor curTile) {//x starts at 0
 		for (int i = 0; i<= HEIGHT -1; i++) {
 			if ( i <= HEIGHT -1) {
-				if (curTile.getIsIce() == true || curTile.getIsFixed() == true) {
+				if (curTile.getIsIce() || curTile.getIsFixed()) {
 					return false;
 				} else {
 					curTile = BOARD[x][i];
@@ -194,7 +203,7 @@ public class Board{
 	*/
 
 	public Floor[] getSurroundingTiles(Floor inflictedTile) {
-		Floor affectedTiles[] = null;
+		Floor[] affectedTiles = null;
 
 		if (inflictedTile.getX() == 0) {
 			if (inflictedTile.getY() == 0) {
@@ -225,8 +234,8 @@ public class Board{
 				affectedTiles[1] = BOARD[LENGTH - 2][0];
 				affectedTiles[2] = BOARD[LENGTH - 1][1];
 				affectedTiles[3] = BOARD[LENGTH - 2][1];
-			} else if (inflictedTile.getY() == HEIGHT - 1) {
-				
+			} else if (inflictedTile.getY() == HEIGHT - 1) { // TODO - empty if statement
+
 			}
 
 		} else if (inflictedTile.equals(BOARD[LENGTH -1][HEIGHT -1])) {
