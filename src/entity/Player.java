@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Junjie
  */
-public class Player { // TODO - finish class + javadoc
+public class Player {
 	private final String NAME;
 	private final Image IMAGE;
 	private final Paint COLOUR;
