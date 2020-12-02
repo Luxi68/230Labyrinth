@@ -37,6 +37,7 @@ public class LoadGameController {
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(gameScreenScene);
 			window.show();
+			window.setMaximized(true);
 		} catch (IOException e) {
 			System.out.println("Error starting the Game Screen from load game screen.");
 			e.printStackTrace();
