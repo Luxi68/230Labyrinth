@@ -3,7 +3,6 @@ package core;
 Right now File reader will work as soon as other classes are implemented I will update it using the appropriate method
 names and fully implement it as soon as we decide how to integrate it with the ui and the rest of the java program.
  */
-import com.sun.org.apache.bcel.internal.generic.SWITCH;
 import entity.*;
 
 import java.io.File;
