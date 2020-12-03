@@ -1,9 +1,5 @@
 package entity;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
-import javafx.print.PageOrientation;
-import javafx.util.Pair;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

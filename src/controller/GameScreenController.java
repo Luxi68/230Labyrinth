@@ -24,7 +24,21 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-// TODO - img resources
+/*
+TODO - img resources
+	 - Remake gridpane to inc triangle buttons
+	 - set gridpane so the outer boxes are not drawn
+	 - Write in method for tile movement
+	 - tie tile movement to the arrows
+	 - fix checks/disables
+	 - properly implement movement code
+	 - test tile and player movement
+	 - action tiles decide how i wanna implement
+	 - implement
+	 - test
+	 - wrap up all other tags
+	 - DONE!!
+ */
 
 /**
  * Class that holds the actions and logic behind GameScreen.fxml
@@ -50,14 +64,10 @@ public class GameScreenController implements Initializable {
 	private int boardRows;
 	private int boardColumns;
 	private StackPane[][] boardImg; // A 2D array so the tiles on the board can be referenced
-
 	// Game checks TODO
 	private boolean isNewTileAction;
 	private boolean isDoubleMoveUsed = false;
-	//	private Paint red = Paint.valueOf("#b53232");
-//	private Paint pink = Paint.valueOf("#c677b3");
-//	private Paint green = Paint.valueOf("#55b54c");
-//	private Paint gold = Paint.valueOf("#fdd14b");
+
 	@FXML
 	private BorderPane borderPane;
 	@FXML
