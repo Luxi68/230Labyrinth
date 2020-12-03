@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LeaderboardController">
+   <children>
+      <TableView layoutX="87.0" layoutY="112.0" prefHeight="200.0" prefWidth="426.0">
+        <columns>
+            <TableColumn fx:id="rankCol" prefWidth="75.0" text="Rank" />
+          <TableColumn fx:id="nameCol" prefWidth="92.0" text="Player Name" />
+          <TableColumn fx:id="gamePlayedCol" prefWidth="95.0" text="Games Played" />
+            <TableColumn fx:id="gameWonCol" prefWidth="87.0" text="Games Won" />
+            <TableColumn fx:id="winRateCol" prefWidth="75.0" text="Win Rate" />
+        </columns>
+      </TableView>
+      <Label layoutX="203.0" layoutY="84.0" text="User Leaderboard ">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Label>
+      <MenuBar prefHeight="29.0" prefWidth="600.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Button layoutX="537.0" layoutY="359.0" mnemonicParsing="false" onAction="#backToProfileSelection" text="Back" />
+   </children>
+</AnchorPane>
