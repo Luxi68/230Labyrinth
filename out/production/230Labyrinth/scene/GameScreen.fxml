@@ -120,7 +120,7 @@
 				<Button fx:id="skipActionButton" mnemonicParsing="false" onMouseClicked="#skipActionClick"
 						text="Skip Action" disable="true"/>
 			</HBox>
-			<Button fx:id="moveButton" mnemonicParsing="false" onMouseClicked="#endTurnClick"
+			<Button fx:id="moveButton" mnemonicParsing="false" onMouseClicked="#moveClick"
 					text="See movement options"
 					disable="true"/>
 			<Button fx:id="endTurnButton" mnemonicParsing="false" onMouseClicked="#endTurnClick" text="End Turn"

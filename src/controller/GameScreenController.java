@@ -18,11 +18,27 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
-// TODO - img resources
+/*
+TODO - img resources
+	 - Remake gridpane to inc triangle buttons
+	 - set gridpane so the outer boxes are not drawn
+	 - Write in method for tile movement
+	 - tie tile movement to the arrows
+	 - fix checks/disables
+	 - properly implement movement code
+	 - test tile and player movement
+	 - action tiles decide how i wanna implement
+	 - implement
+	 - test
+	 - wrap up all other tags
+	 - DONE!!
+ */
 
 /**
  * Class that holds the actions and logic behind GameScreen.fxml
@@ -30,29 +46,27 @@ import java.util.ResourceBundle;
  * @author Junjie, Rhys
  */
 public class GameScreenController implements Initializable {
+	// Colour Scheme
+	private final Paint GREY = Paint.valueOf("#3f443e");
 	// Game components
 	private Board gameBoard;
 	private SilkBag silkBag;
 	private Tile silkBagTile;
-	private Action actionToUse;
-	// Game info
-	private int turn;
-	private int boardRows;
-	private int boardColumns;
-	private Rectangle[][] boardImg; // A 2D array so the tiles on the board can be referenced
-	private int totalPlayers;
 	private Player currPlayer;
 	private Player queuePlayer1;
 	private Player queuePlayer2;
 	private Player queuePlayer3;
+	private Action actionToUse;
+	// Game info
+	private int turn;
+	private int totalPlayers;
+	private ArrayList<Floor> playerMoves;
+	private int boardRows;
+	private int boardColumns;
+	private StackPane[][] boardImg; // A 2D array so the tiles on the board can be referenced
 	// Game checks TODO
 	private boolean isNewTileAction;
-	// Colour Scheme
-	private final Paint GREY = Paint.valueOf("#3f443e");
-//	private Paint red = Paint.valueOf("#b53232");
-//	private Paint pink = Paint.valueOf("#c677b3");
-//	private Paint green = Paint.valueOf("#55b54c");
-//	private Paint gold = Paint.valueOf("#fdd14b");
+	private boolean isDoubleMoveUsed = false;
 
 	@FXML
 	private BorderPane borderPane;
@@ -137,17 +151,26 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Initialises data necessary to setup game
 	 */
-	public void initData(SilkBag bag, Board board, Player[] players, int[] xNotFixed, int[]yNotFixed) {
-		silkBag = bag;
-		gameBoard = board;
-		totalPlayers = players.length;
-		currPlayer = players[0];
-		queuePlayer1 = players[1];
+	public void initData(ArrayList<Object> data) {
+		gameBoard = (Board) data.get(0);
+		silkBag = (SilkBag) data.get(1);
+
+		// There are coming from file reader so i'm 100% sure on the contents of data
+		@SuppressWarnings("unchecked")
+		ArrayList<Player> players = (ArrayList<Player>) data.get(2);
+		@SuppressWarnings("unchecked")
+		ArrayList<Integer> rowNoFixed = (ArrayList<Integer>) data.get(3);
+		@SuppressWarnings("unchecked")
+		ArrayList<Integer> columnNoFixed = (ArrayList<Integer>) data.get(4);
+
+		totalPlayers = players.size();
+		currPlayer = players.get(0);
+		queuePlayer1 = players.get(1);
 		if (totalPlayers >= 3) {
-			queuePlayer2 = players[2];
+			queuePlayer2 = players.get(2);
 		}
 		if (totalPlayers >= 4) {
-			queuePlayer3 = players[3];
+			queuePlayer3 = players.get(3);
 		}
 		// TODO - int[] xNotFixed, int[]yNotFixed
 	}
@@ -182,6 +205,8 @@ public class GameScreenController implements Initializable {
 	private void setupBoard(Board boardObj) {
 		boardRows = boardObj.getHeight();
 		boardColumns = boardObj.getLength();
+		int tileSize = 80;
+		int playerTokenSize = 50;
 
 		// Make board for gui
 		GridPane board = new GridPane();
@@ -193,24 +218,35 @@ public class GameScreenController implements Initializable {
 		board.setHgap(10);
 
 		// Setting up the board image
-		boardImg = new Rectangle[boardRows][boardColumns];
+		boardImg = new StackPane[boardRows][boardColumns];
 
 		for (int i = 0; i < boardRows; i++) {
 			for (int j = 0; j < boardColumns; j++) {
-				Rectangle tile = new Rectangle(50, 50);
+				// Space for Floor tile
+				Rectangle tile = new Rectangle(tileSize, tileSize);
 				tile.setFill(Color.WHITE);
 				tile.setStroke(Color.BLACK);
+				tile.setStrokeType(StrokeType.OUTSIDE);
 
-				GridPane.setRowIndex(tile, i);
-				GridPane.setColumnIndex(tile, j);
+				// Space for player
+				ImageView playerToken = new ImageView();
+				playerToken.setFitHeight(playerTokenSize);
+				playerToken.setFitWidth(playerTokenSize);
+//				playerToken.setOpacity(0); TODO - test to see if needed
 
-				tile.setDisable(true);
-				board.getChildren().addAll(tile);
-				boardImg[i][j] = tile;
+				// Holds both floor and player token
+				StackPane stack = new StackPane(tile, playerToken);
+				stack.setDisable(true);
+
+				GridPane.setRowIndex(stack, i);
+				GridPane.setColumnIndex(stack, j);
+
+				board.getChildren().addAll(stack);
+				boardImg[i][j] = stack;
 
 				int finalI = i;
 				int finalJ = j;
-				tile.setOnMouseClicked(event -> { // TODO - Move to 'place tile' + adapt for move
+				stack.setOnMouseClicked(event -> { // TODO - Move to 'slide tile' method
 					tile.setFill(new ImagePattern(silkBagTile.getImage()));
 					tile.setRotate(silkBagTileImg.getRotate());
 
@@ -221,6 +257,21 @@ public class GameScreenController implements Initializable {
 					gameLog.appendText("Floor tile placed on board at (" + finalI + "," + finalJ + ").\n");
 					silkBagTileRotate.setDisable(true);
 					startPlayActionTurn();
+
+//					// Moving backend TODO - implement(uncomment) when floor sliding implemented
+//					Floor currFloor = currPlayer.getCurrentFloor();
+//					Floor movedFloor = gameBoard.getTileAt(finalI, finalJ);
+//					currPlayer.movePlayer(movedFloor);
+//
+//					// Moving frontend
+//					ImageView currFloorImg =
+//							(ImageView) boardImg[currFloor.getRow()][currFloor.getColumn()].getChildren().get(1);
+//					ImageView movedFloorImg =
+//							(ImageView) boardImg[movedFloor.getRow()][movedFloor.getColumn()].getChildren().get(1);
+//					currFloorImg.setImage(null);
+//					movedFloorImg.setImage(currPlayer.getImage());
+//
+//					checkEndMove();
 				});
 			}
 		}
@@ -232,7 +283,7 @@ public class GameScreenController implements Initializable {
 	 *
 	 * @param bool - The boolean value desired for the tile disable state.
 	 */
-	private void setDisableBoardTiles(Boolean bool) {
+	private void setDisableBoardTiles(boolean bool) {
 		for (int i = 0; i < boardRows; i++) {
 			for (int j = 0; j < boardColumns; j++) {
 				boardImg[i][j].setDisable(bool);
@@ -280,13 +331,34 @@ public class GameScreenController implements Initializable {
 	 */
 	private void startMoveActionTurn() { // TODO - Disable 'Play action'
 		skipActionButton.setDisable(true);
-		moveButton.setDisable(false); // LUCY - need to finish checks for this and sort out where it and tiles are disabled again
-
-		endTurnButton.setDisable(false); // TODO - need to move after move implemented
+		moveButton.setDisable(false);
 
 		actionTrackerPlay.setFill(GREY);
 		actionTrackerMove.setFill(currPlayer.getColour());
 		gameLog.appendText("Move your character!\n");
+	}
+
+	/**
+	 * Checks if the movement phase can be ended or not
+	 */
+	private void checkEndMove() {
+		// Removes tile outlines
+		for (Floor tile : playerMoves) {
+			StackPane stack = boardImg[tile.getRow()][tile.getColumn()];
+			stack.setDisable(true);
+
+			Rectangle floor = (Rectangle) stack.getChildren().get(0);
+			floor.setStroke(Color.BLACK);
+			floor.setStrokeWidth(1);
+		}
+		// Checks if move button should be disabled
+		if (!isDoubleMoveUsed) {
+			moveButton.setDisable(true);
+		} else {
+			gameLog.appendText("Double Move was used earlier, you can move again if you wish.");
+		}
+		endTurnButton.setDisable(false);
+		isDoubleMoveUsed = false;
 	}
 
 	/**
@@ -486,10 +558,37 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
+	 * Button that displays the movement options and allows player to choose
+	 */
+	@FXML
+	private void moveClick() {
+		try {
+			playerMoves = currPlayer.possibleMoves();
+			if (!playerMoves.isEmpty()) {
+				for (Floor tile : playerMoves) {
+					StackPane stack = boardImg[tile.getRow()][tile.getColumn()];
+					stack.setDisable(false);
+
+					Rectangle floor = (Rectangle) stack.getChildren().get(0);
+					floor.setStroke(currPlayer.getColour());
+					floor.setStrokeWidth(4);
+				}
+			} else {
+				gameLog.appendText("No movement possible, please end your turn.");
+				endTurnButton.setDisable(false);
+			}
+		} catch (Exception e) {
+			System.out.println("Move button failed to work again because of " + e); // TODO - Remove once move works
+			endTurnButton.setDisable(false);
+		}
+	}
+
+	/**
 	 * Button that will wraps up the current players turn and start the next player's turn
 	 */
 	@FXML
 	private void endTurnClick() {
+		moveButton.setDisable(true); // Just in case it wasn't disabled earlier
 		endTurnButton.setDisable(true);
 
 		// Add tile to hand if tile is an action tile and remove from screen
@@ -504,4 +603,5 @@ public class GameScreenController implements Initializable {
 		gameLog.appendText("Round " + turn + ": Next Player - " + currPlayer.getName() + "!\n");
 		startNextTurn();
 	}
+
 }

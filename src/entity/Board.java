@@ -1,17 +1,16 @@
 package entity;//package game;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 /**
  * <P>Purpose: Setting out tiles by collaborating with Floor in order to create the game board.
  * It is also responsible for managing the tiles movements</p>
  * <P>File name: Board.java </p>
- * @author Nouran and Gordon
+ *
+ * @author Nouran, Junjie and Gordon
  * <P>Created: 16/11/2020
  * <P>Modified: /2020
  */
 
-public class Board{
+public class Board {
 
 	private final Floor[][] BOARD;
 	private final int LENGTH;
@@ -19,12 +18,13 @@ public class Board{
 
 	/**
 	 * Constructor used to create a new instance of Board.
+	 *
 	 * @param HEIGHT The height of the board (i.e. how many tiles it will hold vertically)
 	 * @param LENGTH The length of the board (i.e. how many tiles it will hold horizontally)
 	 */
 
 
-	public Board (int HEIGHT, int LENGTH) {
+	public Board(int HEIGHT, int LENGTH) {
 		this.BOARD = new Floor[HEIGHT][LENGTH];
 		this.LENGTH = LENGTH;
 		this.HEIGHT = HEIGHT;
@@ -59,8 +59,8 @@ public class Board{
 			
 	}*/
 
-	public Floor getTileAt(int x, int y) {
-		return BOARD[x][y];
+	public Floor getTileAt(int row, int column) {
+		return BOARD[row][column];
 	}
 
 	public void insertTileAt(int x, int y, Floor insert) {
@@ -69,38 +69,31 @@ public class Board{
 
 
 	/**
-	 * insertFromLeft inserts a Floor tile to the board and shifts relevant tiles from the left side.
-	 * returns the rejected tile.
+	 * InsertFromTop inserts a Floor tile to the board and shifts relevant tiles from the top.
+	 * Returns the rejected tile.
+	 *
 	 * @param insert The Floor tile that needs to be inserted
-	 * @param row The y coordinate of the row we need to insert the tile to
+	 * @param column The x coordinate of the column we need to insert the tile to
 	 */
-	public Floor insertFromLeft(Floor insert,int row) {
-		//make sure we can insert the tile
-		boolean isSlidable = true;
-
-		for (int i = 0; i < LENGTH; i++) {
-			if (BOARD[i][row].getIsIce()) {
-				isSlidable = false;
-				break;
+	public Floor insertFromTop(Floor insert, int column) {
+		if (checkIfColumnMovable(column)) {
+			Floor ejectedTile = BOARD[HEIGHT - 1][column];
+			for (int i = HEIGHT - 1; i == 1; i--) {
+				BOARD[i][column] = BOARD[i - 1][column];
 			}
-		}
-
-		if (isSlidable) {
-			Floor ejectedTile = BOARD[LENGTH - 1][row];
-			for (int i = LENGTH - 1; i == 1; i--) {
-				BOARD[i][row] = BOARD[i - 1][row];
-			}
-			BOARD[0][row] = insert;
+			BOARD[0][column] = insert;
 			return ejectedTile;
 		} else {
-			throw new IllegalStateException("ERROR: This row cannot be moved as there are iced tiles in the way.");
+			throw new IllegalStateException(
+					"ERROR: This column cannot be moved as there are iced tiles in the way.");
 		}
 	}
 
 	/**
 	 * insertFromRight inserts a Floor tile to the board and shifts relevant tiles from the right side
+	 *
 	 * @param insert The Floor tile that needs to be inserted
-	 * @param y The y coordinate of the row we need to insert the tile to
+	 * @param y      The y coordinate of the row we need to insert the tile to
 	 */
 	public void insertFromRight(Floor insert, int y) {
 		//make sure we can insert the tile
@@ -112,8 +105,8 @@ public class Board{
 		while (reachedEnd != LENGTH) { //maybe change into for loop?
 			curFloor = BOARD[xCurFloor + 1][y];
 			BOARD[xCurFloor][y] = curFloor;
-			xCurFloor ++;
-			reachedEnd ++;
+			xCurFloor++;
+			reachedEnd++;
 		}
 		BOARD[LENGTH][y] = insert;
 		//we need to add conditions to deal with fixed tile n all
@@ -122,10 +115,11 @@ public class Board{
 
 	/**
 	 * insertFromTop inserts a Floor tile to the board and shifts relevant tiles from the top of the board
+	 *
 	 * @param insert The Floor tile that needs to be inserted
-	 * @param x The x coordinate of the column we need to insert the tile to
+	 * @param x      The x coordinate of the column we need to insert the tile to
 	 */
-	public void insertFromTop(Floor insert, int x) {
+	public void insertFromLeft(Floor insert, int x) {
 		//make sure we can insert the tile
 		int reachedEnd = 0;
 		Floor curFloor = null; // current floor
@@ -135,8 +129,8 @@ public class Board{
 		while (reachedEnd != HEIGHT) { //maybe change into for loop?
 			curFloor = BOARD[x][yCurFloor - 1];
 			BOARD[x][yCurFloor] = curFloor;
-			yCurFloor --;
-			reachedEnd ++;
+			yCurFloor--;
+			reachedEnd++;
 		}
 		BOARD[x][HEIGHT] = insert;
 		//we need to add conditions to deal with fixed tile n all
@@ -144,11 +138,12 @@ public class Board{
 
 	/**
 	 * insertFromBottom inserts a Floor tile to the board and shifts relevant tiles from the bottom of the board
+	 *
 	 * @param insert The Floor tile that needs to be inserted
-	 * @param x The x coordinate of the column we need to insert the tile to
+	 * @param x      The x coordinate of the column we need to insert the tile to
 	 */
 	public void insertFromBottom(Floor insert, int x) { //need to add the exception
-		if (checkIfColumnMovable(x, insert)) {
+		if (checkIfColumnMovable(x)) {
 			int reachedEnd = 0;
 			Floor curFloor = null; // current floor
 			int yCurFloor = 0; //the y of the current floor
@@ -157,8 +152,8 @@ public class Board{
 			while (reachedEnd != HEIGHT) { //maybe change into for loop?
 				curFloor = BOARD[x][yCurFloor + 1];
 				BOARD[x][yCurFloor] = curFloor;
-				yCurFloor ++;
-				reachedEnd ++;
+				yCurFloor++;
+				reachedEnd++;
 			}
 			BOARD[x][0] = insert;
 		} else {
@@ -168,30 +163,30 @@ public class Board{
 
 	/**
 	 * checkIfRowMovable checks whether it is possible or not to insert a tile into this row
-	 * @param y
-	 * @param curTile - The Floor tile that needs to be inserted
+	 *
+	 * @param row     - the row to be checked
+	 * @return
 	 */
-	public boolean checkIfRowMovable(int y, Floor curTile) {//x starts at 0
-		for (int i = 0; i<= LENGTH -1; i++) {
-			if ( i <= LENGTH -1) {
-				if (curTile.getIsIce() || curTile.getIsFixed()) {
-					return false;
-				} else {
-					curTile = BOARD[i][y];
-				}
+	private boolean checkIfRowMovable(int row) {
+		for (int i = 0; i <= HEIGHT - 1; i++) {
+			Floor curTile = BOARD[row][i];
+			if (curTile.getIsIce() || curTile.getIsFixed()) {
+				return false;
 			}
 		}
 		return true;
 	}
 
-	public boolean checkIfColumnMovable(int x, Floor curTile) {//x starts at 0
-		for (int i = 0; i<= HEIGHT -1; i++) {
-			if ( i <= HEIGHT -1) {
-				if (curTile.getIsIce() || curTile.getIsFixed()) {
-					return false;
-				} else {
-					curTile = BOARD[x][i];
-				}
+	/**
+	 *
+	 * @param column
+	 * @return
+	 */
+	private boolean checkIfColumnMovable(int column) {
+		for (int i = 0; i <= LENGTH - 1; i++) {
+			Floor curTile = BOARD[i][column];
+			if (curTile.getIsIce()) {
+				return false;
 			}
 		}
 		return true;
@@ -202,53 +197,113 @@ public class Board{
 	}
 	*/
 
-	public Floor[] getSurroundingTiles(Floor inflictedTile) {
+	/**
+	 * Returns a list of the floor tiles surrounding a specific floor tile on a board
+	 *
+	 * @param inflictedTile - the tile at the centre
+	 * @return - the inflicted tile and all surrounding tiles
+	 * @throws IndexOutOfBoundsException - if the tile is outside the bounds of the board
+	 */
+	public Floor[] getSurroundingTiles(Floor inflictedTile) throws IndexOutOfBoundsException {
 		Floor[] affectedTiles = null;
+		String errorMsg = "Inflicted tile is not on the board. Please choose another floor tile\n";
 
-		if (inflictedTile.getX() == 0) {
-			if (inflictedTile.getY() == 0) {
+		if (inflictedTile.getRow() == 0) {
+			if (inflictedTile.getColumn() == 0) {
+				// Top Left
 				affectedTiles = new Floor[4];
 				affectedTiles[0] = BOARD[0][0];
 				affectedTiles[1] = BOARD[1][0];
 				affectedTiles[2] = BOARD[0][1];
 				affectedTiles[3] = BOARD[1][1];
-			} else if (inflictedTile.getY() == HEIGHT -1) {
+
+			} else if (inflictedTile.getColumn() == LENGTH - 1) {
+				// Top Right
 				affectedTiles = new Floor[4];
-				affectedTiles[0] = BOARD[0][HEIGHT -1];
-				affectedTiles[1] = BOARD[0][HEIGHT -2];
-				affectedTiles[2] = BOARD[1][HEIGHT -1];
-				affectedTiles[3] = BOARD[1][HEIGHT -2];
-			} else if  (inflictedTile.getY() > 0 && inflictedTile.getY() < HEIGHT - 1) {
+				affectedTiles[0] = BOARD[0][LENGTH - 1];
+				affectedTiles[1] = BOARD[0][LENGTH - 2];
+				affectedTiles[2] = BOARD[1][LENGTH - 1];
+				affectedTiles[3] = BOARD[1][LENGTH - 2];
+
+			} else if (inflictedTile.getColumn() > 0 && inflictedTile.getColumn() < LENGTH - 1) {
+				// Top Row
 				affectedTiles = new Floor[6];
-				affectedTiles[0] = BOARD[inflictedTile.getX()][inflictedTile.getY()];
-				affectedTiles[1] = BOARD[inflictedTile.getX()][inflictedTile.getY() + 1];
-				affectedTiles[2] = BOARD[inflictedTile.getX() + 1][inflictedTile.getY()];
-				affectedTiles[3] = BOARD[inflictedTile.getX()][inflictedTile.getY() + 1];
-				affectedTiles[4] = BOARD[inflictedTile.getX() + 1][inflictedTile.getY() - 1];
-				affectedTiles[5] = BOARD[inflictedTile.getX()][inflictedTile.getY() - 1];
+				affectedTiles[0] = BOARD[0][inflictedTile.getColumn()];
+				affectedTiles[1] = BOARD[0][inflictedTile.getColumn() + 1];
+				affectedTiles[2] = BOARD[0][inflictedTile.getColumn() - 1];
+				affectedTiles[3] = BOARD[1][inflictedTile.getColumn()];
+				affectedTiles[4] = BOARD[1][inflictedTile.getColumn() + 1];
+				affectedTiles[5] = BOARD[1][inflictedTile.getColumn() - 1];
+			} else {
+				throw new IndexOutOfBoundsException(errorMsg);
 			}
-		} else if (inflictedTile.getX() == LENGTH -1) {
-			if (inflictedTile.getY() == 0) {
+		} else if (inflictedTile.getRow() == HEIGHT - 1) {
+			if (inflictedTile.getColumn() == 0) {
+				// Bottom Left
 				affectedTiles = new Floor[4];
-				affectedTiles[0] = BOARD[LENGTH - 1][0];
-				affectedTiles[1] = BOARD[LENGTH - 2][0];
-				affectedTiles[2] = BOARD[LENGTH - 1][1];
-				affectedTiles[3] = BOARD[LENGTH - 2][1];
-			} else if (inflictedTile.getY() == HEIGHT - 1) { // TODO - empty if statement
+				affectedTiles[0] = BOARD[HEIGHT - 1][0];
+				affectedTiles[1] = BOARD[HEIGHT - 2][0];
+				affectedTiles[2] = BOARD[HEIGHT - 1][1];
+				affectedTiles[3] = BOARD[HEIGHT - 2][1];
 
+			} else if (inflictedTile.getColumn() == LENGTH - 1) {
+				// Bottom Right
+				affectedTiles = new Floor[4];
+				affectedTiles[0] = BOARD[HEIGHT - 1][LENGTH - 1];
+				affectedTiles[1] = BOARD[HEIGHT - 2][LENGTH - 1];
+				affectedTiles[2] = BOARD[HEIGHT - 1][LENGTH - 2];
+				affectedTiles[3] = BOARD[HEIGHT - 2][LENGTH - 2];
+
+			} else if (inflictedTile.getColumn() > 0 && inflictedTile.getColumn() < LENGTH - 1) {
+				// Bottom Row
+				affectedTiles = new Floor[6];
+				affectedTiles[0] = BOARD[HEIGHT - 1][inflictedTile.getColumn()];
+				affectedTiles[1] = BOARD[HEIGHT - 1][inflictedTile.getColumn() + 1];
+				affectedTiles[2] = BOARD[HEIGHT - 1][inflictedTile.getColumn() - 1];
+				affectedTiles[3] = BOARD[HEIGHT - 2][inflictedTile.getColumn()];
+				affectedTiles[4] = BOARD[HEIGHT - 2][inflictedTile.getColumn() + 1];
+				affectedTiles[5] = BOARD[HEIGHT - 2][inflictedTile.getColumn() - 1];
+			} else {
+				throw new IndexOutOfBoundsException(errorMsg);
 			}
+		} else if (inflictedTile.getRow() > 0 && inflictedTile.getRow() < HEIGHT - 1) {
+			if (inflictedTile.getColumn() == 0) {
+				// Left Column
+				affectedTiles = new Floor[6];
+				affectedTiles[0] = BOARD[inflictedTile.getRow()][0];
+				affectedTiles[1] = BOARD[inflictedTile.getRow() + 1][0];
+				affectedTiles[2] = BOARD[inflictedTile.getRow() - 1][0];
+				affectedTiles[3] = BOARD[inflictedTile.getRow()][1];
+				affectedTiles[3] = BOARD[inflictedTile.getRow() + 1][1];
+				affectedTiles[3] = BOARD[inflictedTile.getRow() - 1][1];
 
-		} else if (inflictedTile.equals(BOARD[LENGTH -1][HEIGHT -1])) {
-			affectedTiles = new Floor[4];
-			affectedTiles[0] = BOARD[LENGTH -1][HEIGHT -1];
-			affectedTiles[1] = BOARD[LENGTH -1][HEIGHT -2];
-			affectedTiles[2] = BOARD[LENGTH -2][HEIGHT -1];
-			affectedTiles[3] = BOARD[LENGTH -2][HEIGHT -2];
+			} else if (inflictedTile.getColumn() == LENGTH - 1) {
+				// Right Column
+				affectedTiles = new Floor[6];
+				affectedTiles[0] = BOARD[inflictedTile.getRow()][LENGTH - 1];
+				affectedTiles[1] = BOARD[inflictedTile.getRow() + 1][LENGTH - 1];
+				affectedTiles[2] = BOARD[inflictedTile.getRow() - 1][LENGTH - 1];
+				affectedTiles[3] = BOARD[inflictedTile.getRow()][LENGTH - 2];
+				affectedTiles[3] = BOARD[inflictedTile.getRow() + 1][LENGTH - 2];
+				affectedTiles[3] = BOARD[inflictedTile.getRow() - 1][LENGTH - 2];
 
-			// still need to make conditions for top/bottom/side rows
-		} else { // all 3x3 square is affected
-			affectedTiles = new Floor[9];
-
+			} else if (inflictedTile.getColumn() > 0 && inflictedTile.getColumn() < LENGTH - 1) {
+				// Centre (all 3x3 square is affected)
+				affectedTiles = new Floor[9];
+				affectedTiles[0] = BOARD[inflictedTile.getRow()][inflictedTile.getColumn()];
+				affectedTiles[1] = BOARD[inflictedTile.getRow()][inflictedTile.getColumn() + 1];
+				affectedTiles[2] = BOARD[inflictedTile.getRow()][inflictedTile.getColumn() - 1];
+				affectedTiles[3] = BOARD[inflictedTile.getRow() + 1][inflictedTile.getColumn()];
+				affectedTiles[4] = BOARD[inflictedTile.getRow() + 1][inflictedTile.getColumn() + 1];
+				affectedTiles[5] = BOARD[inflictedTile.getRow() + 1][inflictedTile.getColumn() - 1];
+				affectedTiles[5] = BOARD[inflictedTile.getRow() - 1][inflictedTile.getColumn()];
+				affectedTiles[5] = BOARD[inflictedTile.getRow() - 1][inflictedTile.getColumn() + 1];
+				affectedTiles[5] = BOARD[inflictedTile.getRow() - 1][inflictedTile.getColumn() - 1];
+			} else {
+				throw new IndexOutOfBoundsException(errorMsg);
+			}
+		} else {
+			throw new IndexOutOfBoundsException(errorMsg);
 		}
 		return affectedTiles;
 	}
