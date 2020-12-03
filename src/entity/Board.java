@@ -169,29 +169,29 @@ public class Board{
 
 	/**
 	 * checkIfRowMovable checks whether it is possible or not to insert a tile into this row
-	 * @param y
+	 * @param row - the row to be checked
 	 * @param curTile - The Floor tile that needs to be inserted
 	 */
-	public boolean checkIfRowMovable(int y, Floor curTile) {//x starts at 0
+	public boolean checkIfRowMovable(int row, Floor curTile) {//x starts at 0
 		for (int i = 0; i<= LENGTH -1; i++) {
 			if ( i <= LENGTH -1) {
 				if (curTile.getIsIce() || curTile.getIsFixed()) {
 					return false;
 				} else {
-					curTile = BOARD[i][y];
+					curTile = BOARD[row][i];
 				}
 			}
 		}
 		return true;
 	}
 
-	public boolean checkIfColumnMovable(int x, Floor curTile) {//x starts at 0
+	public boolean checkIfColumnMovable(int column, Floor curTile) {//x starts at 0
 		for (int i = 0; i<= HEIGHT -1; i++) {
 			if ( i <= HEIGHT -1) {
 				if (curTile.getIsIce() || curTile.getIsFixed()) {
 					return false;
 				} else {
-					curTile = BOARD[x][i];
+					curTile = BOARD[i][column];
 				}
 			}
 		}
