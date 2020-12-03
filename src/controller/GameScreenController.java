@@ -151,17 +151,26 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Initialises data necessary to setup game
 	 */
-	public void initData(SilkBag bag, Board board, Player[] players, int[] xNotFixed, int[] yNotFixed) {
-		silkBag = bag;
-		gameBoard = board;
-		totalPlayers = players.length;
-		currPlayer = players[0];
-		queuePlayer1 = players[1];
+	public void initData(ArrayList<Object> data) {
+		gameBoard = (Board) data.get(0);
+		silkBag = (SilkBag) data.get(1);
+
+		// There are coming from file reader so i'm 100% sure on the contents of data
+		@SuppressWarnings("unchecked")
+		ArrayList<Player> players = (ArrayList<Player>) data.get(2);
+		@SuppressWarnings("unchecked")
+		ArrayList<Integer> rowNoFixed = (ArrayList<Integer>) data.get(3);
+		@SuppressWarnings("unchecked")
+		ArrayList<Integer> columnNoFixed = (ArrayList<Integer>) data.get(4);
+
+		totalPlayers = players.size();
+		currPlayer = players.get(0);
+		queuePlayer1 = players.get(1);
 		if (totalPlayers >= 3) {
-			queuePlayer2 = players[2];
+			queuePlayer2 = players.get(2);
 		}
 		if (totalPlayers >= 4) {
-			queuePlayer3 = players[3];
+			queuePlayer3 = players.get(3);
 		}
 		// TODO - int[] xNotFixed, int[]yNotFixed
 	}
