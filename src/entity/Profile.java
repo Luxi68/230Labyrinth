@@ -16,7 +16,7 @@ public class Profile implements Comparable<Profile> {
     }
 
     public void createProfileFile(String name) throws IOException {
-        String filename = "/Users/albertoortenzi/IdeaProjects/230Labyrinth/resources/users/"+name+".txt";
+        String filename = "resources/users/"+name+".txt";
         File createdFile = new File(filename);
         FileWriter writing = new FileWriter(filename);
         writing.write(name);
