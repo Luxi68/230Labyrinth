@@ -234,9 +234,16 @@ public class FileReader {
         for (int i = 0; i < gBoard.getLength(); i++) {
             for (int y = 0; y < gBoard.getHeight(); y++) {
                 if (gBoard.getTileAt(i, y) == null) {
-                    if (gBoard.getTileAt(i, y) == null) {
-                        gBoard.insertTileAt(y,i,(Floor) bag.drawTile());
+                    Tile silkBagTile = bag.drawTile();
+                    String tempTileType = silkBagTile.getTileType();
+                    while (tempTileType.equalsIgnoreCase("fire")
+                            || tempTileType.equalsIgnoreCase("ice")
+                            || tempTileType.equalsIgnoreCase("doubleMove")
+                            || tempTileType.equalsIgnoreCase("backTrack")){
+                        silkBagTile = bag.drawTile();
+                        tempTileType = silkBagTile.getTileType();
                     }
+                    gBoard.insertTileAt(y,i,(Floor) silkBagTile);
                 }
             }
         }
