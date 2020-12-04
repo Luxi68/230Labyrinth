@@ -95,7 +95,7 @@ public class Board {
     public Floor insertFromTop(Floor insert, int column) throws IllegalStateException {
         if (checkIfColumnMovable(column)) {
             Floor ejectedTile = BOARD[HEIGHT - 1][column];
-            for (int i = HEIGHT - 1; i == 1; i--) {
+            for (int i = HEIGHT - 1; i > 0; i--) {
                 BOARD[i][column] = BOARD[i - 1][column];
             }
             BOARD[0][column] = insert;

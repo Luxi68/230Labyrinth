@@ -174,9 +174,9 @@ public class GameScreenController implements Initializable {
 		}
 
 		// TODO - players array list to simplify turn order stuff
-//		playerRoster = players;
-//		rowNoFixed = rows;
-//		columnNoFixed = columns;
+		playerRoster = players;
+		rowNoFixed = rows;
+		columnNoFixed = columns;
 	}
 
 	/**
@@ -357,25 +357,73 @@ public class GameScreenController implements Initializable {
 					startPlayActionTurn();
 
 				} catch (Exception e) {
-//					gameLog.appendText(e.getMessage());
-					gameLog.appendText("ERROR: This column cannot be moved.\n");
-					e.printStackTrace();
+					gameLog.appendText(e.getMessage());
+//					gameLog.appendText("ERROR: This column cannot be moved.\n");
+//					e.printStackTrace();
 				}
 			} else if (column == 0) { // Left column
 				try {
-//					ejectedTile = gameBoard.insertFromLeft(insertedTile, columnIndex);
+					ejectedTile = gameBoard.insertFromLeft(insertedTile, rowIndex - 1);
+					silkBag.addTile(ejectedTile);
+					// TODO - add player checks
+
+					for (int i = 1; i < boardColumns - 1; i++) {
+						Floor tempFloor = gameBoard.getTileAt(rowIndex - 1, i - 1);
+						Rectangle tempRect = (Rectangle) boardImg[rowIndex][i].getChildren().get(0);
+						tempRect.setFill(new ImagePattern(tempFloor.getImage()));
+						tempRect.setRotate(tempFloor.getRotation());
+					}
+					silkBagTileImg.setFill(GREY);
+					Floor tempFloor = (Floor) silkBagTile;
+					tempFloor.setRotation(0);
+
+					gameLog.appendText("Tile slid into row " + (rowIndex - 1) + ".\n");
+					startPlayActionTurn();
+
 				} catch (Exception e) {
 					gameLog.appendText(e.getMessage());
 				}
 			} else if (row == boardRows - 1) { // Bottom row
 				try {
-//					ejectedTile = gameBoard.insertFromBottom(insertedTile, columnIndex);
+					ejectedTile = gameBoard.insertFromTop(insertedTile, columnIndex - 1);
+					silkBag.addTile(ejectedTile);
+					// TODO - add player checks
+
+					for (int i = 1; i < boardRows - 1; i++) {
+						Floor tempFloor = gameBoard.getTileAt(i - 1, columnIndex - 1);
+						Rectangle tempRect = (Rectangle) boardImg[i][columnIndex].getChildren().get(0);
+						tempRect.setFill(new ImagePattern(tempFloor.getImage()));
+						tempRect.setRotate(tempFloor.getRotation());
+					}
+					silkBagTileImg.setFill(GREY);
+					Floor tempFloor = (Floor) silkBagTile;
+					tempFloor.setRotation(0);
+
+					gameLog.appendText("Tile slid into column " + (columnIndex - 1) + ".\n");
+					startPlayActionTurn();
+
 				} catch (Exception e) {
 					gameLog.appendText(e.getMessage());
 				}
 			} else if (column == boardColumns - 1) { // Right column
 				try {
-//					ejectedTile = gameBoard.insertFromRight(insertedTile, columnIndex);
+					ejectedTile = gameBoard.insertFromRight(insertedTile, rowIndex - 1);
+					silkBag.addTile(ejectedTile);
+					// TODO - add player checks
+
+					for (int i = 1; i < boardColumns - 1; i++) {
+						Floor tempFloor = gameBoard.getTileAt(rowIndex - 1, i - 1);
+						Rectangle tempRect = (Rectangle) boardImg[rowIndex][i].getChildren().get(0);
+						tempRect.setFill(new ImagePattern(tempFloor.getImage()));
+						tempRect.setRotate(tempFloor.getRotation());
+					}
+					silkBagTileImg.setFill(GREY);
+					Floor tempFloor = (Floor) silkBagTile;
+					tempFloor.setRotation(0);
+
+					gameLog.appendText("Tile slid into row " + (rowIndex - 1) + ".\n");
+					startPlayActionTurn();
+
 				} catch (Exception e) {
 					gameLog.appendText(e.getMessage());
 				}

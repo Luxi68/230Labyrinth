@@ -15,13 +15,15 @@ import java.util.Scanner;
 
 /**
  * FileReader.java
- * This class reads a level file.  For the format of this file, see A1 design (slight modification have been done to it)
+ * This class reads a level file.
+ * For the format of this file, see A1 design (slight modification have been done to it)
  *
  * @author Alberto Ortenzi, Rhys
  */
 public class FileReader {
     /**
-     * Method to read the file name which is asked in the main method. initialised a scanner and checks if the file exists
+     * Method to read the file name which is asked in the main method.
+     * Initialised a scanner and checks if the file exists.
      *
      * @param filename the name of the file
      * @param a        is a list of profiles to be used in creating players for the game
@@ -42,12 +44,14 @@ public class FileReader {
     }
 
     /**
-     * Reads the data file used by the program and returns something not sure atm. Based on the first character of each line
-     * of the file the method calls a specific method and creates specific objects which are part of the program
+     * Reads the data file used by the program and returns something not sure atm.
+     * Based on the first character of each line of the file the method calls a specific method
+     * and creates specific objects which are part of the program
      *
      * @param in the scanner containing the file
      * @param a  a list of profiles to be used for creating players
-     * @return gameData an array of different objects(boards w/ tiles placed, silk bag with tiles in and then four players) used to create the game
+     * @return gameData an array of different objects
+     * (boards w/ tiles placed, silk bag with tiles in and then four players) used to create the game
      */
     private static ArrayList<Object> dataFile(Scanner in, ArrayList<Profile> a) {
         ArrayList<Object> gameData = new ArrayList<>();
@@ -56,9 +60,12 @@ public class FileReader {
         SilkBag bag = new SilkBag();
         while (in.hasNextLine()) {
             String data = in.nextLine();
-            String[] splitted = data.split(",");// splits the line of the program using the comma delimiter
-            if (splitted[0].matches("-?\\d+")) { //checks if the character is a integer and returns true and false based on it
-                switch (splitted.length) { //checks length of array and does action based on it as it uses the file format.
+            // splits the line of the program using the comma delimiter
+            String[] splitted = data.split(",");
+            //checks if the character is a integer and returns true and false based on it
+            if (splitted[0].matches("-?\\d+")) {
+                //checks length of array and does action based on it as it uses the file format.
+                switch (splitted.length) {
                     case 2:
                         //generates a blank board
                         int rows = Integer.parseInt(splitted[0]);
@@ -99,7 +106,8 @@ public class FileReader {
                 }
 
             } else {
-                switch (splitted[0].toLowerCase()) { //checks the first position of the array as it contains a specific character
+                //checks the first position of the array as it contains a specific character
+                switch (splitted[0].toLowerCase()) {
                     case "f":
                         //create a tile object with type x, and rotation j and insert it into the board at position y,z
                         String type = splitted[1];
@@ -109,16 +117,20 @@ public class FileReader {
 
                         switch (type) {
                             case "corner":
-                                gBoard.insertTileAt(tRows, tColumns, new Floor("corner", new Image("/assets/fixedcorner.png"), true));
+                                gBoard.insertTileAt(tRows, tColumns, new Floor(
+                                        "corner", new Image("/assets/fixedcorner.png"), true));
                                 break;
                             case "straight":
-                                gBoard.insertTileAt(tRows, tColumns, new Floor("straight", new Image("/assets/fixedstraight.png"), true));
+                                gBoard.insertTileAt(tRows, tColumns, new Floor(
+                                        "straight", new Image("/assets/fixedstraight.png"), true));
                                 break;
                             case "tee":
-                                gBoard.insertTileAt(tRows, tColumns, (new Floor("tee", new Image("/assets/fixedtee.png"), true)));
+                                gBoard.insertTileAt(tRows, tColumns, (new Floor(
+                                        "tee", new Image("/assets/fixedtee.png"), true)));
                                 break;
                             case "goal":
-                                gBoard.insertTileAt(tRows, tColumns, new Floor("goal", new Image("/assets/goal.png"), true));
+                                gBoard.insertTileAt(tRows, tColumns, new Floor(
+                                        "goal", new Image("/assets/goal.png"), true));
                                 break;
                         }
                         for (int i = 0; i < rot; ++i) {
@@ -135,37 +147,44 @@ public class FileReader {
                         switch (name) {
                             case "corner":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Floor("corner", new Image("/assets/corner.png"), false));
+                                    bag.addTile(new Floor("corner",
+                                            new Image("/assets/corner.png"), false));
                                 }
                                 break;
                             case "straight":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Floor("straight", new Image("/assets/straight.png"), false));
+                                    bag.addTile(new Floor("straight",
+                                            new Image("/assets/straight.png"), false));
                                 }
                                 break;
                             case "tee":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Floor("tee", new Image("/assets/tee.png"), false));
+                                    bag.addTile(new Floor("tee",
+                                            new Image("/assets/tee.png"), false));
                                 }
                                 break;
                             case "fire":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("fire", new Image("/assets/fire.png")));
+                                    bag.addTile(new Action("fire",
+                                            new Image("/assets/fire.png")));
                                 }
                                 break;
                             case "ice":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("ice", new Image("/assets/ice.png")));
+                                    bag.addTile(new Action("ice",
+                                            new Image("/assets/ice.png")));
                                 }
                                 break;
                             case "doubleMove":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("doubleMove", new Image("/assets/doublemove.png")));
+                                    bag.addTile(new Action("doubleMove",
+                                            new Image("/assets/doublemove.png")));
                                 }
                                 break;
                             case "backTrack":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("backTrack", new Image("/assets/backtrack.png")));
+                                    bag.addTile(new Action("backTrack",
+                                            new Image("/assets/backtrack.png")));
                                 }
                                 break;
                             default:
@@ -215,7 +234,9 @@ public class FileReader {
         for (int i = 0; i < gBoard.getLength(); i++) {
             for (int y = 0; y < gBoard.getHeight(); y++) {
                 if (gBoard.getTileAt(i, y) == null) {
-                    bag.drawTile();
+                    if (gBoard.getTileAt(i, y) == null) {
+                        gBoard.insertTileAt(y,i,(Floor) bag.drawTile());
+                    }
                 }
             }
         }
@@ -231,7 +252,8 @@ public class FileReader {
 
 
         in.close();
-        return gameData;//spit out board bag and then players//not defined atm but will be as soon as we decide how to make it work with UI
+        return gameData;//spit out board bag and then players
+        // not defined atm but will be as soon as we decide how to make it work with UI
     }
 
 }
