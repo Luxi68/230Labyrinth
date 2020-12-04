@@ -14,7 +14,6 @@ public class Floor extends Tile {
 	private final boolean IS_GOAL;
 	private int row;
 	private int column;
-
 	private boolean north;
 	private boolean south;
 	private boolean east;
