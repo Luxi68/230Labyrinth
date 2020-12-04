@@ -78,8 +78,9 @@ public class Board {
 	public Floor insertFromTop(Floor insert, int column) {
 		if (checkIfColumnMovable(column)) {
 			Floor ejectedTile = BOARD[HEIGHT - 1][column];
-			for (int i = HEIGHT - 1; i == 1; i--) {
-				BOARD[i][column] = BOARD[i - 1][column];
+			for (int i = HEIGHT - 1; i > 0; i--) {
+				Floor tempFloor = BOARD[i - 1][column];
+				BOARD[i][column] = tempFloor;
 			}
 			BOARD[0][column] = insert;
 			return ejectedTile;
@@ -164,7 +165,7 @@ public class Board {
 	/**
 	 * checkIfRowMovable checks whether it is possible or not to insert a tile into this row
 	 *
-	 * @param row     - the row to be checked
+	 * @param row - the row to be checked
 	 * @return
 	 */
 	private boolean checkIfRowMovable(int row) {
@@ -178,7 +179,6 @@ public class Board {
 	}
 
 	/**
-	 *
 	 * @param column
 	 * @return
 	 */

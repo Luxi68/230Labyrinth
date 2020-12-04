@@ -130,7 +130,7 @@
 	<center>
 		<VBox alignment="CENTER">
 			<HBox alignment="CENTER">
-				<StackPane fx:id="borderPaneCentre"/>
+				<AnchorPane fx:id="anchorPaneCentre"/>
 			</HBox>
 		</VBox>
 	</center>
