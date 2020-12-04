@@ -1,93 +1,91 @@
 package core;
 import entity.*;
 import javafx.scene.image.Image;
-import java.io.BufferedReader;
-import java.io.File;
+
+import java.io.*;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
- * @author Salim Zaidi
+ * @author Rhys
  * class that saves to a text file the imformation necessary to resume playing a game in progress
+ * also loads a game from a prior save
  */
 
 public class SaveGame {
 
-    public static void inputs(Board board, Floor floor, ArrayList<Player> players, SilkBag bag) throws IOException { //add hashmaps
+    /**
+     *
+     * @param name the name of the file to be saved to not the full path
+     * @param board the board to be saved
+     * @param players a list of players to be saved
+     * @param bag the silkbag to be saved
+     * @throws IOException because it was being awkward //todo fix the throws
+     */
 
-        String filename = "/resources/users/savedgame.txt";
-        File createdFile = new File(filename);
+    //throughout the file i commented out the hashmaps as i was unsure as to whether we were using them
+    //but to make it work with them simply uncomment and add the following line to the end of the save params
+    // ,HashMap hash1, HashMap hash2
 
-        BufferedReader buff = new BufferedReader(new FileReader("/resources/users/savedgame.txt"));
-        // if first line is empty i.e empty file, then write to it
-        if (buff.readLine() == null) {
-            FileWriter writing = new FileWriter(filename);
+    public static void save(String name, Board board, ArrayList<Player> players, SilkBag bag) throws IOException { //add hashmaps
 
-            writing.write(board.getLength() + "," + board.getHeight()); //board dimensions x y
-            writing.write("\n");
-
-            int x = 0;
-            int y = 0;
-            while(x < board.getLength() && y < board.getHeight()) {  //loop through board tiles
-
-                if (x - y == 1) {
-                    y++;
-                }
-//                    if (floor.equals("corner")){
-//                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,corner,true/false
-//                        writing.write("\n");
-//                    } else if (floor.equals("straight")) {
-//                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,straight,true/false
-//                        writing.write("\n");
-//                    }  else if (floor.equals("tee")){
-//                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,tee,true/false
-//                        writing.write("\n");
-//                    } else (floor.equals("goal")){
-//                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,goal,true/false
-//                        writing.write("\n");
-//                    }
-
-                ++x;
-                y++; // TODO:  need to find a way to increment through coordinates (xy) 01  11  12  22 instead of 00 11 22 33
-
-            } //end while loop
-
-            writing.write(board.toString());
-            writing.write("\n");
-
-            writing.write(players.toString());
-
-            writing.write("\n");
-
-            writing.write(bag.toString());
-
-            writing.close();
-
-
-         // Otherwise delete existing file
-        } else {
-            createdFile.delete(); // TODO: 04/12/2020 delete is ignored apparently.
-            //  SaveGame.inputs();
-        }
+    String fileName = "./reources/save/"+name+".txt";
+    File file = new File(fileName);
+    if(file.exists()){
+        PrintWriter clear = new PrintWriter(file);
+        clear.print("");
+        clear.close();
+    }else{
+        file.createNewFile();
     }
 
-    public static void main(String[]args) throws IOException {
+        FileOutputStream fFile = new FileOutputStream(file);
+        ObjectOutputStream oFile = new ObjectOutputStream(fFile);
 
-        Board board1 = new Board(5,5);
-        Floor floor = new Floor("corner",new Image("/assets/corner.png"), true);
+        oFile.writeObject(board);
+        oFile.writeObject(players);
+        oFile.writeObject(bag);
+        //oFile.writeObject(hash1);
+        //oFile.writeObject(hash2);
 
-        Player player1 = new Player(new Image("/assets/corner.png"), "#fdd14b", 5, 5, board1, new Profile("Rhys"));
-        SilkBag bag1 = new SilkBag();
-        ArrayList<Player> player2 = new ArrayList<>();
-        player2.add(player1);
-
-        SaveGame.inputs(board1, floor,player2, bag1);
+        fFile.close();
+        oFile.close();
     }
-    //public void FileAlreadyExistsException(File createdFile){
-    //    createdFile.delete();
-    //}
 
+    /**
+     *
+     * @param name the name of the file to be loaded from not the path to it
+     * @return a list of information which will allow the game to be recreated to the point it was saved at
+     * @throws IOException
+     * @throws ClassNotFoundException // todo fix the throws
+     */
+
+    public static ArrayList<Object> loadSave (String name) throws IOException, ClassNotFoundException {
+
+        String fileName = "./reources/save/"+name+".txt";
+        File file = new File(fileName);
+        ArrayList<Object> fileData = new ArrayList<>();
+
+        FileInputStream fiFile = new FileInputStream(file);
+        ObjectInputStream oiFile = new ObjectInputStream(fiFile);
+
+        Board board = (Board)oiFile.readObject();
+        ArrayList<Player> players = (ArrayList<Player>)oiFile.readObject();
+        SilkBag bag = (SilkBag) oiFile.readObject();
+        //HashMap hash1 = (HashMap)oiFile.readObject();
+        //HashMap hash2 = (HashMap)oiFile.readObject();
+
+        fileData.add(board);
+        fileData.add(players);
+        fileData.add(bag);
+        //fileData.add(hash1);
+        //fileData.add(hash2);
+
+        fiFile.close();
+        oiFile.close();
+
+        return fileData;
+    }
 }
 
