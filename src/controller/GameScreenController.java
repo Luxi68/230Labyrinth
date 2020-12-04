@@ -137,7 +137,7 @@ public class GameScreenController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Platform.runLater(() -> {
-			setupGame();
+//			setupGame();
 			setupBoard(gameBoard);
 
 			turn = 0;

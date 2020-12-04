@@ -230,10 +230,9 @@ public class FileReader {
         }
 
         //fill empty slots with floor tiles
-
         for (int i = 0; i < gBoard.getLength(); i++) {
             for (int y = 0; y < gBoard.getHeight(); y++) {
-                if (gBoard.getTileAt(i, y) == null) {
+                while (gBoard.getTileAt(i, y) == null) {
                     Tile silkBagTile = bag.drawTile();
                     String tempTileType = silkBagTile.getTileType();
                     while (tempTileType.equalsIgnoreCase("fire")
@@ -243,7 +242,7 @@ public class FileReader {
                         silkBagTile = bag.drawTile();
                         tempTileType = silkBagTile.getTileType();
                     }
-                    gBoard.insertTileAt(y,i,(Floor) silkBagTile);
+                    gBoard.insertTileAt(i,y,(Floor) silkBagTile);
                 }
             }
         }
