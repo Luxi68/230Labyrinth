@@ -3,10 +3,10 @@
 2,0,4
 3,4,0
 4,4,4
-f,corner,0,0,4
-f,corner,3,0,0
-f,corner,1,4,4
-f,corner,2,4,0
+f,corner,1,0,4
+f,corner,0,0,0
+f,corner,2,4,4
+f,corner,3,4,0
 f,goal,0,2,2
 b,corner,20
 b,straight,20

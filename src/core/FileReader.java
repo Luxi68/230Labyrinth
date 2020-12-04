@@ -224,7 +224,8 @@ public class FileReader {
                         silkBagTile = bag.drawTile();
                         tempTileType = silkBagTile.getTileType();
                     }
-                    int ran = (int)Math.random() * (3 + 1);
+                    double ran = (Math.random() * (3 + 1));
+
                     Floor placee = (Floor) silkBagTile;
                     for (int x = 0; x < ran; x++) {
                         placee.rotate();
