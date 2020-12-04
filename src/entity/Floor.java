@@ -12,9 +12,8 @@ public class Floor extends Tile {
 	private final Type FLOOR_TYPE;
 	private final boolean IS_FIXED;
 	private final boolean IS_GOAL;
-	private int x;
-	private int y;
-
+	private int row;
+	private int column;
 	private boolean north;
 	private boolean south;
 	private boolean east;
@@ -95,20 +94,20 @@ public class Floor extends Tile {
 		corner, straight, tee, goal
 	}
 
-	public int getX() {
-		return x;
+	public int getRow() {
+		return row;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public void setRow(int row) {
+		this.row = row;
 	}
 
-	public int getY() {
-		return y;
+	public int getColumn() {
+		return column;
 	}
 
-	public void setY(int y) {
-		this.y = y;
+	public void setColumn(int column) {
+		this.column = column;
 	}
 
 	public boolean isNorth() {
