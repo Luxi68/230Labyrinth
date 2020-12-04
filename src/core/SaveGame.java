@@ -35,22 +35,22 @@ public class SaveGame {
                 if (x - y == 1) {
                     y++;
                 }
-                    if (floor.equals("corner")){
-                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,corner,true/false
-                        writing.write("\n");
-                    } else if (floor.equals("straight")) {
-                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,straight,true/false
-                        writing.write("\n");
-                    }  else if (floor.equals("tee")){
-                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,tee,true/false
-                        writing.write("\n");
-                    } else (floor.equals("goal")){
-                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,goal,true/false
-                        writing.write("\n");
-                    }
+//                    if (floor.equals("corner")){
+//                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,corner,true/false
+//                        writing.write("\n");
+//                    } else if (floor.equals("straight")) {
+//                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,straight,true/false
+//                        writing.write("\n");
+//                    }  else if (floor.equals("tee")){
+//                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,tee,true/false
+//                        writing.write("\n");
+//                    } else (floor.equals("goal")){
+//                        writing.write(floor.getX() + "," + floor.getY() + "," + floor.getRotation() + "," + floor.getFLOOR_TYPE() + "," + floor.getIsFixed()); //write x,y,n,goal,true/false
+//                        writing.write("\n");
+//                    }
 
                 ++x;
-                y++; @// TODO:  need to find a way to increment through coordinates (xy) 01  11  12  22 instead of 00 11 22 33
+                y++; // TODO:  need to find a way to increment through coordinates (xy) 01  11  12  22 instead of 00 11 22 33
 
             } //end while loop
 
@@ -68,7 +68,7 @@ public class SaveGame {
 
          // Otherwise delete existing file
         } else {
-            createdFile.delete(); @// TODO: 04/12/2020 delete is ignored apparently.
+            createdFile.delete(); // TODO: 04/12/2020 delete is ignored apparently.
             //  SaveGame.inputs();
         }
     }
@@ -76,11 +76,11 @@ public class SaveGame {
     public static void main(String[]args) throws IOException {
 
         Board board1 = new Board(5,5);
-        Floor floor = new Floor("corner","/assets/corner.png", true); @// TODO: 04/12/2020 image needed not url.
+        Floor floor = new Floor("corner",new Image("/assets/corner.png"), true);
 
         Player player1 = new Player(new Image("/assets/corner.png"), "#fdd14b", 5, 5, board1, new Profile("Rhys"));
         SilkBag bag1 = new SilkBag();
-        ArrayList<Player> player2 = null;
+        ArrayList<Player> player2 = new ArrayList<>();
         player2.add(player1);
 
         SaveGame.inputs(board1, floor,player2, bag1);

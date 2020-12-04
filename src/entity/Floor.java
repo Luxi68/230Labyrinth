@@ -14,10 +14,10 @@ public class Floor extends Tile {
 	private final boolean IS_GOAL;
 	private int row;
 	private int column;
-	private boolean north;
-	private boolean south;
-	private boolean east;
-	private boolean west;
+	public boolean north;
+	public boolean south;
+	public boolean east;
+	public boolean west;
 	private boolean isFire;
 	private boolean isIce;
 	private int rotation;

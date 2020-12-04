@@ -133,9 +133,13 @@ public class GameScreenController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Platform.runLater(() -> {
-//			setupGame();
+			setupGame();
 			setupBoard(gameBoard);
 			setupPlayerTokens();
+			currPlayerFireImg.setImage(new Image("/assets/fire.png"));
+			currPlayerIceImg.setImage(new Image("/assets/ice.png"));
+			currPlayerDoubleMoveImg.setImage(new Image("/assets/doublemove.png"));
+			currPlayerBacktrackImg.setImage(new Image("/assets/backtrack.png"));
 
 			turn = 0;
 			gameLog.appendText("GAME START!\n");
@@ -193,15 +197,12 @@ public class GameScreenController implements Initializable {
 		Profile lucy = new Profile("Lucy");
 		Profile rhys = new Profile("Rhys");
 		currPlayer = new Player(new Image("/assets/aries.png"), "#b53232", 0, 0, gameBoard, lucy);
-		Player queuePlayer1 = new Player(new Image("/assets/apollo.png"), "#fdd14b", 5, 5, gameBoard, rhys);
+		Player queuePlayer1 = new Player(new Image("/assets/apollo.png"), "#fdd14b", 2, 2, gameBoard, rhys);
 //		Player queuePlayer2 = new Player(new Image("/assets/artemis.png"), "#55b54c", 0, 0, gameBoard, lucy);
 //		Player queuePlayer3 = new Player(new Image("/assets/aphrodite.png"), "#c677b3", 0, 0, gameBoard, rhys);
+		playerRoster = new ArrayList<>();
 		playerRoster.add(currPlayer);
 		playerRoster.add(queuePlayer1);
-		currPlayerFireImg.setImage(new Image("/assets/fire.png"));
-		currPlayerIceImg.setImage(new Image("/assets/ice.png"));
-		currPlayerDoubleMoveImg.setImage(new Image("/assets/doublemove.png"));
-		currPlayerBacktrackImg.setImage(new Image("/assets/backtrack.png"));
 	}
 
 	/**
@@ -259,9 +260,9 @@ public class GameScreenController implements Initializable {
 				int finalJ = j;
 				stack.setOnMouseClicked(event -> {
 					// Moving backend
-					Floor currFloor = currPlayer.getCurrentFloor();
+					Floor currFloor = currPlayer.getCurrentFloor(gameBoard);
 					Floor movedFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
-					currPlayer.movePlayer(movedFloor);
+					currPlayer.movePlayer(gameBoard, movedFloor);
 
 					// Moving frontend
 					ImageView currFloorImg = (ImageView) boardImg[currFloor.getRow() + 1][currFloor.getColumn() + 1]
@@ -340,6 +341,19 @@ public class GameScreenController implements Initializable {
 						Rectangle tempRect = (Rectangle) boardImg[i][columnIndex].getChildren().get(0);
 						tempRect.setFill(new ImagePattern(tempFloor.getImage()));
 						tempRect.setRotate(tempFloor.getRotation());
+
+						Player token = checkPlayerLoc(i - 1, columnIndex - 1);
+						if (token != null) {
+							ImageView oldLoc = (ImageView) boardImg[i][columnIndex].getChildren().get(1);
+							oldLoc.setImage(null);
+							ImageView newLoc;
+							if (i == boardRows - 1) {
+								newLoc = (ImageView) boardImg[1][columnIndex].getChildren().get(1);
+							} else {
+								newLoc = (ImageView) boardImg[i + 1][columnIndex].getChildren().get(1);
+							}
+							newLoc.setImage(token.getImage());
+						}
 					}
 					silkBagTileImg.setFill(GREY);
 					Floor tempFloor = (Floor) silkBagTile;
@@ -443,12 +457,28 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
+	 * Checks to see if any players are in a set location
+	 *
+	 * @param row - row to be checked
+	 * @param column - column to be checked
+	 * @return - player who is on the location, null if none
+	 */
+	private Player checkPlayerLoc(int row, int column) {
+		for (Player player: playerRoster) {
+			if (player.getRowLoc() == row && player.getColumnLoc() == column) {
+				return player;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Setup player images on the corresponding tile.
 	 */
 	private void setupPlayerTokens() {
-		for (Player player: playerRoster) { // TODO - work out why this is weird
-			int row = player.getCurrentFloor().getRow();
-			int column = player.getCurrentFloor().getColumn();
+		for (Player player: playerRoster) {
+			int row = player.getRowLoc();
+			int column = player.getColumnLoc();
 
 			ImageView playerToken = (ImageView) boardImg[row + 1][column + 1].getChildren().get(1);
 			playerToken.setImage(player.getImage());
@@ -475,7 +505,7 @@ public class GameScreenController implements Initializable {
 	 *
 	 * @param bool - The boolean value desired for the arrow disable state
 	 */
-	private void setDisabledBoardArrows(boolean bool) { //TODO - update this
+	private void setDisabledBoardArrows(boolean bool) {
 		for (int i = 0; i < boardRows; i++) {
 			if (boardImg[i][0] != null) {
 				boardImg[i][0].setDisable(bool);
@@ -741,7 +771,24 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void moveClick() {
 		try {
-			playerMoves = currPlayer.possibleMoves();
+			playerMoves = currPlayer.possibleMoves(gameBoard);
+
+			for (Floor floor: playerMoves) {
+				System.out.println(floor.getRow() + "," + floor.getColumn() + ":"
+				+ floor.north + floor.east + floor.south + floor.west);
+			}
+			System.out.println(currPlayer.getRowLoc() + "," + currPlayer.getColumnLoc() + ","
+					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).north + ","
+					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).east + ","
+					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).south + ","
+					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).west + ",");
+			System.out.println(currPlayer.getRowLoc()+1 + "," + currPlayer.getColumnLoc() + ","
+					+ gameBoard.getTileAt(currPlayer.getRowLoc()+1, currPlayer.getColumnLoc()).north + ","
+					+ gameBoard.getTileAt(currPlayer.getRowLoc()+1, currPlayer.getColumnLoc()).east + ","
+					+ gameBoard.getTileAt(currPlayer.getRowLoc()+1, currPlayer.getColumnLoc()).south + ","
+					+ gameBoard.getTileAt(currPlayer.getRowLoc()+1, currPlayer.getColumnLoc()).west + ",");
+
+
 			if (!playerMoves.isEmpty()) {
 				for (Floor tile: playerMoves) {
 					StackPane stack = boardImg[tile.getRow() + 1][tile.getColumn() + 1];

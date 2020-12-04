@@ -115,7 +115,7 @@ public class FileReader {
                                 gBoard.insertTileAt(tRows, tColumns, new Floor("straight", new Image("/assets/fixedstraight.png"), true));
                                 break;
                             case "tee":
-                                gBoard.insertTileAt(tRows, tColumns, (new Floor("tee", new Image("/assets/fixedtee.png"), true)));
+                                gBoard.insertTileAt(tRows, tColumns, new Floor("tee", new Image("/assets/fixedtee.png"), true));
                                 break;
                             case "goal":
                                 gBoard.insertTileAt(tRows, tColumns, new Floor("goal", new Image("/assets/goal.png"), true));
@@ -186,26 +186,24 @@ public class FileReader {
 
         for (int i = 0; i < gBoard.getHeight(); i++) {
             boolean empty = true;
-            for (int x = 0; x < gBoard.getLength(); x++) {
-                if (gBoard.getTileAt(x, i) != null) {
+            for (int j = 0; j < gBoard.getLength(); j++) {
+                if (gBoard.getTileAt(i, j) != null) {
                     empty = false;
                 }
             }
             if (empty) {
-
                 rowNoFixed.add(i);
             }
         }
 
         for (int i = 0; i < gBoard.getLength(); i++) {
             boolean empty = true;
-            for (int x = 0; x < gBoard.getHeight(); x++) {
-                if (gBoard.getTileAt(x, i) != null) {
+            for (int j = 0; j < gBoard.getHeight(); j++) {
+                if (gBoard.getTileAt(j, i) != null) {
                     empty = false;
                 }
             }
             if (empty) {
-
                 columnNoFixed.add(i);
             }
         }
@@ -213,8 +211,8 @@ public class FileReader {
         //fill empty slots with floor tiles
 
         for (int i = 0; i < gBoard.getLength(); i++) {
-            for (int y = 0; y < gBoard.getHeight(); y++) {
-                if (gBoard.getTileAt(i, y) == null) {
+            for (int j = 0; j < gBoard.getHeight(); j++) {
+                if (gBoard.getTileAt(j, i) == null) {
                     Tile silkBagTile = bag.drawTile();
                     String tempTileType = silkBagTile.getTileType();
                     while (tempTileType.equalsIgnoreCase("fire")
@@ -226,11 +224,11 @@ public class FileReader {
                     }
                     double ran = (Math.random() * (3 + 1));
 
-                    Floor placee = (Floor) silkBagTile;
+                    Floor place = (Floor) silkBagTile;
                     for (int x = 0; x < ran; x++) {
-                        placee.rotate();
+                        place.rotate();
                     }
-                    gBoard.insertTileAt(i,y,placee);
+                    gBoard.insertTileAt(j,i,place);
                 }
             }
         }
