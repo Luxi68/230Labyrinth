@@ -10,7 +10,7 @@ public class Tuple implements Comparable<Tuple>{
     }
     @Override
     public int compareTo(Tuple tuple){
-        return Integer.compare(rank, tuple.rank);
+        return tuple.user.getNumberOfWins() - user.getNumberOfWins();
     }
 
     public int getRank() {
