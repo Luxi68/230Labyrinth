@@ -9,13 +9,16 @@ public class SilkBag {
         return bag;
     }
 
-    public Tile drawTile(){
+    public Tile drawTile() {
         Tile tile;
+        double index;
+        int value;
         do {
-            double index = Math.random() * (bag.size()) + 0;
-            int value = (int)index;
+            index = Math.random() * (bag.size()) + 0;
+            value = (int) index;
             tile = bag.get(value);
         } while (tile == null);
+        bag.remove(value);
         return tile;
     }// TODO - Tiles need to be removed as they are taken out
 
