@@ -67,9 +67,11 @@ public class FileReader {
 						break;
 					case 3:
 						//create player object and set starting position to px,py and player number to pn
+
 						int pn = Integer.parseInt(splitted[0]);
 						int px = Integer.parseInt(splitted[1]);
 						int py = Integer.parseInt(splitted[2]);
+
 						Image img = null;
 						String hex = "";
 						switch (pn) {
@@ -90,7 +92,10 @@ public class FileReader {
 								hex = "#fdd14b";
 								break;
 						}
-						players.add(new Player(img, hex, px, py, gBoard, a.get(pn - 1)));
+						if ( a.size() > pn-1) {
+							players.add(new Player(img, hex, px, py, gBoard, a.get(pn - 1)));
+						}
+						break;
 				}
 
 			} else {
