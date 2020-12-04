@@ -61,16 +61,16 @@ public class FileReader {
 				switch (splitted.length) { //checks length of array and does action based on it as it uses the file format.
 					case 2:
 						//generates a blank board
-						int height = Integer.parseInt(splitted[0]);
-						int width = Integer.parseInt(splitted[1]);
-						gBoard = new Board(height, width);
+						int rows = Integer.parseInt(splitted[0]);
+						int columns = Integer.parseInt(splitted[1]);
+						gBoard = new Board(columns, rows);
 						break;
 					case 3:
 						//create player object and set starting position to px,py and player number to pn
 
 						int pn = Integer.parseInt(splitted[0]);
-						int px = Integer.parseInt(splitted[1]);
-						int py = Integer.parseInt(splitted[2]);
+						int pRows = Integer.parseInt(splitted[1]);
+						int pColumns = Integer.parseInt(splitted[2]);
 
 						Image img = null;
 						String hex = "";
@@ -93,7 +93,7 @@ public class FileReader {
 								break;
 						}
 						if ( a.size() > pn-1) {
-							players.add(new Player(img, hex, px, py, gBoard, a.get(pn - 1)));
+							players.add(new Player(img, hex, pColumns, pRows, gBoard, a.get(pn - 1)));
 						}
 						break;
 				}
@@ -104,25 +104,25 @@ public class FileReader {
 						//create a tile object with type x, and rotation j and insert it into the board at position y,z
 						String type = splitted[1];
 						int rot = Integer.parseInt(splitted[2]);
-						int tx = Integer.parseInt(splitted[3]);
-						int ty = Integer.parseInt(splitted[4]);
+						int tRows = Integer.parseInt(splitted[3]);
+						int tColumns = Integer.parseInt(splitted[4]);
 
 						switch (type) {
 							case "corner":
-								gBoard.insertTileAt(tx, ty, new Floor("corner", new Image("/assets/fixedcorner.png"), true));
+								gBoard.insertTileAt(tRows, tColumns, new Floor("corner", new Image("/assets/fixedcorner.png"), true));
 								break;
 							case "straight":
-								gBoard.insertTileAt(tx, ty, new Floor("straight", new Image("/assets/fixedstraight.png"), true));
+								gBoard.insertTileAt(tRows, tColumns, new Floor("straight", new Image("/assets/fixedstraight.png"), true));
 								break;
 							case "tee":
-								gBoard.insertTileAt(tx, ty, (new Floor("tee", new Image("/assets/fixedtee.png"), true)));
+								gBoard.insertTileAt(tRows, tColumns, (new Floor("tee", new Image("/assets/fixedtee.png"), true)));
 								break;
 							case "goal":
-								gBoard.insertTileAt(tx, ty, new Floor("goal", new Image("/assets/goal.png"), true));
+								gBoard.insertTileAt(tRows, tColumns, new Floor("goal", new Image("/assets/goal.png"), true));
 								break;
 						}
 						for (int i = 0; i < rot; ++i) {
-							gBoard.getTileAt(tx, ty).rotate();
+							gBoard.getTileAt(tRows, tColumns).rotate();
 						}
 
 
