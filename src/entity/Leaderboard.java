@@ -18,8 +18,8 @@ public class Leaderboard{
         File directoryPath = new File("resources/users");
         File listOfFiles[] = directoryPath.listFiles();
         Scanner sc = null;
+        int count = 0;
         for (File currentFile : listOfFiles){
-            int count = 0;
             Profile user = new Profile("");
             sc = new Scanner(currentFile);
             while (sc.hasNextLine()){
@@ -34,7 +34,12 @@ public class Leaderboard{
             listOfUsers.add(entry);
         }
         Collections.sort(listOfUsers);
-        return  listOfUsers;
+        for (int i=0; i<listOfUsers.size(); i++){
+            if (listOfUsers.get(i).rank != i+1){
+                listOfUsers.get(i).setRank(i+1);
+            }
+        }
+        return listOfUsers;
     }
 
     public void setLeaderboard(ArrayList<Tuple> leaderboard) {

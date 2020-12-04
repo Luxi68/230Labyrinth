@@ -41,6 +41,7 @@ public class LeaderboardController {
 
     @FXML
     void initialize() {
+        
 
     }
 }
