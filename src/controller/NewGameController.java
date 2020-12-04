@@ -1,25 +1,33 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Observable;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class NewGameController {
 
 	public RadioButton twoPlayers;
 	public RadioButton threePlayers;
 	public RadioButton fourPlayers;
-	@FXML
+    public ChoiceBox<String> fileChoice;
+    @FXML
 	private ResourceBundle resources;
 
 	@FXML
@@ -32,6 +40,8 @@ public class NewGameController {
 		twoPlayers.setSelected(true);
 		threePlayers.setToggleGroup(playerSelectionGroup);
 		fourPlayers.setToggleGroup(playerSelectionGroup);
+		ObservableList<String> choices = FXCollections.observableArrayList(getAllLevelFilenames());
+		fileChoice.setItems(choices);
 	}
 
 	@FXML
@@ -53,6 +63,17 @@ public class NewGameController {
 			e.printStackTrace();
 		}
 	}
+	public ArrayList<String> getAllLevelFilenames(){
+		ArrayList<String> levelFileNames = new ArrayList<>();
+		File directoryPath = new File("resources/levels");
+		File listOfFiles[] = directoryPath.listFiles();
+		Scanner sc = null;
+		for (File currentFile : listOfFiles) {
+			levelFileNames.add(currentFile.getName());
+		}
+		return levelFileNames;
+	}
+
 
 	@FXML
 	private void backToStartScreen(ActionEvent actionEvent) {
