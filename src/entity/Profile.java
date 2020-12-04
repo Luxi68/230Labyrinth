@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Profile {
+public class Profile implements Comparable<Profile> {
     String playerName;
     int numberOfWins = 0;
     int numberOfGamesPlayed = 0;
@@ -23,6 +23,11 @@ public class Profile {
         writing.write(",");
         writing.write("0");
         writing.close();
+    }
+
+    @Override
+    public int compareTo(Profile profile){
+        return profile.getNumberOfWins() - getNumberOfWins();
     }
 
     public int getNumberOfGamesPlayed() {
