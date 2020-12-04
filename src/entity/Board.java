@@ -83,8 +83,6 @@ public class Board {
 	}*/
 
 
-
-
     /**
      * insertFromTop inserts a Floor tile to the board and shifts relevant tiles from the top of the board
      * @param insert The Floor tile that needs to be inserted
@@ -126,7 +124,6 @@ public class Board {
                     "ERROR: This row cannot be moved as there are iced tiles in the way.\n");
         }
     }
-
 
     /**
      * insertFromLeft inserts a Floor tile to the board and shifts relevant tiles from the left of the board

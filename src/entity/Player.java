@@ -43,6 +43,11 @@ public class Player {
 		this.board = board;
 		this.PROFILE = profile;
 		this.backtracked = false;
+		this.currentFloor = board.getTileAt(rowLoc, columnLoc);
+		System.out.println(board);
+		System.out.println(currentFloor);
+		System.out.println(rowLoc + "," + columnLoc);
+		System.out.println(currentFloor.getRow() + "," + currentFloor.getColumn());
 	}
 
 
@@ -124,18 +129,6 @@ public class Player {
 	}
 
 	/**
-	 * Stores the last 3 positions, used to backtrack the player
-	 */
-	private void storePosi() {
-		lastPosiRow[2] = lastPosiRow[1];
-		lastPosiColumn[2] = lastPosiRow[1];
-		lastPosiRow[1] = lastPosiRow[0];
-		lastPosiColumn[1] = lastPosiColumn[0];
-		lastPosiRow[0] = rowLoc;
-		lastPosiColumn[0] = columnLoc;
-	}
-
-	/**
 	 * Returns all the possible moves a player can male from his current location
 	 *
 	 * @return an arrayList of all possible tiles he can move to
@@ -155,6 +148,18 @@ public class Player {
 			possibleMoves.add(board.getTileAt(rowLoc, columnLoc + 1));
 		}
 		return possibleMoves;
+	}
+
+	/**
+	 * Stores the last 3 positions, used to backtrack the player
+	 */
+	private void storePosi() {
+		lastPosiRow[2] = lastPosiRow[1];
+		lastPosiColumn[2] = lastPosiRow[1];
+		lastPosiRow[1] = lastPosiRow[0];
+		lastPosiColumn[1] = lastPosiColumn[0];
+		lastPosiRow[0] = rowLoc;
+		lastPosiColumn[0] = columnLoc;
 	}
 
 	/**

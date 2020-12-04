@@ -51,13 +51,9 @@ public class GameScreenController implements Initializable {
 	private Tile silkBagTile;
 	private ArrayList<Player> playerRoster;
 	private Player currPlayer;
-	private Player queuePlayer1;
-	private Player queuePlayer2;
-	private Player queuePlayer3;
 	private Action actionToUse;
 	// Game info
 	private int turn;
-	private int totalPlayers;
 	private ArrayList<Floor> playerMoves;
 	private int boardRows; // Board height + 2 for arrow buttons
 	private int boardColumns; // Board length + 2 for arrow buttons
@@ -139,6 +135,7 @@ public class GameScreenController implements Initializable {
 		Platform.runLater(() -> {
 //			setupGame();
 			setupBoard(gameBoard);
+			setupPlayerTokens();
 
 			turn = 0;
 			gameLog.appendText("GAME START!\n");
@@ -163,15 +160,7 @@ public class GameScreenController implements Initializable {
 		@SuppressWarnings("unchecked")
 		ArrayList<Integer> columns = (ArrayList<Integer>) data.get(4);
 
-		totalPlayers = players.size();
 		currPlayer = players.get(0);
-		queuePlayer1 = players.get(1);
-		if (totalPlayers >= 3) {
-			queuePlayer2 = players.get(2);
-		}
-		if (totalPlayers >= 4) {
-			queuePlayer3 = players.get(3);
-		}
 
 		// TODO - players array list to simplify turn order stuff
 		playerRoster = players;
@@ -204,10 +193,11 @@ public class GameScreenController implements Initializable {
 		Profile lucy = new Profile("Lucy");
 		Profile rhys = new Profile("Rhys");
 		currPlayer = new Player(new Image("/assets/aries.png"), "#b53232", 0, 0, gameBoard, lucy);
-		queuePlayer1 = new Player(new Image("/assets/apollo.png"), "#fdd14b", 5, 5, gameBoard, rhys);
-//		queuePlayer2 = new Player(new Image("/assets/artemis.png"), "#55b54c", 0, 0, gameBoard, lucy);
-//		queuePlayer3 = new Player(new Image("/assets/aphrodite.png"), "#c677b3", 0, 0, gameBoard, rhys);
-		totalPlayers = 2;
+		Player queuePlayer1 = new Player(new Image("/assets/apollo.png"), "#fdd14b", 5, 5, gameBoard, rhys);
+//		Player queuePlayer2 = new Player(new Image("/assets/artemis.png"), "#55b54c", 0, 0, gameBoard, lucy);
+//		Player queuePlayer3 = new Player(new Image("/assets/aphrodite.png"), "#c677b3", 0, 0, gameBoard, rhys);
+		playerRoster.add(currPlayer);
+		playerRoster.add(queuePlayer1);
 		currPlayerFireImg.setImage(new Image("/assets/fire.png"));
 		currPlayerIceImg.setImage(new Image("/assets/ice.png"));
 		currPlayerDoubleMoveImg.setImage(new Image("/assets/doublemove.png"));
@@ -244,6 +234,7 @@ public class GameScreenController implements Initializable {
 				// Space for Floor tile
 				Rectangle tile = new Rectangle(tileSize, tileSize);
 				tile.setFill(new ImagePattern(boardObj.getTileAt(i - 1, j - 1).getImage()));
+				tile.setRotate(boardObj.getTileAt(i - 1, j - 1).getRotation());
 				tile.setStroke(Color.BLACK);
 				tile.setStrokeType(StrokeType.OUTSIDE);
 
@@ -251,6 +242,7 @@ public class GameScreenController implements Initializable {
 				ImageView playerToken = new ImageView();
 				playerToken.setFitHeight(playerTokenSize);
 				playerToken.setFitWidth(playerTokenSize);
+				playerToken.setMouseTransparent(true);
 //				playerToken.setOpacity(0); TODO - test to see if needed
 
 				// Holds both floor and player token
@@ -325,7 +317,7 @@ public class GameScreenController implements Initializable {
 
 		// Inserting bottom button
 		StackPane stack = new StackPane(insertTileButton);
-//		stack.setDisable(true);
+		stack.setDisable(true);
 		GridPane.setRowIndex(stack, row);
 		GridPane.setColumnIndex(stack, column);
 		boardPhs.getChildren().addAll(stack);
@@ -454,7 +446,13 @@ public class GameScreenController implements Initializable {
 	 * Setup player images on the corresponding tile.
 	 */
 	private void setupPlayerTokens() {
+		for (Player player: playerRoster) { // TODO - work out why this is weird
+			int row = player.getCurrentFloor().getRow();
+			int column = player.getCurrentFloor().getColumn();
 
+			ImageView playerToken = (ImageView) boardImg[row + 1][column + 1].getChildren().get(1);
+			playerToken.setImage(player.getImage());
+		}
 	}
 
 	/**
@@ -503,12 +501,12 @@ public class GameScreenController implements Initializable {
 		++turn;
 //		System.out.println((turn+totalPlayers-1)/totalPlayers);
 		setupCurrPlayerDisplay();
-		updatePlayerQueue(q1Img, q1Txt, queuePlayer1);
-		if (totalPlayers >= 3) {
-			updatePlayerQueue(q2Img, q2Txt, queuePlayer2);
+		updatePlayerQueue(q1Img, q1Txt, playerRoster.get(1));
+		if (playerRoster.size() >= 3) {
+			updatePlayerQueue(q2Img, q2Txt, playerRoster.get(2));
 		}
-		if (totalPlayers >= 4) {
-			updatePlayerQueue(q3Img, q3Txt, queuePlayer3);
+		if (playerRoster.size() >= 4) {
+			updatePlayerQueue(q3Img, q3Txt, playerRoster.get(3));
 		}
 
 		takeSilkBagTileButton.setDisable(false);
@@ -568,34 +566,11 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
-	 * Takes the current player and moves them to the back of the queue
-	 */
-	private void updatePlayerOrder() {
-		Player tempPlayer = queuePlayer1;
-		switch (totalPlayers) {
-			case 2:
-				queuePlayer1 = currPlayer;
-				break;
-			case 3:
-				queuePlayer1 = queuePlayer2;
-				queuePlayer2 = currPlayer;
-				break;
-			case 4:
-				queuePlayer1 = queuePlayer2;
-				queuePlayer2 = queuePlayer3;
-				queuePlayer3 = currPlayer;
-				break;
-			default:
-				gameLog.appendText("ERROR: Player order disrupted. Please reload from last save file.\n");
-				break;
-		}
-		currPlayer = tempPlayer;
-	}
-
-	/**
 	 * Setups the current player's hand including the correct number of each action tile
 	 */
 	private void setupCurrPlayerDisplay() {
+		Player currPlayer = playerRoster.get(0);
+
 		currPlayerImg.setImage(currPlayer.getImage());
 		currPlayerTxt.setText(currPlayer.getName());
 
@@ -802,7 +777,9 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText(currPlayer.getName() + "'s tile has been added to their hand.\n");
 		}
 
-		updatePlayerOrder();
+		playerRoster.remove(0);
+		playerRoster.add(currPlayer);
+		currPlayer = playerRoster.get(0);
 		gameLog.appendText("Round " + turn + ": Next Player - " + currPlayer.getName() + "!\n");
 		startNextTurn();
 	}
