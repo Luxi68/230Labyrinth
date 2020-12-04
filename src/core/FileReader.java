@@ -224,7 +224,12 @@ public class FileReader {
                         silkBagTile = bag.drawTile();
                         tempTileType = silkBagTile.getTileType();
                     }
-                    gBoard.insertTileAt(y,i,(Floor) silkBagTile);
+                    int ran = (int)Math.random() * (3 + 1);
+                    Floor placee = (Floor) silkBagTile;
+                    for (int x = 0; x < ran; x++) {
+                        placee.rotate();
+                    }
+                    gBoard.insertTileAt(i,y,placee);
                 }
             }
         }
