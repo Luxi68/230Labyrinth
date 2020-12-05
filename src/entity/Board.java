@@ -1,4 +1,4 @@
-package entity;//package game;
+package entity;
 
 /**
  * <P>Purpose: Setting out tiles by collaborating with Floor in order to create the game board.
