@@ -15,15 +15,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.*;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 
-import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -216,6 +213,7 @@ public class GameScreenController implements Initializable {
 		playerRoster.add(queuePlayer1);
 	}
 */
+
 	/**
 	 * Setups the necessary components for the board to function.
 	 * This includes the grid pane displaying the board tiles and the 2d array referencing said tiles.
@@ -422,7 +420,7 @@ public class GameScreenController implements Initializable {
 
 						}
 					}
-					silkBag.addTile(true,ejectedTile); //tile is removed
+					silkBag.addTile(true, ejectedTile); //tile is removed
 
 				} else if (column == 0 || column == boardColumns - 1) { // Left column
 					axis = "column";
@@ -525,7 +523,7 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Updates the floor image on the selected tile
 	 *
-	 * @param boardImgRow    - boardImg row the tile to be changed is
+	 * @param boardImgRow - boardImg row the tile to be changed is
 	 * @param boardImgCol - boardImg column the tile to be changed is
 	 */
 	private void updateTileImgs(int boardImgRow, int boardImgCol) {
@@ -540,7 +538,7 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Checks to see if any players are in a set location
 	 *
-	 * @param boardPhyRow    - gameBoard row to be checked
+	 * @param boardPhyRow - gameBoard row to be checked
 	 * @param boardPhyCol - gameBoard column to be checked
 	 * @return - player who is on the location, null if none
 	 */
@@ -607,7 +605,7 @@ public class GameScreenController implements Initializable {
 	 * Toggles the disable state of the action tile buttons and its highlighting
 	 *
 	 * @param button - the button to be changes
-	 * @param bool - the state of the button
+	 * @param bool   - the state of the button
 	 */
 	private void setDisableActionButton(StackPane button, boolean bool) {
 		button.setDisable(false);
@@ -784,7 +782,7 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void takeTileClick() {
-		for (Player player: playerRoster) {
+		for (Player player : playerRoster) {
 			System.out.println(player.getName() + "(" + player.getRowLoc() + ", " + player.getColumnLoc() + ")");
 		}
 
@@ -935,7 +933,7 @@ public class GameScreenController implements Initializable {
 
 			if (!playerMoves.isEmpty()) {
 				// Removing tiles with players on TODO - properly implement players blocking other players
-				for (Player player: playerRoster) {
+				for (Player player : playerRoster) {
 					playerMoves.remove(player.getCurrentFloor(gameBoard));
 				}
 				// Highlighting the available tiles
