@@ -27,7 +27,7 @@ public class PlayerSelectionController {
     @FXML
     void backToStartScreen(ActionEvent event) {
         try{
-            Parent startScreenParent = FXMLLoader.load(getClass().getResource("/scene/StartScreen.fxml"));
+            Parent startScreenParent = FXMLLoader.load(getClass().getResource("/scene/PlayerSelection.fxml"));
             Scene startScreenScene = new Scene(startScreenParent);
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
             window.setScene(startScreenScene);
@@ -40,40 +40,52 @@ public class PlayerSelectionController {
 
     @FXML
     void fourPlayersSelected(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/scene/NewGame.fxml"));
-        Parent root = (Parent) loader.load();
-        NewGameController bob = loader.getController();
-        bob.setLabel("Please Select 4 Players");
-        Stage stage = new Stage();
-        stage.setScene(new Scene (root));
-        stage.show();
+        int playerNum = 4;
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/scene/NewGame.fxml"));
+        Parent newGameParent = loader.load();
+
+        NewGameController newGameController = loader.getController();
+        newGameController.chooseXProfiles(playerNum);
+        newGameController.numberOfPlayers = 4;
+
+        Scene newGameScene = new Scene(newGameParent);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newGameScene);
+        window.show();
     }
 
     @FXML
-    void threePlayersSelected(ActionEvent event) {
-        try {
-            Parent startScreenParent = FXMLLoader.load(getClass().getResource("/scene/NewGame.fxml"));
-            Scene startScreenScene = new Scene(startScreenParent);
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setScene(startScreenScene);
-            window.show();
-        } catch (IOException e) {
-            System.out.println("Error returning to the start screen from new game screen.");
-            e.printStackTrace();
-        }
+    void threePlayersSelected(ActionEvent event) throws IOException {
+        int playerNum = 3;
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/scene/NewGame.fxml"));
+        Parent newGameParent = loader.load();
+
+        NewGameController newGameController = loader.getController();
+        newGameController.chooseXProfiles(playerNum);
+        newGameController.numberOfPlayers = 3;
+
+        Scene newGameScene = new Scene(newGameParent);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newGameScene);
+        window.show();
     }
 
     @FXML
-    void twoPlayersSelected(ActionEvent event) {
-        try {
-            Parent startScreenParent = FXMLLoader.load(getClass().getResource("/scene/NewGame.fxml"));
-            Scene startScreenScene = new Scene(startScreenParent);
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setScene(startScreenScene);
-            window.show();
-        } catch (IOException e) {
-            System.out.println("Error returning to the start screen from new game screen.");
-            e.printStackTrace();
-        }
+    void twoPlayersSelected(ActionEvent event) throws IOException {
+        int playerNum = 2;
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/scene/NewGame.fxml"));
+        Parent newGameParent = loader.load();
+
+        NewGameController newGameController = loader.getController();
+        newGameController.chooseXProfiles(playerNum);
+        newGameController.numberOfPlayers = 2;
+
+        Scene newGameScene = new Scene(newGameParent);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newGameScene);
+        window.show();
     }
 }

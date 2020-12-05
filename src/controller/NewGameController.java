@@ -1,5 +1,7 @@
 package controller;
 
+import core.FileReader;
+import entity.Profile;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +23,11 @@ import java.util.Scanner;
 
 public class NewGameController {
 
+	public ListView<String> chosenProfiles;
+	public ArrayList<Profile> profiles = new ArrayList<>();
+	public Button chooseProfileButton;
+	public int numberOfPlayers;
+	public int count = 0;
     public ChoiceBox<String> fileChoice;
 	public Label labelSelectPlayers;
 	public ListView<String> listOfProfiles;
@@ -34,18 +41,19 @@ public class NewGameController {
 	public void initialize() {
 		ObservableList<String> choices = FXCollections.observableArrayList(getAllLevelFilenames());
 		fileChoice.setItems(choices);
+		chosenProfiles.setMouseTransparent(true);
+		chosenProfiles.setFocusTraversable(false);
 		displayAllProfiles();
 	}
 
 	@FXML
 	private void startGame(ActionEvent actionEvent) {
+		if(fileChoice.getValue() != null && areAllProfilesChosen()){
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/scene/GameScreen.fxml"));
 			Parent gameScreenParent = loader.load();
 			GameScreenController controller = loader.getController();
-
-			// controller.initData(); TODO - needs to be edited to input stuff to screen
-
+			controller.initData(FileReader.readDataFile(fileChoice.getValue(),profiles));
 			Scene gameScreenScene = new Scene(gameScreenParent);
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(gameScreenScene);
@@ -54,6 +62,19 @@ public class NewGameController {
 		} catch (IOException e) {
 			System.out.println("Error starting the Game Screen from new game screen.");
 			e.printStackTrace();
+		}
+		} else if(!areAllProfilesChosen()) {
+			Alert errorInfo = new Alert(Alert.AlertType.ERROR);
+			errorInfo.setTitle("Error");
+			errorInfo.setHeaderText("Please Select all the required Players !");
+			errorInfo.setContentText("You have not selected enough players please try again");
+			errorInfo.show();
+		} else {
+			Alert errorInfo = new Alert(Alert.AlertType.ERROR);
+			errorInfo.setTitle("Error");
+			errorInfo.setHeaderText("Please Select a Game file");
+			errorInfo.setContentText("You have not selected a map to play on. Please select one");
+			errorInfo.show();
 		}
 	}
 	public ArrayList<String> getAllLevelFilenames(){
@@ -85,16 +106,32 @@ public class NewGameController {
 		}
 	}
 
-	public void setLabel(String message){
-		labelSelectPlayers.setText(message);
+	public void chooseXProfiles(int playerNum){
+		labelSelectPlayers.setText("Please select " + playerNum + " players");
 	}
 
-	public void chooseXProfiles(int numberOfPlayers){
-
+	public boolean areAllProfilesChosen(){
+		return count == numberOfPlayers;
 	}
 
 	public void chooseProfile(ActionEvent actionEvent) {
-
+		String selectedProfile = listOfProfiles.getSelectionModel().getSelectedItem();
+		Profile chosenOne = new Profile(selectedProfile);
+		if(selectedProfile == null){
+			Alert errorInfo = new Alert(Alert.AlertType.ERROR);
+			errorInfo.setTitle("Error");
+			errorInfo.setHeaderText("Please Select a Player !");
+			errorInfo.setContentText("You have not selected a player please do and try again");
+			errorInfo.show();
+		} else {
+			chosenProfiles.getItems().add(selectedProfile);
+			listOfProfiles.getItems().remove(selectedProfile);
+			profiles.add(chosenOne);
+			count++;
+		}
+		if(areAllProfilesChosen()){
+			chooseProfileButton.setDisable(true);
+		}
 	}
 
 	@FXML

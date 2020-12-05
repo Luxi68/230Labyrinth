@@ -43,11 +43,13 @@
 			</effect>
 		</Label>
 		<Label fx:id="labelSelectPlayers" layoutX="14.0" layoutY="72.0" text="Please Select" />
-		<Label layoutX="408.0" layoutY="221.0" text="Game File" />
-		<ChoiceBox fx:id="fileChoice" layoutX="476.0" layoutY="216.0" prefWidth="150.0" />
-		<Button layoutX="408.0" layoutY="260.0" mnemonicParsing="false" onAction="#startGame" prefHeight="57.0" prefWidth="207.0" text="Start Game" />
+		<Label layoutX="418.0" layoutY="207.0" text="Game File" />
+		<ChoiceBox fx:id="fileChoice" layoutX="490.0" layoutY="202.0" prefHeight="27.0" prefWidth="136.0" />
+		<Button layoutX="455.0" layoutY="254.0" mnemonicParsing="false" onAction="#startGame" prefHeight="57.0" prefWidth="150.0" text="Start Game" />
 		<Button layoutX="577.0" layoutY="330.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Back" />
-      <ListView fx:id="listOfProfiles" layoutX="14.0" layoutY="95.0" prefHeight="268.0" prefWidth="364.0" />
-      <Button layoutX="448.0" layoutY="95.0" mnemonicParsing="false" onAction="#chooseProfile" text="Choose Profile" />
+      <ListView fx:id="listOfProfiles" layoutX="14.0" layoutY="95.0" prefHeight="268.0" prefWidth="175.0" />
+      <Button fx:id="chooseProfileButton" layoutX="476.0" layoutY="95.0" mnemonicParsing="false" onAction="#chooseProfile" text="Choose Profile" />
+      <ListView fx:id="chosenProfiles" layoutX="216.0" layoutY="95.0" prefHeight="268.0" prefWidth="175.0" />
+      <Label layoutX="255.0" layoutY="72.0" text="Chosen Profiles" />
 	</AnchorPane>
 </VBox>
