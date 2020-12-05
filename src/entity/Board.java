@@ -175,7 +175,7 @@ public class Board {
                 movedFloor.updateCoords(i, column);
             }
             BOARD[HEIGHT-1][column] = insert;
-            insert.updateCoords(0, column);
+            insert.updateCoords(HEIGHT - 1, column);
             return ejectedTile;
         } else {
             throw new IllegalStateException(

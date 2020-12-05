@@ -3,12 +3,12 @@ package entity;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioFileFormat.Type;
+
 /**
  * The class that represents the silk bag
  * @author Chris, Ryan, Junjie
  *
  */
-
 public class SilkBag {
     ArrayList<Tile> bag = new ArrayList<>();
     ArrayList<Tile> discardBag = new ArrayList<>();
@@ -27,9 +27,10 @@ public class SilkBag {
      */
     public Tile drawTile(){
         Tile tile;
+        int value;
         do {
             double index = Math.random() * (bag.size()) + 0;
-            int value = (int)index;
+            value = (int)index;
             tile = bag.get(value);
         } while (tile == null);
         bag.remove(value);
