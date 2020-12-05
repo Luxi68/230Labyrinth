@@ -168,13 +168,13 @@ public class Board {
      */
     public Floor insertFromBottom(Floor insert, int column) throws IllegalStateException {
         if (checkIfColumnMovable(column)) {
-            Floor ejectedTile = BOARD[HEIGHT - 1][column];
+            Floor ejectedTile = BOARD[0][column];
             for (int i = 0 ; i < HEIGHT - 1; i++) {
                 Floor movedFloor = BOARD[i + 1][column];
                 BOARD[i][column] = movedFloor;
                 movedFloor.updateCoords(i, column);
             }
-            BOARD[0][column] = insert;
+            BOARD[HEIGHT-1][column] = insert;
             insert.updateCoords(0, column);
             return ejectedTile;
         } else {
