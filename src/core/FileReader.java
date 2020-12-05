@@ -124,9 +124,16 @@ public class FileReader {
                         String name = splitted[1];
                         int num = Integer.parseInt(splitted[2]);
 
-                        for (int i = 0; i < num; ++i) {
-                            bag.addTile(true, new Floor(name, new Image("/assets/" + name + ".png"), false));
+                        if (name.equals("corner") || name.equals("straight") || name.equals("tee")){
+                            for (int i = 0; i < num; ++i) {
+                                bag.addTile(true, new Floor(name, new Image("/assets/" + name + ".png"), false));
+                            }
+                        } else {
+                            for (int i = 0; i < num; ++i) {
+                                bag.addTile(true, new Action(name, new Image("/assets/" + name + ".png")));
+                            }
                         }
+
 
                         break;
                 }
