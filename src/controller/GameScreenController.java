@@ -301,8 +301,8 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Given all the parameters, creates and inserts the triangle insert tile buttons onto the board/
 	 *
-	 * @param row - The row the button is to be inserted onto.
-	 * @param column - The column the button is to be inserted onto.
+	 * @param row      - The row the button is to be inserted onto.
+	 * @param column   - The column the button is to be inserted onto.
 	 * @param boardPhs - The board the button is to be inserted onto.
 	 * @param rotation - The direction the button is facing (0 = downwards triangle).
 	 */
@@ -459,12 +459,12 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Checks to see if any players are in a set location
 	 *
-	 * @param row - row to be checked
+	 * @param row    - row to be checked
 	 * @param column - column to be checked
 	 * @return - player who is on the location, null if none
 	 */
 	private Player checkPlayerLoc(int row, int column) {
-		for (Player player: playerRoster) {
+		for (Player player : playerRoster) {
 			if (player.getRowLoc() == row && player.getColumnLoc() == column) {
 				return player;
 			}
@@ -476,7 +476,7 @@ public class GameScreenController implements Initializable {
 	 * Setup player images on the corresponding tile.
 	 */
 	private void setupPlayerTokens() {
-		for (Player player: playerRoster) {
+		for (Player player : playerRoster) {
 			int row = player.getRowLoc();
 			int column = player.getColumnLoc();
 
@@ -770,9 +770,10 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void moveClick() {
+
 		try {
 			playerMoves = currPlayer.possibleMoves(gameBoard);
-
+/*
 			for (Floor floor: playerMoves) {
 				System.out.println(floor.getRow() + "," + floor.getColumn() + ":"
 				+ floor.north + floor.east + floor.south + floor.west);
@@ -788,25 +789,28 @@ public class GameScreenController implements Initializable {
 					+ gameBoard.getTileAt(currPlayer.getRowLoc()+1, currPlayer.getColumnLoc()).south + ","
 					+ gameBoard.getTileAt(currPlayer.getRowLoc()+1, currPlayer.getColumnLoc()).west + ",");
 
+*/
+		if (!playerMoves.isEmpty()) {
+			for (Floor tile : playerMoves) {
+				StackPane stack = boardImg[tile.getRow() + 1][tile.getColumn() + 1];
+				stack.setDisable(false);
 
-			if (!playerMoves.isEmpty()) {
-				for (Floor tile: playerMoves) {
-					StackPane stack = boardImg[tile.getRow() + 1][tile.getColumn() + 1];
-					stack.setDisable(false);
-
-					Rectangle floor = (Rectangle) stack.getChildren().get(0);
-					floor.setStroke(currPlayer.getColour());
-					floor.setStrokeWidth(4);
-				}
-			} else {
-				gameLog.appendText("No movement possible, please end your turn.\n");
-				endTurnButton.setDisable(false);
+				Rectangle floor = (Rectangle) stack.getChildren().get(0);
+				floor.setStroke(currPlayer.getColour());
+				floor.setStrokeWidth(4);
 			}
-		} catch (Exception e) {
-			System.out.println("Move button failed to work again because of " + e); // TODO - Remove once move works
+		} else {
+			gameLog.appendText("No movement possible, please end your turn.\n");
 			endTurnButton.setDisable(false);
 		}
+	} catch(Exception e)
+
+	{
+		System.out.println("Move button failed to work again because of " + e); // TODO - Remove once move works
+		endTurnButton.setDisable(false);
 	}
+
+}
 
 	/**
 	 * Button that will wraps up the current players turn and start the next player's turn

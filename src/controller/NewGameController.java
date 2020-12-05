@@ -8,9 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -23,11 +21,10 @@ import java.util.Scanner;
 
 public class NewGameController {
 
-	public RadioButton twoPlayers;
-	public RadioButton threePlayers;
-	public RadioButton fourPlayers;
     public ChoiceBox<String> fileChoice;
-    @FXML
+	public Label labelSelectPlayers;
+	public ListView<String> listOfProfiles;
+	@FXML
 	private ResourceBundle resources;
 
 	@FXML
@@ -35,13 +32,9 @@ public class NewGameController {
 
 	@FXML
 	public void initialize() {
-		ToggleGroup playerSelectionGroup = new ToggleGroup();
-		twoPlayers.setToggleGroup(playerSelectionGroup);
-		twoPlayers.setSelected(true);
-		threePlayers.setToggleGroup(playerSelectionGroup);
-		fourPlayers.setToggleGroup(playerSelectionGroup);
 		ObservableList<String> choices = FXCollections.observableArrayList(getAllLevelFilenames());
 		fileChoice.setItems(choices);
+		displayAllProfiles();
 	}
 
 	@FXML
@@ -74,6 +67,35 @@ public class NewGameController {
 		return levelFileNames;
 	}
 
+	public ArrayList<String> getAllProfiles() {
+		ArrayList<String> profileFileNames = new ArrayList<>();
+		File directoryPath = new File("resources/users");
+		File listOfFiles[] = directoryPath.listFiles();
+		Scanner sc = null;
+		for (File currentFile : listOfFiles) {
+			profileFileNames.add(currentFile.getName());
+		}
+		return profileFileNames;
+	}
+
+	private void displayAllProfiles(){
+		for(int i=0; i<getAllProfiles().size(); i++){
+			String currentProfile = getAllProfiles().get(i);
+			listOfProfiles.getItems().add(currentProfile.substring(0, currentProfile.length()-4));
+		}
+	}
+
+	public void setLabel(String message){
+		labelSelectPlayers.setText(message);
+	}
+
+	public void chooseXProfiles(int numberOfPlayers){
+
+	}
+
+	public void chooseProfile(ActionEvent actionEvent) {
+
+	}
 
 	@FXML
 	private void backToStartScreen(ActionEvent actionEvent) {
