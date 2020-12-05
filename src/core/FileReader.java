@@ -31,7 +31,8 @@ public class FileReader {
         //Scanner in = new Scanner();
         Scanner in = null;
         try {
-            File input = new File(filename);
+            String fileN = "resources/users/"+filename+".txt";
+            File input = new File(fileN);
             in = new Scanner(input);
         } catch (FileNotFoundException e) {
             System.out.println("File " + filename + " does not exist.");
