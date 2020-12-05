@@ -14,9 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.paint.Paint;
+import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -84,21 +82,31 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private ImageView currPlayerImg;
 	@FXML
+	private StackPane fireButton;
+	@FXML
 	private Label currPlayerFireTxt;
-	@FXML
-	private Label currPlayerIceTxt;
-	@FXML
-	private Label currPlayerDoubleMoveTxt;
-	@FXML
-	private Label currPlayerBacktrackTxt;
 	@FXML
 	private ImageView currPlayerFireImg;
 	@FXML
+	private StackPane iceButton;
+	@FXML
+	private Label currPlayerIceTxt;
+	@FXML
 	private ImageView currPlayerIceImg;
+	@FXML
+	private StackPane doubleMoveButton;
+	@FXML
+	private Label currPlayerDoubleMoveTxt;
 	@FXML
 	private ImageView currPlayerDoubleMoveImg;
 	@FXML
+	private StackPane backTrackButton;
+	@FXML
+	private Label currPlayerBacktrackTxt;
+	@FXML
 	private ImageView currPlayerBacktrackImg;
+	@FXML
+	private Button takeActionButton;
 	@FXML
 	private Button skipActionButton;
 	@FXML
@@ -205,6 +213,7 @@ public class GameScreenController implements Initializable {
 		playerRoster.add(queuePlayer1);
 	}
 */
+
 	/**
 	 * Setups the necessary components for the board to function.
 	 * This includes the grid pane displaying the board tiles and the 2d array referencing said tiles.
@@ -239,15 +248,28 @@ public class GameScreenController implements Initializable {
 				tile.setStroke(Color.BLACK);
 				tile.setStrokeType(StrokeType.OUTSIDE);
 
+				// Space for Fire gradient
+				Stop[] fireStop = {new Stop(0, Color.ORANGERED), new Stop(0.5, Color.TRANSPARENT)};
+				Rectangle fire = new Rectangle(tileSize, tileSize);
+				fire.setFill(new LinearGradient(0, 0, 1, 1,
+						true, CycleMethod.NO_CYCLE, fireStop));
+				fire.setOpacity(0);
+
+				// Space for Ice gradient
+				Stop[] iceStop = {new Stop(0.5, Color.TRANSPARENT), new Stop(1, Color.LIGHTBLUE)};
+				Rectangle ice = new Rectangle(tileSize, tileSize);
+				ice.setFill(new LinearGradient(0, 0, 1, 1,
+						true, CycleMethod.NO_CYCLE, iceStop));
+				ice.setOpacity(0);
+
 				// Space for player
 				ImageView playerToken = new ImageView();
 				playerToken.setFitHeight(playerTokenSize);
 				playerToken.setFitWidth(playerTokenSize);
 				playerToken.setMouseTransparent(true);
-//				playerToken.setOpacity(0); TODO - test to see if needed
 
 				// Holds both floor and player token
-				StackPane stack = new StackPane(tile, playerToken);
+				StackPane stack = new StackPane(tile, fire, ice, playerToken);
 				stack.setDisable(true);
 
 				GridPane.setRowIndex(stack, i);
@@ -266,9 +288,9 @@ public class GameScreenController implements Initializable {
 
 					// Moving frontend
 					ImageView currFloorImg = (ImageView) boardImg[currFloor.getRow() + 1][currFloor.getColumn() + 1]
-							.getChildren().get(1);
+							.getChildren().get(3);
 					ImageView movedFloorImg = (ImageView) boardImg[movedFloor.getRow() + 1][movedFloor.getColumn() + 1]
-							.getChildren().get(1);
+							.getChildren().get(3);
 					currFloorImg.setImage(null);
 					movedFloorImg.setImage(currPlayer.getImage());
 
@@ -398,7 +420,7 @@ public class GameScreenController implements Initializable {
 
 						}
 					}
-					silkBag.addTile(true,ejectedTile); //tile is removed
+					silkBag.addTile(true, ejectedTile); //tile is removed
 
 				} else if (column == 0 || column == boardColumns - 1) { // Left column
 					axis = "column";
@@ -493,7 +515,7 @@ public class GameScreenController implements Initializable {
 			int row = player.getRowLoc();
 			int column = player.getColumnLoc();
 
-			ImageView playerToken = (ImageView) boardImg[row + 1][column + 1].getChildren().get(1);
+			ImageView playerToken = (ImageView) boardImg[row + 1][column + 1].getChildren().get(3);
 			playerToken.setImage(player.getImage());
 		}
 	}
@@ -501,7 +523,7 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Updates the floor image on the selected tile
 	 *
-	 * @param boardImgRow    - boardImg row the tile to be changed is
+	 * @param boardImgRow - boardImg row the tile to be changed is
 	 * @param boardImgCol - boardImg column the tile to be changed is
 	 */
 	private void updateTileImgs(int boardImgRow, int boardImgCol) {
@@ -516,7 +538,7 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Checks to see if any players are in a set location
 	 *
-	 * @param boardPhyRow    - gameBoard row to be checked
+	 * @param boardPhyRow - gameBoard row to be checked
 	 * @param boardPhyCol - gameBoard column to be checked
 	 * @return - player who is on the location, null if none
 	 */
@@ -536,7 +558,7 @@ public class GameScreenController implements Initializable {
 	 * @param boardImgCol - boardImg column to be set
 	 */
 	private void setPlayerImg(Image img, int boardImgRow, int boardImgCol) {
-		ImageView view = (ImageView) boardImg[boardImgRow][boardImgCol].getChildren().get(1);
+		ImageView view = (ImageView) boardImg[boardImgRow][boardImgCol].getChildren().get(3);
 		view.setImage(img);
 	}
 
@@ -580,6 +602,37 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
+	 * Toggles the disable state of the action tile buttons and its highlighting
+	 *
+	 * @param button - the button to be changes
+	 * @param bool   - the state of the button
+	 */
+	private void setDisableActionButton(StackPane button, boolean bool) {
+		button.setDisable(false);
+		Rectangle action = (Rectangle) button.getChildren().get(0);
+		if (!bool) {
+			action.setStroke(currPlayer.getColour());
+			action.setStrokeWidth(4);
+		} else {
+			action.setStroke(Color.BLACK);
+			action.setStrokeWidth(1);
+		}
+
+	}
+
+	/**
+	 * Disables the other action tiles that have not been selected
+	 */
+	private void disableActionSelect() {
+		takeActionButton.setDisable(true);
+//		skipActionButton.setDisable(true); TODO - Uncomment once actions work
+		setDisableActionButton(fireButton, true);
+		setDisableActionButton(iceButton, true);
+		setDisableActionButton(doubleMoveButton, true);
+		setDisableActionButton(backTrackButton, true);
+	}
+
+	/**
 	 * Loads in a new player and the 'take an tile' section of the game
 	 */
 	private void startNextTurn() {
@@ -607,7 +660,7 @@ public class GameScreenController implements Initializable {
 	private void startPlayActionTurn() {
 		silkBagTileRotate.setDisable(true);
 		setDisabledBoardArrows(true);
-		// TODO - Enable play action button
+		takeActionButton.setDisable(false);
 		skipActionButton.setDisable(false);
 
 		actionTrackerDraw.setFill(GREY);
@@ -729,7 +782,7 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void takeTileClick() {
-		for (Player player: playerRoster) {
+		for (Player player : playerRoster) {
 			System.out.println(player.getName() + "(" + player.getRowLoc() + ", " + player.getColumnLoc() + ")");
 		}
 
@@ -771,42 +824,71 @@ public class GameScreenController implements Initializable {
 		Floor tempFloor = (Floor) silkBagTile;
 		tempFloor.rotate();
 
-		// Rotates the image since it is not 'locked' to tile // TODO - try to 'lock' tile onto rectangle (setdata)
+		// Rotates the image since it is not 'locked' to tile
 		silkBagTileImg.setRotate(tempFloor.getRotation());
 		gameLog.appendText("Floor tile rotated 90 degrees.\n");
 	}
 
-//	/**
-//	 * Button that will use a fire action tile
-//	 */
-//	@FXML
-//	private void fireClick() {
+	/**
+	 * Button that checks what action tiles the player has and enables the relevant buttons
+	 */
+	@FXML
+	private void takeActionClick() {
+		if (!currPlayerFireTxt.getText().equalsIgnoreCase("none")) {
+			setDisableActionButton(fireButton, false);
+		}
+		if (!currPlayerIceTxt.getText().equalsIgnoreCase("none")) {
+			setDisableActionButton(iceButton, false);
+		}
+		if (!currPlayerDoubleMoveTxt.getText().equalsIgnoreCase("none")) {
+			setDisableActionButton(doubleMoveButton, false);
+		}
+		if (!currPlayerBacktrackTxt.getText().equalsIgnoreCase("none")) {
+			setDisableActionButton(backTrackButton, false);
+		}
+	}
+
+	/**
+	 * Button that will use a fire action tile
+	 */
+	@FXML
+	private void fireClick() {
+		disableActionSelect();
+		gameLog.appendText("Choose a tile to cast FIRE on.\n");
 //		useActionTile("fire");
-//	}
-//
-//	/**
-//	 * Button that will use a ice action tile
-//	 */
-//	@FXML
-//	private void iceClick() {
+	}
+
+	/**
+	 * Button that will use a ice action tile
+	 */
+	@FXML
+	private void iceClick() {
+		disableActionSelect();
+		gameLog.appendText("Choose a tile to cast ICE on.\n");
 //		useActionTile("ice");
-//	}
-//
-//	/**
-//	 * Button that will use a double move action tile
-//	 */
-//	@FXML
-//	private void doubleMoveClick() {
+	}
+
+	/**
+	 * Button that will use a double move action tile
+	 */
+	@FXML
+	private void doubleMoveClick() {
+		isDoubleMoveUsed = true;
+		disableActionSelect();
+		gameLog.appendText("Double Move was case on " + currPlayer.getName()
+				+ ". You can now move twice on this turn.\n");
 //		useActionTile("doubleMove");
-//	}
-//
-//	/**
-//	 * Button that will use a backtrack action tile
-//	 */
-//	@FXML
-//	private void backtrackClick() {
+	}
+
+	/**
+	 * Button that will use a backtrack action tile
+	 */
+	@FXML
+	private void backTrackClick() {
+		disableActionSelect();
+		gameLog.appendText("Choose a player to cast BACKTRACK on.\n");
 //		useActionTile("backTrack");
-//	}
+	}
 
 	/**
 	 * Sets the action that will be used on this turn
@@ -851,7 +933,7 @@ public class GameScreenController implements Initializable {
 
 			if (!playerMoves.isEmpty()) {
 				// Removing tiles with players on TODO - properly implement players blocking other players
-				for (Player player: playerRoster) {
+				for (Player player : playerRoster) {
 					playerMoves.remove(player.getCurrentFloor(gameBoard));
 				}
 				// Highlighting the available tiles
