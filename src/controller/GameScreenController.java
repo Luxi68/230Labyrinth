@@ -174,6 +174,7 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Method to setup the beginning of the game and initialise all the needed variables
 	 */
+	/*
 	private void setupGame() { // TODO - delete once initialise is setup
 		gameBoard = new Board(3, 3);
 		rowNoFixed = new ArrayList<>();
@@ -203,7 +204,7 @@ public class GameScreenController implements Initializable {
 		playerRoster.add(currPlayer);
 		playerRoster.add(queuePlayer1);
 	}
-
+*/
 	/**
 	 * Setups the necessary components for the board to function.
 	 * This includes the grid pane displaying the board tiles and the 2d array referencing said tiles.
@@ -397,7 +398,7 @@ public class GameScreenController implements Initializable {
 
 						}
 					}
-					silkBag.addTile(ejectedTile);
+					silkBag.addTile(true,ejectedTile); //tile is removed
 
 				} else if (column == 0 || column == boardColumns - 1) { // Left column
 					axis = "column";
@@ -460,7 +461,7 @@ public class GameScreenController implements Initializable {
 							setPlayerImg(ejectedPlayer.getImage(), rowImg, boardColumns - 2);
 						}
 					}
-					silkBag.addTile(ejectedTile);
+					silkBag.addTile(true, ejectedTile);
 
 				}
 				silkBagTileImg.setFill(GREY);

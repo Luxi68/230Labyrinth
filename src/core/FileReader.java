@@ -31,7 +31,7 @@ public class FileReader {
         //Scanner in = new Scanner();
         Scanner in = null;
         try {
-            String fileN = "resources/users/"+filename+".txt";
+            String fileN = "resources/levels/"+filename;
             File input = new File(fileN);
             in = new Scanner(input);
         } catch (FileNotFoundException e) {
