@@ -16,8 +16,8 @@ public class Floor extends Tile {
 	private int column;
 	private boolean north;
 	private boolean south;
-	private boolean west;
 	private boolean east;
+	private boolean west;
 	private boolean isFire;
 	private boolean isIce;
 	private int rotation;

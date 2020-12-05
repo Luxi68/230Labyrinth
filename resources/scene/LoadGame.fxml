@@ -37,7 +37,7 @@
 			</effect>
 		</Label>
 		<Label layoutX="209.0" layoutY="97.0" text="Select File.."/>
-		<ChoiceBox layoutX="320.0" layoutY="92.0" prefWidth="150.0"/>
+		<ChoiceBox fx:id="savesChoice" layoutX="320.0" layoutY="92.0" prefWidth="150.0"/>
 		<Button layoutX="577.0" layoutY="330.0" mnemonicParsing="false" onAction="#backToStartScreen"
 				text="Back"/>
 		<Button layoutX="276.0" layoutY="172.0" mnemonicParsing="false" text="Load Game" onAction="#loadGame"/>

@@ -49,7 +49,7 @@ public class StartScreenController {
 	@FXML
 	private void goToNewGame(ActionEvent actionEvent) {
 	    try {
-		Parent newGameParent = FXMLLoader.load(getClass().getResource("/scene/NewGame.fxml"));
+		Parent newGameParent = FXMLLoader.load(getClass().getResource("/scene/PlayerSelection.fxml"));
 		Scene newGameScene = new Scene(newGameParent);
 		Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 		window.setScene(newGameScene);
