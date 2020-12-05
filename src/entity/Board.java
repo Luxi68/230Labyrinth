@@ -1,5 +1,7 @@
 package entity;//package game;
 
+import sun.security.util.Length;
+
 /**
  * <P>Purpose: Setting out tiles by collaborating with Floor in order to create the game board.
  * It is also responsible for managing the tiles movements</p>
@@ -94,9 +96,12 @@ public class Board {
         if (checkIfColumnMovable(column)) {
             Floor ejectedTile = BOARD[HEIGHT - 1][column];
             for (int i = HEIGHT - 1; i > 0; i--) {
-                BOARD[i][column] = BOARD[i - 1][column];
+                Floor movedFloor = BOARD[i - 1][column];
+                BOARD[i][column] = movedFloor;
+                movedFloor.updateCoords(i, column);
             }
             BOARD[0][column] = insert;
+            insert.updateCoords(0, column);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
@@ -115,9 +120,12 @@ public class Board {
         if (checkIfRowMovable(row)) {
             Floor ejectedTile = BOARD[row][0];
             for (int i = 0; i < LENGTH - 1; i++) {
-                BOARD[row][i] = BOARD[row][i + 1];
+                Floor movedFloor = BOARD[row][i + 1];
+                BOARD[row][i] = movedFloor;
+                movedFloor.updateCoords(row, i);
             }
             BOARD[row][LENGTH - 1] = insert;
+            insert.updateCoords(row, LENGTH - 1);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
@@ -136,9 +144,12 @@ public class Board {
         if (checkIfRowMovable(row)) {
             Floor ejectedTile = BOARD[row][LENGTH - 1];
             for (int i = LENGTH - 1; i > 0; i--) {
-                BOARD[row][i] = BOARD[row][i - 1];
+                Floor movedFloor = BOARD[row][i - 1];
+                BOARD[row][i] = movedFloor;
+                movedFloor.updateCoords(row, i);
             }
             BOARD[row][0] = insert;
+            insert.updateCoords(row, 0);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
@@ -157,9 +168,12 @@ public class Board {
         if (checkIfColumnMovable(column)) {
             Floor ejectedTile = BOARD[HEIGHT - 1][column];
             for (int i = 0 ; i < HEIGHT - 1; i++) {
-                BOARD[i][column] = BOARD[i + 1][column];
+                Floor movedFloor = BOARD[i + 1][column];
+                BOARD[i][column] = movedFloor;
+                movedFloor.updateCoords(i, column);
             }
             BOARD[0][column] = insert;
+            insert.updateCoords(0, column);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
@@ -173,9 +187,9 @@ public class Board {
      * @return true if we can insert a tile into the row, false otherwise
      */
     private boolean checkIfRowMovable(int row) {
-        for (int i = 0; i <= HEIGHT - 1; i++) {
+        for (int i = 0; i <= LENGTH - 1; i++) {
             Floor curTile = BOARD[row][i];
-            if (curTile.getIsIce() || curTile.getIsFixed()) {
+            if (curTile.getIsIce()) {
                 return false;
             }
         }
@@ -188,7 +202,7 @@ public class Board {
      * @return true if we can insert a tile into the column, false otherwise
      */
     private boolean checkIfColumnMovable(int column) {
-        for (int i = 0; i <= LENGTH - 1; i++) {
+        for (int i = 0; i <= HEIGHT - 1; i++) {
             Floor curTile = BOARD[i][column];
             if (curTile.getIsIce()) {
                 return false;

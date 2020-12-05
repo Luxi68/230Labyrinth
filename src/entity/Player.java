@@ -173,7 +173,7 @@ public class Player {
 	 * @return true if it is possible to move east, false otherwise
 	 */
 	public boolean isEastPossible(Board board) { //right
-		if (columnLoc < board.getLength() - 1) {
+		if (columnLoc != board.getLength() - 1) {
 			return board.getTileAt(rowLoc, columnLoc).isEast()
 					&& board.getTileAt(rowLoc, columnLoc + 1).isWest();
 		} else {
@@ -187,7 +187,7 @@ public class Player {
 	 * @return true if it is possible to move west, false otherwise
 	 */
 	public boolean isWestPossible(Board board) {
-		if (columnLoc > 0) {
+		if (columnLoc != 0) {
 			return board.getTileAt(rowLoc, columnLoc).isWest()
 					&& board.getTileAt(rowLoc, columnLoc - 1).isEast();
 		} else {
@@ -201,7 +201,7 @@ public class Player {
 	 * @return true if it is possible to move upwards, false otherwise
 	 */
 	public boolean isNorthPossible(Board board) {
-		if (rowLoc > 0) {
+		if (rowLoc != 0) {
 			return board.getTileAt(rowLoc, columnLoc).isNorth()
 					&& board.getTileAt(rowLoc - 1, columnLoc).isSouth();
 		} else {
@@ -215,7 +215,7 @@ public class Player {
 	 * @return true if it is possible to move down, false otherwise
 	 */
 	public boolean isSouthPossible(Board board) {
-		if (rowLoc < board.getHeight() - 1) {
+		if (rowLoc != board.getHeight() - 1) {
 			return board.getTileAt(rowLoc, columnLoc).isSouth()
 					&& board.getTileAt(rowLoc + 1, columnLoc).isNorth();
 		} else {

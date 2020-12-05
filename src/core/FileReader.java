@@ -209,7 +209,6 @@ public class FileReader {
         }
 
         //fill empty slots with floor tiles
-
         for (int i = 0; i < gBoard.getLength(); i++) {
             for (int j = 0; j < gBoard.getHeight(); j++) {
                 if (gBoard.getTileAt(j, i) == null) {
@@ -229,6 +228,7 @@ public class FileReader {
                         place.rotate();
                     }
                     gBoard.insertTileAt(j,i,place);
+                    place.updateCoords(j, i);
                 }
             }
         }
