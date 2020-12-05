@@ -3,12 +3,12 @@ package entity;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioFileFormat.Type;
+
 /**
  * The class that represents the silk bag
- * @author Chris, Ryan 
+ * @author Chris, Ryan, Junjie
  *
  */
-
 public class SilkBag {
     ArrayList<Tile> bag = new ArrayList<>();
     ArrayList<Tile> discardBag = new ArrayList<>();
@@ -25,13 +25,13 @@ public class SilkBag {
      *The method used to draw a tile out of silk bag and remove that tile.	 
      * @return the tile taken from the silk bag
      */
-    public Tile drawTile(Tile removedTile){
+    public Tile drawTile(){
         Tile tile;
+        int value;
         do {
             double index = Math.random() * (bag.size()) + 0;
-            int value = (int)index;
+            value = (int)index;
             tile = bag.get(value);
-            removedTile = bag.get(value);
         } while (tile == null);
         bag.remove(value);
         return tile;
@@ -41,15 +41,15 @@ public class SilkBag {
      * @param removedTile the tile type passed in to check where it goes.
      */
     public void addTile(Tile removedTile){
-     if( removedTile.toString().equalsIgnoreCase("corner")
-    	 			|| removedTile.toString().equalsIgnoreCase("straight")
-    	 			|| removedTile.toString().equalsIgnoreCase("tee")) {
+     if( removedTile.tileType.equals("corner")
+    	 			|| removedTile.tileType.equals("straight")
+    	 			|| removedTile.tileType.equals("tee")) {
         bag.add(removedTile);
      }
-     else if (removedTile.toString().equalsIgnoreCase("fire")
-    		 		|| removedTile.toString().equalsIgnoreCase("ice")
-    		 		|| removedTile.toString().equalsIgnoreCase("backTrack")
-    		 		|| removedTile.toString().equalsIgnoreCase("doubleMove")) {
+     else if (removedTile.tileType.equals("fire")
+    		 		|| removedTile.tileType.equals("ice")
+    		 		|| removedTile.tileType.equals("backTrack")
+    		 		|| removedTile.tileType.equals("doubleMove")) {
     	 discardBag.add(removedTile);
      }
      else {

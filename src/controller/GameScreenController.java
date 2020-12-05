@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 /*
 TODO - img resources
-	 - properly implement movement code
 	 - test tile and player movement
 	 - action tiles decide how i wanna implement
 	 - implement
@@ -214,8 +213,8 @@ public class GameScreenController implements Initializable {
 	private void setupBoard(Board boardObj) {
 		boardRows = boardObj.getHeight() + 2;
 		boardColumns = boardObj.getLength() + 2;
-		int tileSize = 50;
-		int playerTokenSize = 33;
+		int tileSize = 80;
+		int playerTokenSize = 50;
 
 		// Make board for gui
 		GridPane board = new GridPane();
@@ -388,8 +387,14 @@ public class GameScreenController implements Initializable {
 						}
 
 						if (ejectedPlayer != null) {
+							System.out.println("newLoc: " + (boardRows - 3) + "," + (colImg - 1));
+							System.out.println(ejectedPlayer.getName()
+									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
 							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(boardRows - 3, colImg - 1));
+							System.out.println(ejectedPlayer.getName()
+									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
 							setPlayerImg(ejectedPlayer.getImage(), boardRows - 2, colImg);
+
 						}
 					}
 					silkBag.addTile(ejectedTile);
@@ -446,7 +451,12 @@ public class GameScreenController implements Initializable {
 						}
 
 						if (ejectedPlayer != null) {
+							System.out.println("newLoc: " + (rowImg - 1) + "," + (boardColumns - 3));
+							System.out.println(ejectedPlayer.getName()
+									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
 							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, boardColumns - 3));
+							System.out.println(ejectedPlayer.getName()
+									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
 							setPlayerImg(ejectedPlayer.getImage(), rowImg, boardColumns - 2);
 						}
 					}
