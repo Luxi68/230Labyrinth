@@ -45,6 +45,8 @@ TODO - img resources
 public class GameScreenController implements Initializable {
 	// Colour Scheme
 	private final Paint GREY = Paint.valueOf("#3f443e");
+	ArrayList<Integer> rowNoFixed;
+	ArrayList<Integer> columnNoFixed;
 	// Game components
 	private Board gameBoard;
 	private SilkBag silkBag;
@@ -57,8 +59,6 @@ public class GameScreenController implements Initializable {
 	private ArrayList<Floor> playerMoves;
 	private int boardRows; // Board height + 2 for arrow buttons
 	private int boardColumns; // Board length + 2 for arrow buttons
-	ArrayList<Integer> rowNoFixed;
-	ArrayList<Integer> columnNoFixed;
 	private StackPane[][] boardImg; // A 2D array so the tiles on the board can be referenced
 	// Game checks TODO
 	private boolean isNewTileAction;
@@ -133,7 +133,7 @@ public class GameScreenController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Platform.runLater(() -> {
-			setupGame();
+//			setupGame();
 			setupBoard(gameBoard);
 			setupPlayerTokens();
 			currPlayerFireImg.setImage(new Image("/assets/fire.png"));
@@ -272,6 +272,9 @@ public class GameScreenController implements Initializable {
 					currFloorImg.setImage(null);
 					movedFloorImg.setImage(currPlayer.getImage());
 
+					gameLog.appendText(currPlayer.getName() + " moved to location ("
+							+ (finalJ - 1) + ", " + (finalI - 1) + ").\n");
+
 					checkEndMove();
 				});
 			}
@@ -328,148 +331,138 @@ public class GameScreenController implements Initializable {
 			int rowIndex = GridPane.getRowIndex(stack);
 			int columnIndex = GridPane.getColumnIndex(stack);
 			Floor ejectedTile;
+			Player ejectedPlayer;
 			Floor insertedTile = (Floor) silkBagTile;
+			String axis = "";
+			String direction = "";
 
-			if (row == 0) { // Top row
-				try {
-					ejectedTile = gameBoard.insertFromTop(insertedTile, columnIndex - 1);
-					silkBag.addTile(ejectedTile);
-					// TODO - add player checks
+			try {
+				if (row == 0 || row == boardRows - 1) {
+					axis = "row";
+					// Move all the tiles along and return the ejected tile
+					if (row == 0) {
+						direction = "top";
+						ejectedTile = gameBoard.insertFromTop(insertedTile, columnIndex - 1);
+						ejectedPlayer = checkPlayerLoc(boardRows - 3, columnIndex - 1);
 
-					for (int i = 1; i < boardRows - 1; i++) {
-						Floor tempFloor = gameBoard.getTileAt(i - 1, columnIndex - 1);
-						Rectangle tempRect = (Rectangle) boardImg[i][columnIndex].getChildren().get(0);
-						tempRect.setFill(new ImagePattern(tempFloor.getImage()));
-						tempRect.setRotate(tempFloor.getRotation());
-
-						Player token = checkPlayerLoc(i - 1, columnIndex - 1);
-						if (token != null) {
-							ImageView oldLoc = (ImageView) boardImg[i][columnIndex].getChildren().get(1);
-							oldLoc.setImage(null);
-							ImageView newLoc;
-							if (i == boardRows - 1) {
-								newLoc = (ImageView) boardImg[1][columnIndex].getChildren().get(1);
-							} else {
-								newLoc = (ImageView) boardImg[i + 1][columnIndex].getChildren().get(1);
+						// Loop up through the column to update all images
+						for (int i = boardRows - 2; i > 0; i--) {
+							updateTileImgs(i, columnIndex);
+							Player token = checkPlayerLoc(i, columnIndex);
+							if (token != null) {
+								setPlayerImg(null, i, columnIndex);
+								System.out.println("oldLoc: " + i + columnIndex);
+								if (row != boardRows - 2) {
+									setPlayerImg(token.getImage(), i + 1, columnIndex);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(i, columnIndex - 1));
+								}
 							}
-							newLoc.setImage(token.getImage());
+						}
+
+						if (ejectedPlayer != null) {
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(0, columnIndex - 1));
+							setPlayerImg(ejectedPlayer.getImage(), 1, columnIndex);
+						}
+
+					} else {
+						direction = "bottom";
+						ejectedTile = gameBoard.insertFromBottom(insertedTile, columnIndex - 1);
+						ejectedPlayer = checkPlayerLoc(0, columnIndex - 1);
+
+						// Loop down through the column to update all images
+						for (int i = 1; i < boardRows - 1; i++) {
+							updateTileImgs(i, columnIndex);
+							Player token = checkPlayerLoc(i, columnIndex);
+							if (token != null) {
+								setPlayerImg(null, i, columnIndex);
+								System.out.println("oldLoc: " + i + columnIndex);
+								if (row != 1) {
+									setPlayerImg(token.getImage(), i - 1, columnIndex);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(i - 2, columnIndex - 1));
+								}
+							}
+						}
+
+						if (ejectedPlayer != null) {
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(boardRows - 3, columnIndex - 1));
+							setPlayerImg(ejectedPlayer.getImage(), boardRows - 2, columnIndex);
 						}
 					}
-					silkBagTileImg.setFill(GREY);
-					Floor tempFloor = (Floor) silkBagTile;
-					tempFloor.setRotation(0);
-
-					gameLog.appendText("Tile slid into column " + (columnIndex - 1) + ".\n");
-					startPlayActionTurn();
-
-				} catch (Exception e) {
-					gameLog.appendText(e.getMessage());
-//					gameLog.appendText("ERROR: This column cannot be moved.\n");
-//					e.printStackTrace();
-				}
-			} else if (column == 0) { // Left column
-				try {
-					ejectedTile = gameBoard.insertFromLeft(insertedTile, rowIndex - 1);
 					silkBag.addTile(ejectedTile);
-					// TODO - add player checks
 
-					for (int i = 1; i < boardColumns - 1; i++) {
-						Floor tempFloor = gameBoard.getTileAt(rowIndex - 1, i - 1);
-						Rectangle tempRect = (Rectangle) boardImg[rowIndex][i].getChildren().get(0);
-						tempRect.setFill(new ImagePattern(tempFloor.getImage()));
-						tempRect.setRotate(tempFloor.getRotation());
+				} else if (column == 0 || column == boardColumns - 1) { // Left column
+					axis = "column";
+					// Move all the tiles along and return the ejected tile
+					if (column == 0) {
+						direction = "left";
+						ejectedTile = gameBoard.insertFromLeft(insertedTile, rowIndex - 1);
+						ejectedPlayer = checkPlayerLoc(rowIndex - 1, boardColumns - 3);
+
+						// Loop right through the row to update all images
+						for (int i = boardColumns - 2; i > 0; i--) {
+							updateTileImgs(rowIndex, i);
+							Player token = checkPlayerLoc(rowIndex, i - 1);
+							if (token != null) {
+								setPlayerImg(null, rowIndex, i);
+								System.out.println("oldLoc: " + rowIndex + i);
+								if (column != boardColumns - 2) {
+									setPlayerImg(token.getImage(), rowIndex, i + 1);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(rowIndex - 1, i));
+								}
+							}
+						}
+
+						if (ejectedPlayer != null) {
+							setPlayerImg(ejectedPlayer.getImage(), rowIndex, 1);
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowIndex - 1, 0));
+						}
+
+					} else {
+						direction = "right";
+						ejectedTile = gameBoard.insertFromRight(insertedTile, rowIndex - 1);
+						ejectedPlayer = checkPlayerLoc(rowIndex - 1, 0);
+
+						// Loop left through the row to update all images
+						for (int i = 1; i < boardColumns - 1; i++) {
+							updateTileImgs(rowIndex, i);
+							Player token = checkPlayerLoc(rowIndex, i - 1);
+							if (token != null) {
+								setPlayerImg(null, rowIndex, i);
+								System.out.println("oldLoc: " + rowIndex + i);
+								if (column != 1) {
+									setPlayerImg(token.getImage(), rowIndex, i - 1);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(rowIndex - 1, i - 2));
+								}
+							}
+						}
+
+						if (ejectedPlayer != null) {
+							setPlayerImg(ejectedPlayer.getImage(), rowIndex, boardColumns - 2);
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowIndex - 1, boardColumns - 3));
+						}
 					}
-					silkBagTileImg.setFill(GREY);
-					Floor tempFloor = (Floor) silkBagTile;
-					tempFloor.setRotation(0);
-
-					gameLog.appendText("Tile slid into row " + (rowIndex - 1) + ".\n");
-					startPlayActionTurn();
-
-				} catch (Exception e) {
-					gameLog.appendText(e.getMessage());
-				}
-			} else if (row == boardRows - 1) { // Bottom row
-				try {
-					ejectedTile = gameBoard.insertFromTop(insertedTile, columnIndex - 1);
 					silkBag.addTile(ejectedTile);
-					// TODO - add player checks
 
-					for (int i = 1; i < boardRows - 1; i++) {
-						Floor tempFloor = gameBoard.getTileAt(i - 1, columnIndex - 1);
-						Rectangle tempRect = (Rectangle) boardImg[i][columnIndex].getChildren().get(0);
-						tempRect.setFill(new ImagePattern(tempFloor.getImage()));
-						tempRect.setRotate(tempFloor.getRotation());
-					}
-					silkBagTileImg.setFill(GREY);
-					Floor tempFloor = (Floor) silkBagTile;
-					tempFloor.setRotation(0);
-
-					gameLog.appendText("Tile slid into column " + (columnIndex - 1) + ".\n");
-					startPlayActionTurn();
-
-				} catch (Exception e) {
-					gameLog.appendText(e.getMessage());
 				}
-			} else if (column == boardColumns - 1) { // Right column
-				try {
-					ejectedTile = gameBoard.insertFromRight(insertedTile, rowIndex - 1);
-					silkBag.addTile(ejectedTile);
-					// TODO - add player checks
+				silkBagTileImg.setFill(GREY);
+				Floor tempFloor = (Floor) silkBagTile;
+				tempFloor.setRotation(0);
 
-					for (int i = 1; i < boardColumns - 1; i++) {
-						Floor tempFloor = gameBoard.getTileAt(rowIndex - 1, i - 1);
-						Rectangle tempRect = (Rectangle) boardImg[rowIndex][i].getChildren().get(0);
-						tempRect.setFill(new ImagePattern(tempFloor.getImage()));
-						tempRect.setRotate(tempFloor.getRotation());
-					}
-					silkBagTileImg.setFill(GREY);
-					Floor tempFloor = (Floor) silkBagTile;
-					tempFloor.setRotation(0);
-
-					gameLog.appendText("Tile slid into row " + (rowIndex - 1) + ".\n");
-					startPlayActionTurn();
-
-				} catch (Exception e) {
-					gameLog.appendText(e.getMessage());
+				int printNum;
+				if (axis.equalsIgnoreCase("row")) {
+					printNum = columnIndex - 1;
+				} else {
+					printNum = rowIndex - 1;
 				}
-			} else {
-				gameLog.appendText("ERROR: Invalid insert tile button. Please choose another location\n");
+				gameLog.appendText("Tile slid into " + axis + " " + printNum + " from " + direction + ".\n");
+				startPlayActionTurn();
+
+			} catch (Exception e) {
+//				gameLog.appendText(e.getMessage());
+				gameLog.appendText("ERROR: The tile cannot be moved into here.\n");
+				e.printStackTrace();
 			}
 		});
-	}
-
-	/**
-	 * Sets the specified tile image to that of the currently drawn floor tile.
-	 *
-	 * @param tile - the tile on the board that is taking on the silk bag tile.
-	 */
-	private void setTileImage(Rectangle tile) {
-		tile.setFill(new ImagePattern(silkBagTile.getImage()));
-		tile.setRotate(silkBagTileImg.getRotate());
-
-		silkBagTileImg.setFill(GREY);
-		Floor tempFloor = (Floor) silkBagTile;
-		tempFloor.setRotation(0);
-
-		silkBagTileRotate.setDisable(true);
-		setDisabledBoardArrows(true);
-	}
-
-	/**
-	 * Checks to see if any players are in a set location
-	 *
-	 * @param row    - row to be checked
-	 * @param column - column to be checked
-	 * @return - player who is on the location, null if none
-	 */
-	private Player checkPlayerLoc(int row, int column) {
-		for (Player player : playerRoster) {
-			if (player.getRowLoc() == row && player.getColumnLoc() == column) {
-				return player;
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -483,6 +476,46 @@ public class GameScreenController implements Initializable {
 			ImageView playerToken = (ImageView) boardImg[row + 1][column + 1].getChildren().get(1);
 			playerToken.setImage(player.getImage());
 		}
+	}
+
+	/**
+	 * Updates the floor image on the selected tile
+	 *
+	 * @param row    - row the tile to be changed is
+	 * @param column - column the tile to be changed is
+	 */
+	private void updateTileImgs(int row, int column) {
+		Floor tempFloor = gameBoard.getTileAt(row - 1, column - 1);
+		Rectangle tempRect = (Rectangle) boardImg[row][column].getChildren().get(0);
+		tempRect.setFill(new ImagePattern(tempFloor.getImage()));
+		tempRect.setRotate(tempFloor.getRotation());
+	}
+
+	/**
+	 * Checks to see if any players are in a set location
+	 *
+	 * @param gameBoardRow    - gameBoard row to be checked
+	 * @param gameBoardColumn - gameBoard column to be checked
+	 * @return - player who is on the location, null if none
+	 */
+	private Player checkPlayerLoc(int gameBoardRow, int gameBoardColumn) {
+		for (Player player : playerRoster) {
+			if (player.getRowLoc() == gameBoardRow && player.getColumnLoc() == gameBoardColumn) {
+				return player;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Sets the player token image at a specified tile
+	 *
+	 * @param boardImgRow - boardImg row to be set
+	 * @param boardImgCol - boardImg column to be set
+	 */
+	private void setPlayerImg(Image img, int boardImgRow, int boardImgCol) {
+		ImageView view = (ImageView) boardImg[boardImgRow][boardImgCol].getChildren().get(1);
+		view.setImage(img);
 	}
 
 	/**
@@ -770,47 +803,37 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void moveClick() {
-
 		try {
 			playerMoves = currPlayer.possibleMoves(gameBoard);
-/*
-			for (Floor floor: playerMoves) {
+
+			for (Floor floor : playerMoves) {
 				System.out.println(floor.getRow() + "," + floor.getColumn() + ":"
-				+ floor.north + floor.east + floor.south + floor.west);
+						+ floor.isNorth() + floor.isEast() + floor.isSouth() + floor.isWest());
 			}
 			System.out.println(currPlayer.getRowLoc() + "," + currPlayer.getColumnLoc() + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).north + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).east + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).south + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).west + ",");
-			System.out.println(currPlayer.getRowLoc()+1 + "," + currPlayer.getColumnLoc() + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc()+1, currPlayer.getColumnLoc()).north + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc()+1, currPlayer.getColumnLoc()).east + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc()+1, currPlayer.getColumnLoc()).south + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc()+1, currPlayer.getColumnLoc()).west + ",");
+					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isNorth() + ","
+					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isEast() + ","
+					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isSouth() + ","
+					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isWest() + ",");
 
-*/
-		if (!playerMoves.isEmpty()) {
-			for (Floor tile : playerMoves) {
-				StackPane stack = boardImg[tile.getRow() + 1][tile.getColumn() + 1];
-				stack.setDisable(false);
+			if (!playerMoves.isEmpty()) {
+				for (Floor tile : playerMoves) {
+					StackPane stack = boardImg[tile.getRow() + 1][tile.getColumn() + 1];
+					stack.setDisable(false);
 
-				Rectangle floor = (Rectangle) stack.getChildren().get(0);
-				floor.setStroke(currPlayer.getColour());
-				floor.setStrokeWidth(4);
+					Rectangle floor = (Rectangle) stack.getChildren().get(0);
+					floor.setStroke(currPlayer.getColour());
+					floor.setStrokeWidth(4);
+				}
+			} else {
+				gameLog.appendText("No movement possible, please end your turn.\n");
+				endTurnButton.setDisable(false);
 			}
-		} else {
-			gameLog.appendText("No movement possible, please end your turn.\n");
+		} catch (Exception e) {
+			System.out.println("Move button failed to work again because of " + e); // TODO - Remove once move works
 			endTurnButton.setDisable(false);
 		}
-	} catch(Exception e)
-
-	{
-		System.out.println("Move button failed to work again because of " + e); // TODO - Remove once move works
-		endTurnButton.setDisable(false);
 	}
-
-}
 
 	/**
 	 * Button that will wraps up the current players turn and start the next player's turn
