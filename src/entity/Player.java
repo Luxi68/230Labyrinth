@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Class that represents the players and their tokens within the game
  *
- * @author Nouran, Chris, Junjie.
+ * @author Nouran, Chris, Junjie, Rhys.
  */
 public class Player {
 	private final String NAME;
@@ -18,9 +18,7 @@ public class Player {
 	private final ArrayList<Action> HAND;
 	private int rowLoc;
 	private int columnLoc;
-	private Floor currentFloor;
 	private boolean isGoal;
-	private Board board;
 	private int[] lastPosiRow = new int[3];
 	private int[] lastPosiColumn = new int[3];
 	private boolean backtracked;
@@ -40,7 +38,6 @@ public class Player {
 		this.HAND = new ArrayList<>();
 		this.rowLoc = rowStart;
 		this.columnLoc = columnStart;
-		this.board = board;
 		this.PROFILE = profile;
 		this.backtracked = false;
 	}
@@ -82,13 +79,31 @@ public class Player {
 		return HAND;
 	}
 
+
 	/**
-	 * Returns the location of the player
+	 * Returns the row the player is on
 	 *
-	 * @return - the floor tile the player is at
+	 * @return -  the row the player is on
 	 */
-	public Floor getCurrentFloor() {
-		return currentFloor;
+	public int getRowLoc() {
+		return rowLoc;
+	}
+
+	/**
+	 * Returns the column the player is on
+	 *
+	 * @return - the column the player is on
+	 */
+	public int getColumnLoc() {
+		return columnLoc;
+	}
+
+	/**
+	 * @param board
+	 * @return
+	 */
+	public Floor getCurrentFloor(Board board) {
+		return board.getTileAt(this.rowLoc, this.columnLoc);
 	}
 
 	/**
@@ -112,15 +127,94 @@ public class Player {
 	 *
 	 * @param moveTo - The tile the player wants to move to
 	 */
-	public void movePlayer(Floor moveTo) {
-		if (possibleMoves().contains(moveTo)) {
-			this.rowLoc = moveTo.getRow();
-			this.columnLoc = moveTo.getColumn();
-			storePosi();
-			this.currentFloor = moveTo;
-		} else {
-			throw new IndexOutOfBoundsException("ERROR: " + this.NAME + " cannot make this move\n");
+	public void movePlayer(Board board, Floor moveTo) {
+		this.rowLoc = moveTo.getRow();
+		this.columnLoc = moveTo.getColumn();
+		storePosi();
+	}
+
+	/**
+	 * Returns all the possible moves a player can male from his current location
+	 *
+	 * @return an arrayList of all possible tiles he can move to
+	 */
+	public ArrayList<Floor> possibleMoves(Board board) {
+		ArrayList<Floor> possibleMoves = new ArrayList<>();
+		int count = 0;
+		//east
+		if (columnLoc < board.getLength()) {
+			int c = columnLoc;
+			boolean can = true;
+			while ((c < board.getLength()) && (count < 4) && can && ( c + 1 < board.getLength())) {
+				if ((board.getTileAt(rowLoc, c).isEast()) && (board.getTileAt(rowLoc, c + 1).isWest())){
+					possibleMoves.add(board.getTileAt(rowLoc, c + 1));
+					c++;
+					count++;
+				} else {
+					can = false;
+				}
+			}
 		}
+		//west
+		if (columnLoc > 0) {
+			count = 0;
+			int c = columnLoc;
+			boolean can = true;
+			while ((c > 0) && (count < 4) && can && (c - 1 > 0)) {
+				if ((board.getTileAt(rowLoc, c).isWest()) && (board.getTileAt(rowLoc, c - 1).isEast())){
+					possibleMoves.add(board.getTileAt(rowLoc, c - 1));
+					--c;
+					count++;
+				} else {
+					can = false;
+				}
+			}
+		}
+		//north
+		if (rowLoc > 0) {
+			count = 0;
+			int r = rowLoc;
+			boolean can = true;
+			while ((r > 0) && (count < 4) && can && (r - 1 >0)) {
+				if (((board.getTileAt(r, columnLoc).isNorth()) && (board.getTileAt(r - 1, columnLoc).isSouth()))){
+					System.out.println("a");
+					possibleMoves.add(board.getTileAt(r - 1, columnLoc));
+					--r;
+					count++;
+				} else {
+					can = false;
+				}
+			}
+		}
+		//south
+		if (rowLoc < board.getHeight()) {
+			count = 0;
+			int r = rowLoc;
+			boolean can = true;
+			while ((r < board.getHeight()) && (count < 4) && can && (r + 1 < board.getHeight())) {
+				if ((board.getTileAt(r, columnLoc).isSouth()) && (board.getTileAt(r + 1, columnLoc).isNorth())){
+					possibleMoves.add(board.getTileAt(r + 1, columnLoc));
+					r++;
+					count++;
+				} else {
+					can = false;
+				}
+			}
+		}
+		/*
+		if (isEastPossible(board)) {
+			possibleMoves.add(board.getTileAt(rowLoc, columnLoc + 1));
+		}
+		if (isWestPossible(board)) {
+			possibleMoves.add(board.getTileAt(rowLoc, columnLoc - 1));
+		}
+		if (isNorthPossible(board)) {
+			possibleMoves.add(board.getTileAt(rowLoc - 1, columnLoc));
+		}
+		if (isSouthPossible(board)) {
+			possibleMoves.add(board.getTileAt(rowLoc + 1, columnLoc));
+		}*/
+		return possibleMoves;
 	}
 
 	/**
@@ -136,36 +230,14 @@ public class Player {
 	}
 
 	/**
-	 * Returns all the possible moves a player can male from his current location
-	 *
-	 * @return an arrayList of all possible tiles he can move to
-	 */
-	public ArrayList<Floor> possibleMoves() {
-		ArrayList<Floor> possibleMoves = new ArrayList<>();
-		if (isEastPossible()) {
-			possibleMoves.add(board.getTileAt(rowLoc + 1, columnLoc));
-		}
-		if (isWestPossible()) {
-			possibleMoves.add(board.getTileAt(rowLoc - 1, columnLoc));
-		}
-		if (isNorthPossible()) {
-			possibleMoves.add(board.getTileAt(rowLoc, columnLoc - 1));
-		}
-		if (isSouthPossible()) {
-			possibleMoves.add(board.getTileAt(rowLoc, columnLoc + 1));
-		}
-		return possibleMoves;
-	}
-
-	/**
 	 * Checks if it is possible to move to the tile on the right
 	 *
 	 * @return true if it is possible to move east, false otherwise
 	 */
-	public boolean isEastPossible() { //right
-		if (rowLoc < board.getLength() - 1) {
-			return board.getTileAt(rowLoc, columnLoc).isWest()
-					&& board.getTileAt(rowLoc + 1, columnLoc).isEast();
+	public boolean isEastPossible(Board board) { //right
+		if (columnLoc != board.getLength() - 1) {
+			return board.getTileAt(rowLoc, columnLoc).isEast()
+					&& board.getTileAt(rowLoc, columnLoc + 1).isWest();
 		} else {
 			return false;
 		}
@@ -176,10 +248,10 @@ public class Player {
 	 *
 	 * @return true if it is possible to move west, false otherwise
 	 */
-	public boolean isWestPossible() {
-		if (rowLoc > 0) {
-			return board.getTileAt(rowLoc, columnLoc).isEast()
-					&& board.getTileAt(rowLoc - 1, columnLoc).isWest();
+	public boolean isWestPossible(Board board) {
+		if (columnLoc != 0) {
+			return board.getTileAt(rowLoc, columnLoc).isWest()
+					&& board.getTileAt(rowLoc, columnLoc - 1).isEast();
 		} else {
 			return false;
 		}
@@ -190,10 +262,10 @@ public class Player {
 	 *
 	 * @return true if it is possible to move upwards, false otherwise
 	 */
-	public boolean isNorthPossible() {
-		if (columnLoc > 0) {
-			return board.getTileAt(rowLoc, columnLoc).isSouth()
-					&& board.getTileAt(rowLoc, columnLoc - 1).isNorth();
+	public boolean isNorthPossible(Board board) {
+		if (rowLoc != 0) {
+			return board.getTileAt(rowLoc, columnLoc).isNorth()
+					&& board.getTileAt(rowLoc - 1, columnLoc).isSouth();
 		} else {
 			return false;
 		}
@@ -204,10 +276,10 @@ public class Player {
 	 *
 	 * @return true if it is possible to move down, false otherwise
 	 */
-	public boolean isSouthPossible() {
-		if (columnLoc < board.getHeight() - 1) {
-			return board.getTileAt(rowLoc, columnLoc).isNorth()
-					&& board.getTileAt(rowLoc, columnLoc + 1).isSouth();
+	public boolean isSouthPossible(Board board) {
+		if (rowLoc != board.getHeight() - 1) {
+			return board.getTileAt(rowLoc, columnLoc).isSouth()
+					&& board.getTileAt(rowLoc + 1, columnLoc).isNorth();
 		} else {
 			return false;
 		}
@@ -240,7 +312,7 @@ public class Player {
 	 *
 	 * @throws NullPointerException if the player cannot be backtracked
 	 */
-	public void backtrack() throws NullPointerException {
+	public void backtrack(Board board) throws NullPointerException {
 		if (!backtracked) {
 			if (!board.getTileAt(lastPosiRow[1], lastPosiColumn[1]).getIsFire()) {
 				rowLoc = lastPosiRow[1];

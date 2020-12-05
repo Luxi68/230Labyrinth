@@ -14,7 +14,6 @@ public class Floor extends Tile {
 	private final boolean IS_GOAL;
 	private int row;
 	private int column;
-
 	private boolean north;
 	private boolean south;
 	private boolean east;
@@ -95,20 +94,26 @@ public class Floor extends Tile {
 		corner, straight, tee, goal
 	}
 
-	public int getRow() {
-		return row;
-	}
-
 	public void setRow(int row) {
 		this.row = row;
 	}
 
-	public int getColumn() {
-		return column;
-	}
-
 	public void setColumn(int column) {
 		this.column = column;
+	}
+
+	public void updateCoords(int row, int column) {
+		this.row = row;
+		this.column = column;
+	}
+
+	public int getRow() {
+
+		return row;
+	}
+
+	public int getColumn() {
+		return column;
 	}
 
 	public boolean isNorth() {
@@ -211,13 +216,15 @@ public class Floor extends Tile {
 	}
 
 
-	// Method that rotates the tile
-	public void rotate () {
+	/**
+	 * Method that rotates the tile 90 degrees clockwise
+	 */
+	public void  rotate () {
 		boolean tempN = north;
-		north = east;
-		east = south;
-		south = west;
-		west = tempN;
+		north = west;
+		west = south;
+		south = east;
+		east = tempN;
 
 		if (rotation == 0) {
 			this.rotation = 1;

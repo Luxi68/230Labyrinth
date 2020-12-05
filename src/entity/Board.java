@@ -1,5 +1,9 @@
 package entity;
 
+import java.util.ArrayList;
+
+import sun.security.util.Length;
+
 /**
  * <P>Purpose: Setting out tiles by collaborating with Floor in order to create the game board.
  * It is also responsible for managing the tiles movements</p>
@@ -83,8 +87,6 @@ public class Board {
 	}*/
 
 
-
-
     /**
      * insertFromTop inserts a Floor tile to the board and shifts relevant tiles from the top of the board
      * @param insert The Floor tile that needs to be inserted
@@ -95,10 +97,13 @@ public class Board {
     public Floor insertFromTop(Floor insert, int column) throws IllegalStateException {
         if (checkIfColumnMovable(column)) {
             Floor ejectedTile = BOARD[HEIGHT - 1][column];
-            for (int i = HEIGHT - 1; i == 1; i--) {
-                BOARD[i][column] = BOARD[i - 1][column];
+            for (int i = HEIGHT - 1; i > 0; i--) {
+                Floor movedFloor = BOARD[i - 1][column];
+                BOARD[i][column] = movedFloor;
+                movedFloor.updateCoords(i, column);
             }
             BOARD[0][column] = insert;
+            insert.updateCoords(0, column);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
@@ -117,16 +122,18 @@ public class Board {
         if (checkIfRowMovable(row)) {
             Floor ejectedTile = BOARD[row][0];
             for (int i = 0; i < LENGTH - 1; i++) {
-                BOARD[row][i] = BOARD[row][i + 1];
+                Floor movedFloor = BOARD[row][i + 1];
+                BOARD[row][i] = movedFloor;
+                movedFloor.updateCoords(row, i);
             }
             BOARD[row][LENGTH - 1] = insert;
+            insert.updateCoords(row, LENGTH - 1);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
                     "ERROR: This row cannot be moved as there are iced tiles in the way.\n");
         }
     }
-
 
     /**
      * insertFromLeft inserts a Floor tile to the board and shifts relevant tiles from the left of the board
@@ -139,9 +146,12 @@ public class Board {
         if (checkIfRowMovable(row)) {
             Floor ejectedTile = BOARD[row][LENGTH - 1];
             for (int i = LENGTH - 1; i > 0; i--) {
-                BOARD[row][i] = BOARD[row][i - 1];
+                Floor movedFloor = BOARD[row][i - 1];
+                BOARD[row][i] = movedFloor;
+                movedFloor.updateCoords(row, i);
             }
             BOARD[row][0] = insert;
+            insert.updateCoords(row, 0);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
@@ -160,9 +170,12 @@ public class Board {
         if (checkIfColumnMovable(column)) {
             Floor ejectedTile = BOARD[HEIGHT - 1][column];
             for (int i = 0 ; i < HEIGHT - 1; i++) {
-                BOARD[i][column] = BOARD[i + 1][column];
+                Floor movedFloor = BOARD[i + 1][column];
+                BOARD[i][column] = movedFloor;
+                movedFloor.updateCoords(i, column);
             }
             BOARD[0][column] = insert;
+            insert.updateCoords(0, column);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
@@ -176,9 +189,9 @@ public class Board {
      * @return true if we can insert a tile into the row, false otherwise
      */
     private boolean checkIfRowMovable(int row) {
-        for (int i = 0; i <= HEIGHT - 1; i++) {
+        for (int i = 0; i <= LENGTH - 1; i++) {
             Floor curTile = BOARD[row][i];
-            if (curTile.getIsIce() || curTile.getIsFixed()) {
+            if (curTile.getIsIce()) {
                 return false;
             }
         }
@@ -191,7 +204,7 @@ public class Board {
      * @return true if we can insert a tile into the column, false otherwise
      */
     private boolean checkIfColumnMovable(int column) {
-        for (int i = 0; i <= LENGTH - 1; i++) {
+        for (int i = 0; i <= HEIGHT - 1; i++) {
             Floor curTile = BOARD[i][column];
             if (curTile.getIsIce()) {
                 return false;
@@ -205,10 +218,24 @@ public class Board {
      * Returns a list of the floor tiles surrounding a specific floor tile on a board
      * @param inflictedTile - the tile at the centre
      * @return - the inflicted tile and all surrounding tiles
-     * @throws IndexOutOfBoundsException - if the tile is outside the bounds of the board
      */
-    public Floor[] getSurroundingTiles(Floor inflictedTile) throws IndexOutOfBoundsException {
-        Floor[] affectedTiles = null;
+    public ArrayList<Floor> getSurroundingTiles(Floor inflictedTile) {
+        ArrayList<Floor> affectedTilesR = new ArrayList<>();
+        int row = inflictedTile.getRow();
+        int column = inflictedTile.getColumn();
+
+        for (int r = row - 1; r < row + 2;r++){
+            for (int c = column - 1; c < column + 2;c++){
+                if (c < 0 || r < 0 || c > HEIGHT || r > LENGTH){
+                    //outta range
+                }else{
+                    affectedTilesR.add(getTileAt(r, c));
+                }
+            }
+        }
+
+        /*
+         Floor[] affectedTiles = null;
         String errorMsg = "Inflicted tile is not on the board. Please choose another floor tile\n";
 
         if (inflictedTile.getRow() == 0) {
@@ -308,6 +335,7 @@ public class Board {
         } else {
             throw new IndexOutOfBoundsException(errorMsg);
         }
-        return affectedTiles;
+        */
+        return affectedTilesR;
     }
 }

@@ -7,46 +7,40 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class Leaderboard{
-    ArrayList<Tuple> Leaderboard;
+    ArrayList<Profile> Leaderboard;
 
-    public Leaderboard() throws FileNotFoundException {
-        this.Leaderboard = createLeaderboard();
+    public Leaderboard(int boardNumber) throws FileNotFoundException {
+        this.Leaderboard = createLeaderboard(boardNumber);
     }
 
-    private ArrayList<Tuple> createLeaderboard() throws FileNotFoundException {
-        ArrayList<Tuple> listOfUsers = new ArrayList<Tuple>();
+    private ArrayList<Profile> createLeaderboard(int boardNumber) throws FileNotFoundException {
+        ArrayList<Profile> listOfUsers = new ArrayList<Profile>();
         File directoryPath = new File("resources/users");
         File listOfFiles[] = directoryPath.listFiles();
-        Scanner sc = null;
-        int count = 0;
+        Scanner sc;
         for (File currentFile : listOfFiles){
-            Profile user = new Profile("");
             sc = new Scanner(currentFile);
+            String profileName = sc.nextLine();
+            Profile user = new Profile(profileName);
             while (sc.hasNextLine()){
                 String currentLine = sc.nextLine();
                 String[] splitted = currentLine.split(",");
-                user.setPlayerName(splitted[0]);
-                user.setNumberOfGamesPlayed(Integer.parseInt(splitted[1]));
-                user.setNumberOfWins(Integer.parseInt(splitted[2]));
+                if (Integer.parseInt(splitted[0])==boardNumber){
+                    user.setNumberOfGamesPlayed(Integer.parseInt(splitted[1]));
+                    user.setNumberOfWins(Integer.parseInt(splitted[2]));
+                }
             }
-            count++;
-            Tuple entry = new Tuple(count,user);
-            listOfUsers.add(entry);
+            listOfUsers.add(user);
         }
         Collections.sort(listOfUsers);
-        for (int i=0; i<listOfUsers.size(); i++){
-            if (listOfUsers.get(i).rank != i+1){
-                listOfUsers.get(i).setRank(i+1);
-            }
-        }
         return listOfUsers;
     }
 
-    public void setLeaderboard(ArrayList<Tuple> leaderboard) {
+    public void setLeaderboard(ArrayList<Profile> leaderboard) {
         Leaderboard = leaderboard;
     }
 
-    public ArrayList<Tuple> getLeaderboard() {
+    public ArrayList<Profile> getLeaderboard() {
         return Leaderboard;
     }
 
