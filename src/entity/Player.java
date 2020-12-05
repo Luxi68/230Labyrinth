@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Class that represents the players and their tokens within the game
  *
- * @author Nouran, Chris, Junjie, Rhys.
+ * @author Nouran, Chris, Junjie.
  */
 public class Player {
 	private final String NAME;
@@ -140,68 +140,7 @@ public class Player {
 	 */
 	public ArrayList<Floor> possibleMoves(Board board) {
 		ArrayList<Floor> possibleMoves = new ArrayList<>();
-		int count = 0;
-		//east
-		if (columnLoc < board.getLength()) {
-			int c = columnLoc;
-			boolean can = true;
-			while ((c < board.getLength()) && (count < 4) && can && ( c + 1 < board.getLength())) {
-				if ((board.getTileAt(rowLoc, c).isEast()) && (board.getTileAt(rowLoc, c + 1).isWest())){
-					possibleMoves.add(board.getTileAt(rowLoc, c + 1));
-					c++;
-					count++;
-				} else {
-					can = false;
-				}
-			}
-		}
-		//west
-		if (columnLoc > 0) {
-			count = 0;
-			int c = columnLoc;
-			boolean can = true;
-			while ((c > 0) && (count < 4) && can && (c - 1 > 0)) {
-				if ((board.getTileAt(rowLoc, c).isWest()) && (board.getTileAt(rowLoc, c - 1).isEast())){
-					possibleMoves.add(board.getTileAt(rowLoc, c - 1));
-					--c;
-					count++;
-				} else {
-					can = false;
-				}
-			}
-		}
-		//north
-		if (rowLoc > 0) {
-			count = 0;
-			int r = rowLoc;
-			boolean can = true;
-			while ((r > 0) && (count < 4) && can && (r - 1 >0)) {
-				if (((board.getTileAt(r, columnLoc).isNorth()) && (board.getTileAt(r - 1, columnLoc).isSouth()))){
-					System.out.println("a");
-					possibleMoves.add(board.getTileAt(r - 1, columnLoc));
-					--r;
-					count++;
-				} else {
-					can = false;
-				}
-			}
-		}
-		//south
-		if (rowLoc < board.getHeight()) {
-			count = 0;
-			int r = rowLoc;
-			boolean can = true;
-			while ((r < board.getHeight()) && (count < 4) && can && (r + 1 < board.getHeight())) {
-				if ((board.getTileAt(r, columnLoc).isSouth()) && (board.getTileAt(r + 1, columnLoc).isNorth())){
-					possibleMoves.add(board.getTileAt(r + 1, columnLoc));
-					r++;
-					count++;
-				} else {
-					can = false;
-				}
-			}
-		}
-		/*
+
 		if (isEastPossible(board)) {
 			possibleMoves.add(board.getTileAt(rowLoc, columnLoc + 1));
 		}
@@ -213,7 +152,7 @@ public class Player {
 		}
 		if (isSouthPossible(board)) {
 			possibleMoves.add(board.getTileAt(rowLoc + 1, columnLoc));
-		}*/
+		}
 		return possibleMoves;
 	}
 
