@@ -25,15 +25,15 @@ public class SilkBag {
      *The method used to draw a tile out of silk bag and remove that tile.	 
      * @return the tile taken from the silk bag
      */
-    public Tile drawTile(){
+    public Tile drawTile(Tile removedTile){
         Tile tile;
         do {
             double index = Math.random() * (bag.size()) + 0;
             int value = (int)index;
             tile = bag.get(value);
             removedTile = bag.get(value);
-            bag.remove(value);
         } while (tile == null);
+        bag.remove(value);
         return tile;
     }
     /**
