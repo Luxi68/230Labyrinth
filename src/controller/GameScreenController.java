@@ -328,8 +328,8 @@ public class GameScreenController implements Initializable {
 		boardImg[row][column] = stack;
 
 		stack.setOnMouseClicked(event -> {
-			int rowIndex = GridPane.getRowIndex(stack);
-			int columnIndex = GridPane.getColumnIndex(stack);
+			int rowImg = GridPane.getRowIndex(stack);
+			int colImg = GridPane.getColumnIndex(stack);
 			Floor ejectedTile;
 			Player ejectedPlayer;
 			Floor insertedTile = (Floor) silkBagTile;
@@ -342,50 +342,54 @@ public class GameScreenController implements Initializable {
 					// Move all the tiles along and return the ejected tile
 					if (row == 0) {
 						direction = "top";
-						ejectedTile = gameBoard.insertFromTop(insertedTile, columnIndex - 1);
-						ejectedPlayer = checkPlayerLoc(boardRows - 3, columnIndex - 1);
+						ejectedTile = gameBoard.insertFromTop(insertedTile, colImg - 1);
+						ejectedPlayer = checkPlayerLoc(boardRows - 3, colImg - 1);
 
 						// Loop up through the column to update all images
 						for (int i = boardRows - 2; i > 0; i--) {
-							updateTileImgs(i, columnIndex);
-							Player token = checkPlayerLoc(i, columnIndex);
+							updateTileImgs(i, colImg);
+							Player token = checkPlayerLoc(i - 1, colImg - 1);
 							if (token != null) {
-								setPlayerImg(null, i, columnIndex);
-								System.out.println("oldLoc: " + i + columnIndex);
-								if (row != boardRows - 2) {
-									setPlayerImg(token.getImage(), i + 1, columnIndex);
-									token.movePlayer(gameBoard, gameBoard.getTileAt(i, columnIndex - 1));
+								setPlayerImg(null, i, colImg);
+								System.out.println("oldLoc: " + (i - 1) + "," + (colImg - 1));
+								if (i != boardRows - 2) {
+									// set image of tile below
+									setPlayerImg(token.getImage(), i + 1, colImg);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(i, colImg - 1));
+									System.out.println("newLoc: " + (i) + "," + (colImg - 1));
 								}
 							}
 						}
 
 						if (ejectedPlayer != null) {
-							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(0, columnIndex - 1));
-							setPlayerImg(ejectedPlayer.getImage(), 1, columnIndex);
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(0, colImg - 1));
+							setPlayerImg(ejectedPlayer.getImage(), 1, colImg);
 						}
 
 					} else {
 						direction = "bottom";
-						ejectedTile = gameBoard.insertFromBottom(insertedTile, columnIndex - 1);
-						ejectedPlayer = checkPlayerLoc(0, columnIndex - 1);
+						ejectedTile = gameBoard.insertFromBottom(insertedTile, colImg - 1);
+						ejectedPlayer = checkPlayerLoc(0, colImg - 1);
 
 						// Loop down through the column to update all images
 						for (int i = 1; i < boardRows - 1; i++) {
-							updateTileImgs(i, columnIndex);
-							Player token = checkPlayerLoc(i, columnIndex);
+							updateTileImgs(i, colImg);
+							Player token = checkPlayerLoc(i - 1, colImg - 1);
 							if (token != null) {
-								setPlayerImg(null, i, columnIndex);
-								System.out.println("oldLoc: " + i + columnIndex);
-								if (row != 1) {
-									setPlayerImg(token.getImage(), i - 1, columnIndex);
-									token.movePlayer(gameBoard, gameBoard.getTileAt(i - 2, columnIndex - 1));
+								setPlayerImg(null, i, colImg);
+								System.out.println("oldLoc: " + (i - 1) + "," + (colImg - 1));
+								if (i != 1) {
+									// set image of tile above
+									setPlayerImg(token.getImage(), i - 1, colImg);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(i - 2, colImg - 1));
+									System.out.println("newLoc: " + (i - 2) + "," + (colImg - 1));
 								}
 							}
 						}
 
 						if (ejectedPlayer != null) {
-							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(boardRows - 3, columnIndex - 1));
-							setPlayerImg(ejectedPlayer.getImage(), boardRows - 2, columnIndex);
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(boardRows - 3, colImg - 1));
+							setPlayerImg(ejectedPlayer.getImage(), boardRows - 2, colImg);
 						}
 					}
 					silkBag.addTile(ejectedTile);
@@ -395,50 +399,55 @@ public class GameScreenController implements Initializable {
 					// Move all the tiles along and return the ejected tile
 					if (column == 0) {
 						direction = "left";
-						ejectedTile = gameBoard.insertFromLeft(insertedTile, rowIndex - 1);
-						ejectedPlayer = checkPlayerLoc(rowIndex - 1, boardColumns - 3);
+						ejectedTile = gameBoard.insertFromLeft(insertedTile, rowImg - 1);
+						ejectedPlayer = checkPlayerLoc(rowImg - 1, boardColumns - 3);
 
 						// Loop right through the row to update all images
 						for (int i = boardColumns - 2; i > 0; i--) {
-							updateTileImgs(rowIndex, i);
-							Player token = checkPlayerLoc(rowIndex, i - 1);
+							updateTileImgs(rowImg, i);
+							Player token = checkPlayerLoc(rowImg - 1, i - 1);
 							if (token != null) {
-								setPlayerImg(null, rowIndex, i);
-								System.out.println("oldLoc: " + rowIndex + i);
-								if (column != boardColumns - 2) {
-									setPlayerImg(token.getImage(), rowIndex, i + 1);
-									token.movePlayer(gameBoard, gameBoard.getTileAt(rowIndex - 1, i));
+								setPlayerImg(null, rowImg, i);
+								System.out.println("oldLoc: " + (rowImg - 1) + "," + (i - 1));
+								if (i != boardColumns - 2) {
+									// set image of tile right
+									setPlayerImg(token.getImage(), rowImg, i + 1);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, i));
+									System.out.println("newLoc: " + (rowImg - 1) + "," + (i));
+
 								}
 							}
 						}
 
 						if (ejectedPlayer != null) {
-							setPlayerImg(ejectedPlayer.getImage(), rowIndex, 1);
-							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowIndex - 1, 0));
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, 0));
+							setPlayerImg(ejectedPlayer.getImage(), rowImg, 1);
 						}
 
 					} else {
 						direction = "right";
-						ejectedTile = gameBoard.insertFromRight(insertedTile, rowIndex - 1);
-						ejectedPlayer = checkPlayerLoc(rowIndex - 1, 0);
+						ejectedTile = gameBoard.insertFromRight(insertedTile, rowImg - 1);
+						ejectedPlayer = checkPlayerLoc(rowImg - 1, 0);
 
 						// Loop left through the row to update all images
 						for (int i = 1; i < boardColumns - 1; i++) {
-							updateTileImgs(rowIndex, i);
-							Player token = checkPlayerLoc(rowIndex, i - 1);
+							updateTileImgs(rowImg, i);
+							Player token = checkPlayerLoc(rowImg - 1, i - 1);
 							if (token != null) {
-								setPlayerImg(null, rowIndex, i);
-								System.out.println("oldLoc: " + rowIndex + i);
-								if (column != 1) {
-									setPlayerImg(token.getImage(), rowIndex, i - 1);
-									token.movePlayer(gameBoard, gameBoard.getTileAt(rowIndex - 1, i - 2));
+								setPlayerImg(null, rowImg, i);
+								System.out.println("oldLoc: " + (rowImg - 1) + "," + (i - 1));
+								if (i != 1) {
+									// set image of tile left
+									setPlayerImg(token.getImage(), rowImg, i - 1);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, i - 2));
+									System.out.println("newLoc: " + (rowImg - 1) + "," + (i - 2));
 								}
 							}
 						}
 
 						if (ejectedPlayer != null) {
-							setPlayerImg(ejectedPlayer.getImage(), rowIndex, boardColumns - 2);
-							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowIndex - 1, boardColumns - 3));
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, boardColumns - 3));
+							setPlayerImg(ejectedPlayer.getImage(), rowImg, boardColumns - 2);
 						}
 					}
 					silkBag.addTile(ejectedTile);
@@ -450,9 +459,9 @@ public class GameScreenController implements Initializable {
 
 				int printNum;
 				if (axis.equalsIgnoreCase("row")) {
-					printNum = columnIndex - 1;
+					printNum = colImg - 1;
 				} else {
-					printNum = rowIndex - 1;
+					printNum = rowImg - 1;
 				}
 				gameLog.appendText("Tile slid into " + axis + " " + printNum + " from " + direction + ".\n");
 				startPlayActionTurn();
@@ -481,26 +490,28 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Updates the floor image on the selected tile
 	 *
-	 * @param row    - row the tile to be changed is
-	 * @param column - column the tile to be changed is
+	 * @param boardImgRow    - boardImg row the tile to be changed is
+	 * @param boardImgCol - boardImg column the tile to be changed is
 	 */
-	private void updateTileImgs(int row, int column) {
-		Floor tempFloor = gameBoard.getTileAt(row - 1, column - 1);
-		Rectangle tempRect = (Rectangle) boardImg[row][column].getChildren().get(0);
+	private void updateTileImgs(int boardImgRow, int boardImgCol) {
+		Floor tempFloor = gameBoard.getTileAt(boardImgRow - 1, boardImgCol - 1);
+		Rectangle tempRect = (Rectangle) boardImg[boardImgRow][boardImgCol].getChildren().get(0);
 		tempRect.setFill(new ImagePattern(tempFloor.getImage()));
 		tempRect.setRotate(tempFloor.getRotation());
+		System.out.println("Update- " + tempFloor.getRow() + "," + tempFloor.getColumn() + ":"
+				+ tempFloor.isNorth() + tempFloor.isEast() + tempFloor.isSouth() + tempFloor.isWest());
 	}
 
 	/**
 	 * Checks to see if any players are in a set location
 	 *
-	 * @param gameBoardRow    - gameBoard row to be checked
-	 * @param gameBoardColumn - gameBoard column to be checked
+	 * @param boardPhyRow    - gameBoard row to be checked
+	 * @param boardPhyCol - gameBoard column to be checked
 	 * @return - player who is on the location, null if none
 	 */
-	private Player checkPlayerLoc(int gameBoardRow, int gameBoardColumn) {
+	private Player checkPlayerLoc(int boardPhyRow, int boardPhyCol) {
 		for (Player player : playerRoster) {
-			if (player.getRowLoc() == gameBoardRow && player.getColumnLoc() == gameBoardColumn) {
+			if (player.getRowLoc() == boardPhyRow && player.getColumnLoc() == boardPhyCol) {
 				return player;
 			}
 		}
@@ -629,6 +640,13 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
+	 * Method that runs when the game ends. Will announce the winner and exit from the game
+	 */
+	private void endGame() { // TODO - flesh out
+		gameLog.appendText(currPlayer.getName() + " wins!!\nThank you for playing!!\n");
+	}
+
+	/**
 	 * Setups the current player's hand including the correct number of each action tile
 	 */
 	private void setupCurrPlayerDisplay() {
@@ -700,6 +718,10 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void takeTileClick() {
+		for (Player player: playerRoster) {
+			System.out.println(player.getName() + "(" + player.getRowLoc() + ", " + player.getColumnLoc() + ")");
+		}
+
 		silkBagTileImg.setRotate(0);
 		silkBagTile = silkBag.drawTile();
 		silkBagTileImg.setFill(new ImagePattern(silkBagTile.getImage()));
@@ -817,6 +839,11 @@ public class GameScreenController implements Initializable {
 					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isWest() + ",");
 
 			if (!playerMoves.isEmpty()) {
+				// Removing tiles with players on TODO - properly implement players blocking other players
+				for (Player player: playerRoster) {
+					playerMoves.remove(player.getCurrentFloor(gameBoard));
+				}
+				// Highlighting the available tiles
 				for (Floor tile : playerMoves) {
 					StackPane stack = boardImg[tile.getRow() + 1][tile.getColumn() + 1];
 					stack.setDisable(false);
@@ -840,6 +867,10 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void endTurnClick() {
+		if (currPlayer.getCurrentFloor(gameBoard).getIsGoal()) {
+			endGame();
+		}
+
 		moveButton.setDisable(true); // Just in case it wasn't disabled earlier
 		endTurnButton.setDisable(true);
 

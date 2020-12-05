@@ -124,7 +124,7 @@ public class FileReader {
                         for (int i = 0; i < rot; ++i) {
                             gBoard.getTileAt(tRows, tColumns).rotate();
                         }
-
+                        gBoard.getTileAt(tRows, tColumns).updateCoords(tRows, tColumns);
 
                         break;
                     case "b":
