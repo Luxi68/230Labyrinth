@@ -135,37 +135,37 @@ public class FileReader {
                         switch (name) {
                             case "corner":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Floor("corner", new Image("/assets/corner.png"), false));
+                                    bag.addTile(true, new Floor("corner", new Image("/assets/corner.png"), false));
                                 }
                                 break;
                             case "straight":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Floor("straight", new Image("/assets/straight.png"), false));
+                                    bag.addTile(true, new Floor("straight", new Image("/assets/straight.png"), false));
                                 }
                                 break;
                             case "tee":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Floor("tee", new Image("/assets/tee.png"), false));
+                                    bag.addTile(true, new Floor("tee", new Image("/assets/tee.png"), false));
                                 }
                                 break;
                             case "fire":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("fire", new Image("/assets/fire.png")));
+                                    bag.addTile(true, new Action("fire", new Image("/assets/fire.png")));
                                 }
                                 break;
                             case "ice":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("ice", new Image("/assets/ice.png")));
+                                    bag.addTile(true, new Action("ice", new Image("/assets/ice.png")));
                                 }
                                 break;
                             case "doubleMove":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("doubleMove", new Image("/assets/doublemove.png")));
+                                    bag.addTile(true, new Action("doubleMove", new Image("/assets/doublemove.png")));
                                 }
                                 break;
                             case "backTrack":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("backTrack", new Image("/assets/backtrack.png")));
+                                    bag.addTile(false, new Action("backTrack", new Image("/assets/backtrack.png")));
                                 }
                                 break;
                             default:
