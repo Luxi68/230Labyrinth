@@ -21,6 +21,8 @@ public class SaveGame {
      * @param board the board to be saved
      * @param players a list of players to be saved
      * @param bag the silkbag to be saved
+     * @param rowNoFixed a list of rows indexs with no fixed tiles
+     * @param columnNoFixed a list of column indexs with no fixed tile
      * @throws IOException because it was being awkward //todo fix the throws
      */
 
@@ -28,7 +30,7 @@ public class SaveGame {
     //but to make it work with them simply uncomment and add the following line to the end of the save params
     // ,HashMap hash1, HashMap hash2
 
-    public static void save(String name, Board board, ArrayList<Player> players, SilkBag bag) throws IOException { //add hashmaps
+    public static void save(String name, Board board, ArrayList<Player> players, SilkBag bag, ArrayList<Integer> rowNoFixed, ArrayList<Integer> columnNoFixed) throws IOException { //add hashmaps
 
     String fileName = "./reources/save/"+name+".txt";
     File file = new File(fileName);
@@ -46,8 +48,8 @@ public class SaveGame {
         oFile.writeObject(board);
         oFile.writeObject(players);
         oFile.writeObject(bag);
-        //oFile.writeObject(hash1);
-        //oFile.writeObject(hash2);
+        oFile.writeObject(rowNoFixed);
+        oFile.writeObject(columnNoFixed);
 
         fFile.close();
         oFile.close();
@@ -73,14 +75,14 @@ public class SaveGame {
         Board board = (Board)oiFile.readObject();
         ArrayList<Player> players = (ArrayList<Player>)oiFile.readObject();
         SilkBag bag = (SilkBag) oiFile.readObject();
-        //HashMap hash1 = (HashMap)oiFile.readObject();
-        //HashMap hash2 = (HashMap)oiFile.readObject();
+        ArrayList<Integer> rowNoFixed = (ArrayList<Integer>)oiFile.readObject();
+        ArrayList<Integer> columnNoFixed = (ArrayList<Integer>)oiFile.readObject();
 
         fileData.add(board);
         fileData.add(players);
         fileData.add(bag);
-        //fileData.add(hash1);
-        //fileData.add(hash2);
+        fileData.add(rowNoFixed);
+        fileData.add(columnNoFixed);
 
         fiFile.close();
         oiFile.close();
