@@ -54,11 +54,12 @@ public class StartScreenController {
 		}
 	}
 
-	/**public void backgroudMusic(){
-		Media backgroudSound = new Media("/Users/albertoortenzi/IdeaProjects/230Labyrinth/resources/sounds/startScreenBackground.mp3");
-		mediaPlayer = new MediaPlayer(backgroudSound);
+	public void backgroundMusic(){
+		Media backgroundSound = new Media(new File("resources/sounds/startScreenBackground.mp3").toURI().toString());
+		mediaPlayer = new MediaPlayer(backgroundSound);
 		mediaPlayer.setAutoPlay(true);
-	}**/
+		mediaPlayer.play();
+	}
 
 	@FXML
 	private void goToNewGame(ActionEvent actionEvent) {
