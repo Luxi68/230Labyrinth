@@ -46,8 +46,8 @@ public class SaveGame {
         ObjectOutputStream oFile = new ObjectOutputStream(fFile);
 
         oFile.writeObject(board);
-        oFile.writeObject(players);
         oFile.writeObject(bag);
+        oFile.writeObject(players);
         oFile.writeObject(rowNoFixed);
         oFile.writeObject(columnNoFixed);
 
@@ -79,8 +79,8 @@ public class SaveGame {
         ArrayList<Integer> columnNoFixed = (ArrayList<Integer>)oiFile.readObject();
 
         fileData.add(board);
-        fileData.add(players);
         fileData.add(bag);
+        fileData.add(players);
         fileData.add(rowNoFixed);
         fileData.add(columnNoFixed);
 
