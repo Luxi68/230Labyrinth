@@ -311,6 +311,9 @@ public class GameScreenController implements Initializable {
 											victim.getRowLoc() + 1, victim.getColumnLoc() + 1);
 									System.out.println((victim.getRowLoc() + 1) + "," + (victim.getColumnLoc() + 1));
 									gameLog.appendText(victim.getName() + " was forcibly moved back in time.\n");
+									Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
+									MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+									mediaPlayer.play();
 								} catch (Exception e) {
 									gameLog.appendText(e.getMessage());
 								}
@@ -1084,9 +1087,9 @@ public class GameScreenController implements Initializable {
 			disableActionSelect();
 			gameLog.appendText("Choose a fellow deity to cast BACKTRACK on.\n");
 			currPlayerBacktrackTxt.setText("Used");
-			Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
-			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-			mediaPlayer.play();
+			//Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
+			//MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			//mediaPlayer.play();
 
 			for (Player player : playerRoster) {
 				if (!player.isBacktracked()) {
