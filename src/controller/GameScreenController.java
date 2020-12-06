@@ -253,6 +253,10 @@ public class GameScreenController implements Initializable {
 					Paint colour = tile.getStroke();
 
 					if (actionTrackerMove.getFill() == currPlayer.getColour()) { // If movement turn
+						//sound effect when player moves
+						Media buttonSound = new Media(new File("resources/sounds/footsteps.wav").toURI().toString());
+						MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+						mediaPlayer.play();
 						// Moving backend
 						Floor currFloor = currPlayer.getCurrentFloor(gameBoard);
 						Floor movedFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
@@ -917,6 +921,7 @@ public class GameScreenController implements Initializable {
 		silkBagTileImg.setRotate(0);
 		silkBagTile = silkBag.drawTile();
 		silkBagTileImg.setFill(new ImagePattern(silkBagTile.getImage()));
+		// Sound effect when the button is clicked
 		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
 		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 		mediaPlayer.play();
@@ -1000,6 +1005,7 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Choose an island to cast FIRE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("fire");
+			// Sound effect when the fire action has been played
 			Media buttonSound = new Media(new File("resources/sounds/fire.wav").toURI().toString());
 			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 			mediaPlayer.play();
@@ -1020,6 +1026,7 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Choose an island to cast ICE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("ice");
+			//Sound effect for when ice action has been played
 			Media buttonSound = new Media(new File("resources/sounds/ice.wav").toURI().toString());
 			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 			mediaPlayer.play();
