@@ -733,8 +733,11 @@ public class GameScreenController implements Initializable {
 		StackPane stack;
 		Rectangle effect;
 		boolean changed = false;
-		for (Floor effected: fireInfectedTiles) {
-			if (effected.getFireOver() == turn) {
+		for (Floor effected : fireInfectedTiles) {
+			if (!effected.isOnBoard() || effected.getFireOver() < turn) {
+				effected.setIsFire(false);
+				fireInfectedTiles.remove(effected);
+			} else if (effected.getFireOver() == turn) {
 				stack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
 				effect = (Rectangle) stack.getChildren().get(1);
 				effect.setOpacity(0);
@@ -746,8 +749,11 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Fire, that were burning on some islands, have now died down.\n");
 			changed = false;
 		}
-		for (Floor effected: iceInfectedTiles) {
-			if (effected.getIceOver() == turn) {
+		for (Floor effected : iceInfectedTiles) {
+			if (!effected.isOnBoard() || effected.getIceOver() < turn) {
+				effected.setIsIce(false);
+				iceInfectedTiles.remove(effected);
+			} else if (effected.getIceOver() == turn) {
 				stack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
 				effect = (Rectangle) stack.getChildren().get(2);
 				effect.setOpacity(0);
@@ -1054,28 +1060,27 @@ public class GameScreenController implements Initializable {
 	private void moveClick() {
 		try {
 			playerMoves = currPlayer.possibleMoves(gameBoard);
+//			for (Floor floor : playerMoves) {
+//				System.out.println(floor.getRow() + "," + floor.getColumn() + ":"
+//						+ floor.isNorth() + floor.isEast() + floor.isSouth() + floor.isWest());
+//			}
+//			System.out.println(currPlayer.getRowLoc() + "," + currPlayer.getColumnLoc() + ","
+//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isNorth() + ","
+//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isEast() + ","
+//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isSouth() + ","
+//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isWest() + ",");
 
-			for (Floor floor : playerMoves) {
-				System.out.println(floor.getRow() + "," + floor.getColumn() + ":"
-						+ floor.isNorth() + floor.isEast() + floor.isSouth() + floor.isWest());
+			// Removing tiles with players on
+			for (Player player : playerRoster) {
+				playerMoves.remove(player.getCurrentFloor(gameBoard));
 			}
-			System.out.println(currPlayer.getRowLoc() + "," + currPlayer.getColumnLoc() + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isNorth() + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isEast() + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isSouth() + ","
-					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isWest() + ",");
+			playerMoves.removeIf(Floor::getIsFire);
 
 			if (!playerMoves.isEmpty()) {
-				// Removing tiles with players on
-				for (Player player : playerRoster) {
-					playerMoves.remove(player.getCurrentFloor(gameBoard));
-				}
 				// Highlighting the available tiles
 				for (Floor tile : playerMoves) {
-					if (!tile.getIsFire()) {
-						toggleRectDisable(boardImg[tile.getRow() + 1][tile.getColumn() + 1],
-								0, false, currPlayer.getColour());
-					}
+					toggleRectDisable(boardImg[tile.getRow() + 1][tile.getColumn() + 1],
+							0, false, currPlayer.getColour());
 				}
 			} else {
 				gameLog.appendText("No movement possible, please end your turn.\n");
