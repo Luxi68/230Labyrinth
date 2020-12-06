@@ -125,7 +125,6 @@ public class FileReader {
                         for (int i = 0; i < rot; ++i) {
                             gBoard.getTileAt(tRows, tColumns).rotate();
                         }
-                        gBoard.getTileAt(tRows, tColumns).updateCoords(tRows, tColumns);
 
                         break;
                     case "b":
@@ -136,32 +135,32 @@ public class FileReader {
                         switch (name) {
                             case "corner":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(true, new Floor("corner", new Image("/assets/corner.png"), false));
+                                    bag.addTile(false, new Floor("corner", new Image("/assets/corner.png"), false));
                                 }
                                 break;
                             case "straight":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(true, new Floor("straight", new Image("/assets/straight.png"), false));
+                                    bag.addTile(false, new Floor("straight", new Image("/assets/straight.png"), false));
                                 }
                                 break;
                             case "tee":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(true, new Floor("tee", new Image("/assets/tee.png"), false));
+                                    bag.addTile(false, new Floor("tee", new Image("/assets/tee.png"), false));
                                 }
                                 break;
                             case "fire":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(true, new Action("fire", new Image("/assets/fire.png")));
+                                    bag.addTile(false, new Action("fire", new Image("/assets/fire.png")));
                                 }
                                 break;
                             case "ice":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(true, new Action("ice", new Image("/assets/ice.png")));
+                                    bag.addTile(false, new Action("ice", new Image("/assets/ice.png")));
                                 }
                                 break;
                             case "doubleMove":
                                 for (int i = 0; i < num; ++i) {
-                                    bag.addTile(true, new Action("doubleMove", new Image("/assets/doublemove.png")));
+                                    bag.addTile(false, new Action("doubleMove", new Image("/assets/doublemove.png")));
                                 }
                                 break;
                             case "backTrack":
@@ -229,7 +228,6 @@ public class FileReader {
                         place.rotate();
                     }
                     gBoard.insertTileAt(j,i,place);
-                    place.updateCoords(j, i);
                 }
             }
         }

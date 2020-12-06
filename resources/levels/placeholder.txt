@@ -11,7 +11,7 @@ f,goal,0,2,2
 b,corner,20
 b,straight,20
 b,tee,20
-b,fire,2
-b,ice,2
-b,doubleMove,2
-b,backTrack,2
+b,fire,50
+b,ice,50
+b,doubleMove,5
+b,backTrack,5

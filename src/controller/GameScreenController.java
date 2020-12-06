@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 /*
 TODO - img resources
-	 - test tile and player movement
 	 - action tiles decide how i wanna implement
 	 - implement
 	 - test
@@ -56,10 +55,13 @@ public class GameScreenController implements Initializable {
 	private ArrayList<Floor> playerMoves;
 	private int boardRows; // Board height + 2 for arrow buttons
 	private int boardColumns; // Board length + 2 for arrow buttons
-	private StackPane[][] boardImg; // A 2D array so the tiles on the board can be referenced
+	private StackPane[][] boardImg; // A 2D array for referencing gridPane contents. Is one step bigger all the way around
+	private ArrayList<Floor> inflictableTiles;
+	private ArrayList<Floor> fireInfectedTiles;
+	private ArrayList<Floor> iceInfectedTiles;
 	// Game checks TODO
 	private boolean isNewTileAction;
-	private boolean isDoubleMoveUsed = false;
+	private boolean isDoubleMoveUsed;
 
 	@FXML
 	private BorderPane borderPane;
@@ -150,7 +152,7 @@ public class GameScreenController implements Initializable {
 
 			turn = 0;
 			gameLog.appendText("GAME START!\n");
-			gameLog.appendText("Round 1: First Player - " + currPlayer.getName() + "!\n");
+			gameLog.appendText("Round 1: First Deity - " + currPlayer.getName() + "!\n");
 			startNextTurn();
 		});
 		// TODO - Code that either loads past game or starts new game
@@ -173,10 +175,14 @@ public class GameScreenController implements Initializable {
 
 		currPlayer = players.get(0);
 
-		// TODO - players array list to simplify turn order stuff
 		playerRoster = players;
 		rowNoFixed = rows;
 		columnNoFixed = columns;
+
+		// TODO - need a check for save files
+		isDoubleMoveUsed = false;
+		fireInfectedTiles = new ArrayList<>();
+		iceInfectedTiles = new ArrayList<>();
 	}
 
 	/**
@@ -281,23 +287,74 @@ public class GameScreenController implements Initializable {
 				int finalI = i;
 				int finalJ = j;
 				stack.setOnMouseClicked(event -> {
-					// Moving backend
-					Floor currFloor = currPlayer.getCurrentFloor(gameBoard);
-					Floor movedFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
-					currPlayer.movePlayer(gameBoard, movedFloor);
+					Paint colour = tile.getStroke();
 
-					// Moving frontend
-					ImageView currFloorImg = (ImageView) boardImg[currFloor.getRow() + 1][currFloor.getColumn() + 1]
-							.getChildren().get(3);
-					ImageView movedFloorImg = (ImageView) boardImg[movedFloor.getRow() + 1][movedFloor.getColumn() + 1]
-							.getChildren().get(3);
-					currFloorImg.setImage(null);
-					movedFloorImg.setImage(currPlayer.getImage());
+					if (colour == currPlayer.getColour()) { // If movement turn
+						// Moving backend
+						Floor currFloor = currPlayer.getCurrentFloor(gameBoard);
+						Floor movedFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
+						currPlayer.movePlayer(gameBoard, movedFloor);
 
-					gameLog.appendText(currPlayer.getName() + " moved to location ("
-							+ (finalJ - 1) + ", " + (finalI - 1) + ").\n");
+						// Moving frontend
+						ImageView currFloorImg = (ImageView)
+								boardImg[currFloor.getRow() + 1][currFloor.getColumn() + 1].getChildren().get(3);
+						ImageView movedFloorImg = (ImageView)
+								boardImg[movedFloor.getRow() + 1][movedFloor.getColumn() + 1].getChildren().get(3);
+						currFloorImg.setImage(null);
+						movedFloorImg.setImage(currPlayer.getImage());
 
-					checkEndMove();
+						gameLog.appendText(currPlayer.getName() + " moved to island ("
+								+ (finalJ - 1) + ", " + (finalI - 1) + ").\n");
+						checkEndMove();
+
+					} else {
+						// Remove the colour and disable tiles
+						for (Floor inflictable : inflictableTiles) {
+							toggleRectDisable(boardImg[inflictable.getRow() + 1][inflictable.getColumn() + 1],
+									0, true, Color.BLACK);
+						}
+
+						Floor currFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
+						ArrayList<Floor> inflictedTiles = gameBoard.getSurroundingTiles(currFloor);
+
+						if (colour == Color.ORANGERED) { // Fire was played
+							int endTurn = turn + (playerRoster.size() * 2);
+
+							for (Floor effected : inflictedTiles) {
+								if (fireInfectedTiles.contains(effected)) {
+									effected.setFireOver(endTurn);
+								} else {
+									StackPane tempStack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
+									Rectangle tempEffect = (Rectangle) tempStack.getChildren().get(1);
+									tempEffect.setOpacity(1);
+									effected.setIsFire(true);
+									fireInfectedTiles.add(effected);
+								}
+							}
+							gameLog.appendText(currPlayer.getName() + " cast FIRE onto island ("
+									+ (finalJ - 1) + ", " + (finalI - 1) + "). " +
+									"Those islands are now too dangerous to traverse on.\n");
+							startMoveActionTurn();
+
+						} else if (colour == Color.LIGHTBLUE) { // Ice was played
+							int endTurn = turn + playerRoster.size();
+
+							for (Floor effected : inflictedTiles) {
+								if (iceInfectedTiles.contains(effected)) {
+									effected.setIceOver(endTurn);
+								} else {
+									StackPane tempStack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
+									Rectangle tempEffect = (Rectangle) tempStack.getChildren().get(2);
+									tempEffect.setOpacity(1);
+									effected.setIsIce(true);
+									iceInfectedTiles.add(effected);
+								}
+							}
+							gameLog.appendText(currPlayer.getName() + " cast ICE onto island ("
+									+ (finalJ - 1) + ", " + (finalI - 1) + "). Those island are now stuck in place.\n");
+							startMoveActionTurn();
+						}
+					}
 				});
 			}
 		}
@@ -360,10 +417,10 @@ public class GameScreenController implements Initializable {
 
 			try {
 				if (row == 0 || row == boardRows - 1) {
-					axis = "row";
+					axis = "longitude";
 					// Move all the tiles along and return the ejected tile
 					if (row == 0) {
-						direction = "top";
+						direction = "north";
 						ejectedTile = gameBoard.insertFromTop(insertedTile, colImg - 1);
 						ejectedPlayer = checkPlayerLoc(boardRows - 3, colImg - 1);
 
@@ -389,7 +446,7 @@ public class GameScreenController implements Initializable {
 						}
 
 					} else {
-						direction = "bottom";
+						direction = "south";
 						ejectedTile = gameBoard.insertFromBottom(insertedTile, colImg - 1);
 						ejectedPlayer = checkPlayerLoc(0, colImg - 1);
 
@@ -423,10 +480,10 @@ public class GameScreenController implements Initializable {
 					silkBag.addTile(true, ejectedTile); //tile is removed
 
 				} else if (column == 0 || column == boardColumns - 1) { // Left column
-					axis = "column";
+					axis = "latitude";
 					// Move all the tiles along and return the ejected tile
 					if (column == 0) {
-						direction = "left";
+						direction = "west";
 						ejectedTile = gameBoard.insertFromLeft(insertedTile, rowImg - 1);
 						ejectedPlayer = checkPlayerLoc(rowImg - 1, boardColumns - 3);
 
@@ -453,7 +510,7 @@ public class GameScreenController implements Initializable {
 						}
 
 					} else {
-						direction = "right";
+						direction = "east";
 						ejectedTile = gameBoard.insertFromRight(insertedTile, rowImg - 1);
 						ejectedPlayer = checkPlayerLoc(rowImg - 1, 0);
 
@@ -491,17 +548,17 @@ public class GameScreenController implements Initializable {
 				tempFloor.setRotation(0);
 
 				int printNum;
-				if (axis.equalsIgnoreCase("row")) {
+				if (axis.equalsIgnoreCase("longitude")) {
 					printNum = colImg - 1;
 				} else {
 					printNum = rowImg - 1;
 				}
-				gameLog.appendText("Tile slid into " + axis + " " + printNum + " from " + direction + ".\n");
+				gameLog.appendText("Island slid into " + axis + " " + printNum + " from " + direction + ".\n");
 				startPlayActionTurn();
 
 			} catch (Exception e) {
 //				gameLog.appendText(e.getMessage());
-				gameLog.appendText("ERROR: The tile cannot be moved into here.\n");
+				gameLog.appendText("ERROR: These islands cannot be moved currently.\n");
 				e.printStackTrace();
 			}
 		});
@@ -528,9 +585,17 @@ public class GameScreenController implements Initializable {
 	 */
 	private void updateTileImgs(int boardImgRow, int boardImgCol) {
 		Floor tempFloor = gameBoard.getTileAt(boardImgRow - 1, boardImgCol - 1);
-		Rectangle tempRect = (Rectangle) boardImg[boardImgRow][boardImgCol].getChildren().get(0);
+		StackPane tempStack = boardImg[boardImgRow][boardImgCol];
+		Rectangle tempRect = (Rectangle) tempStack.getChildren().get(0);
 		tempRect.setFill(new ImagePattern(tempFloor.getImage()));
 		tempRect.setRotate(tempFloor.getRotation());
+		// Update fire infliction locations
+		Rectangle tempFire = (Rectangle) tempStack.getChildren().get(1);
+		if (tempFloor.getIsFire()) {
+			tempRect.setOpacity(1);
+		} else {
+			tempFire.setOpacity(0);
+		}
 		System.out.println("Update- " + tempFloor.getRow() + "," + tempFloor.getColumn() + ":"
 				+ tempFloor.isNorth() + tempFloor.isEast() + tempFloor.isSouth() + tempFloor.isWest());
 	}
@@ -562,20 +627,20 @@ public class GameScreenController implements Initializable {
 		view.setImage(img);
 	}
 
-	/**
-	 * Changes if the board tiles displayed can be clicked or not.
-	 *
-	 * @param bool - The boolean value desired for the tile disable state.
-	 */
-	private void setDisableBoardTiles(boolean bool) {
-		for (int i = 1; i < boardRows - 1; i++) {
-			for (int j = 1; j < boardColumns - 1; j++) {
-				if (boardImg[i][j] != null) {
-					boardImg[i][j].setDisable(bool);
-				}
-			}
-		}
-	}
+//	/**
+//	 * Changes if the board tiles displayed can be clicked or not.
+//	 *
+//	 * @param bool - The boolean value desired for the tile disable state.
+//	 */
+//	private void setDisableBoardTiles(boolean bool) {
+//		for (int i = 1; i < boardRows - 1; i++) {
+//			for (int j = 1; j < boardColumns - 1; j++) {
+//				if (boardImg[i][j] != null) {
+//					boardImg[i][j].setDisable(bool);
+//				}
+//			}
+//		}
+//	}
 
 	/**
 	 * Changes if the board arrows can be clicked or not
@@ -602,42 +667,106 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
-	 * Toggles the disable state of the action tile buttons and its highlighting
+	 * Toggles the disable state of buttons and its highlighting
 	 *
 	 * @param button - the button to be changes
+	 * @param child  - which child within the button is highlighted
 	 * @param bool   - the state of the button
+	 * @param colour - the colour of the highlight
 	 */
-	private void setDisableActionButton(StackPane button, boolean bool) {
-		button.setDisable(false);
-		Rectangle action = (Rectangle) button.getChildren().get(0);
+	private void toggleRectDisable(StackPane button, int child, boolean bool, Paint colour) {
+		Rectangle action = (Rectangle) button.getChildren().get(child);
+		action.setStroke(colour);
 		if (!bool) {
-			action.setStroke(currPlayer.getColour());
 			action.setStrokeWidth(4);
 		} else {
-			action.setStroke(Color.BLACK);
 			action.setStrokeWidth(1);
 		}
-
+		button.setDisable(false);
 	}
 
 	/**
 	 * Disables the other action tiles that have not been selected
 	 */
 	private void disableActionSelect() {
+		Paint colour = currPlayer.getColour();
 		takeActionButton.setDisable(true);
 //		skipActionButton.setDisable(true); TODO - Uncomment once actions work
-		setDisableActionButton(fireButton, true);
-		setDisableActionButton(iceButton, true);
-		setDisableActionButton(doubleMoveButton, true);
-		setDisableActionButton(backTrackButton, true);
+		toggleRectDisable(fireButton, 0, true, colour);
+		toggleRectDisable(iceButton, 0, true, colour);
+		toggleRectDisable(doubleMoveButton, 0, true, colour);
+		toggleRectDisable(backTrackButton, 0, true, colour);
+	}
+
+	/**
+	 * Finds and highlights the tiles that fire/ice can be played on
+	 */
+	private void setPlayableTiles(String action) {
+		ArrayList<Floor> nonInflictableTiles = new ArrayList<>();
+		inflictableTiles = new ArrayList<>();
+		// Finding tiles that can't be inflicted
+		for (Player player : playerRoster) {
+			Floor currTile = player.getCurrentFloor(gameBoard);
+			nonInflictableTiles.addAll(gameBoard.getSurroundingTiles(currTile));
+		}
+		// Finding tiles that can be inflicted
+		for (int row = 1; row < boardRows - 1; row++) {
+			for (int col = 1; col < boardColumns - 1; col++) {
+				Floor tempFloor = gameBoard.getTileAt(row - 1, col - 1);
+				if (!nonInflictableTiles.contains(tempFloor)) {
+					inflictableTiles.add(tempFloor);
+					StackPane tempStack = boardImg[row][col];
+					if (action.equalsIgnoreCase("fire")) {
+						toggleRectDisable(tempStack, 0, false, Color.ORANGERED);
+					} else if (action.equalsIgnoreCase("ice")) {
+						toggleRectDisable(tempStack, 0, false, Color.LIGHTBLUE);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Checks if there are any inflictions that have worn out
+	 */
+	private void checkInflictions() {
+		StackPane stack;
+		Rectangle effect;
+		boolean changed = false;
+		for (Floor effected: fireInfectedTiles) {
+			if (effected.getFireOver() == turn) {
+				stack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
+				effect = (Rectangle) stack.getChildren().get(1);
+				effect.setOpacity(0);
+				effected.setIsFire(false);
+				changed = true;
+			}
+		}
+		if (changed) {
+			gameLog.appendText("Fire, that were burning on some islands, have now died down.\n");
+			changed = false;
+		}
+		for (Floor effected: iceInfectedTiles) {
+			if (effected.getIceOver() == turn) {
+				stack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
+				effect = (Rectangle) stack.getChildren().get(2);
+				effect.setOpacity(0);
+				effected.setIsIce(false);
+				changed = true;
+			}
+		}
+		if (changed) {
+			gameLog.appendText("Some ice, that were freezing some islands still, have now melted.\n");
+		}
 	}
 
 	/**
 	 * Loads in a new player and the 'take an tile' section of the game
 	 */
 	private void startNextTurn() {
-		++turn;
-//		System.out.println((turn+totalPlayers-1)/totalPlayers);
+		turn++;
+		System.out.println("Turn: " + turn);
+
 		setupCurrPlayerDisplay();
 		updatePlayerQueue(q1Img, q1Txt, playerRoster.get(1));
 		if (playerRoster.size() >= 3) {
@@ -647,11 +776,12 @@ public class GameScreenController implements Initializable {
 			updatePlayerQueue(q3Img, q3Txt, playerRoster.get(3));
 		}
 
-		takeSilkBagTileButton.setDisable(false);
-
 		actionTrackerMove.setFill(GREY);
 		actionTrackerDraw.setFill(currPlayer.getColour());
-		gameLog.appendText("Take a Tile!\n");
+		checkInflictions();
+
+		takeSilkBagTileButton.setDisable(false);
+		gameLog.appendText("Take a gift from Nesoi!\n");
 	}
 
 	/**
@@ -665,13 +795,14 @@ public class GameScreenController implements Initializable {
 
 		actionTrackerDraw.setFill(GREY);
 		actionTrackerPlay.setFill(currPlayer.getColour());
-		gameLog.appendText("Play an Action!\n");
+		gameLog.appendText("Cast an ability!\n");
 	}
 
 	/**
 	 * Loads the movement section of the game
 	 */
-	private void startMoveActionTurn() { // TODO - Disable 'Play action'
+	private void startMoveActionTurn() {
+		takeActionButton.setDisable(true);
 		skipActionButton.setDisable(true);
 		moveButton.setDisable(false);
 
@@ -686,18 +817,13 @@ public class GameScreenController implements Initializable {
 	private void checkEndMove() {
 		// Removes tile outlines
 		for (Floor tile : playerMoves) {
-			StackPane stack = boardImg[tile.getRow() + 1][tile.getColumn() + 1];
-			stack.setDisable(true);
-
-			Rectangle floor = (Rectangle) stack.getChildren().get(0);
-			floor.setStroke(Color.BLACK);
-			floor.setStrokeWidth(1);
+			toggleRectDisable(boardImg[tile.getRow() + 1][tile.getColumn() + 1], 0, true, Color.BLACK);
 		}
 		// Checks if move button should be disabled
 		if (!isDoubleMoveUsed) {
 			moveButton.setDisable(true);
 		} else {
-			gameLog.appendText("Double Move was used earlier, you can move again if you wish.");
+			gameLog.appendText("Double Move was cast upon you earlier, you can move again if you wish.\n");
 		}
 		endTurnButton.setDisable(false);
 		isDoubleMoveUsed = false;
@@ -797,7 +923,7 @@ public class GameScreenController implements Initializable {
 				|| tempTileType.equalsIgnoreCase("tee")) {
 			// If is a floor type
 			isNewTileAction = false;
-			gameLog.appendText(currPlayer.getName() + " drew a Floor Tile!\n");
+			gameLog.appendText(currPlayer.getName() + " discovered a new island!\n");
 			takeSilkBagTileButton.setDisable(true);
 			silkBagTileRotate.setDisable(false);
 			setDisabledBoardArrows(false);
@@ -807,7 +933,7 @@ public class GameScreenController implements Initializable {
 				|| tempTileType.equalsIgnoreCase("backTrack")) {
 			// If is action type
 			isNewTileAction = true;
-			gameLog.appendText(currPlayer.getName() + " drew an Action Tile!\n");
+			gameLog.appendText(currPlayer.getName() + " drew a powerful tile!\n");
 			takeSilkBagTileButton.setDisable(true);
 			startPlayActionTurn();
 		} else {
@@ -826,7 +952,7 @@ public class GameScreenController implements Initializable {
 
 		// Rotates the image since it is not 'locked' to tile
 		silkBagTileImg.setRotate(tempFloor.getRotation());
-		gameLog.appendText("Floor tile rotated 90 degrees.\n");
+		gameLog.appendText("Island rotated 90 degrees.\n");
 	}
 
 	/**
@@ -834,17 +960,23 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void takeActionClick() {
-		if (!currPlayerFireTxt.getText().equalsIgnoreCase("none")) {
-			setDisableActionButton(fireButton, false);
-		}
-		if (!currPlayerIceTxt.getText().equalsIgnoreCase("none")) {
-			setDisableActionButton(iceButton, false);
-		}
-		if (!currPlayerDoubleMoveTxt.getText().equalsIgnoreCase("none")) {
-			setDisableActionButton(doubleMoveButton, false);
-		}
-		if (!currPlayerBacktrackTxt.getText().equalsIgnoreCase("none")) {
-			setDisableActionButton(backTrackButton, false);
+		if (currPlayer.getHand().isEmpty()) {
+			gameLog.appendText("You currently have no castable powers. Please skip, your time to shine will come.\n");
+		} else {
+			Paint colour = currPlayer.getColour();
+			if (!currPlayerFireTxt.getText().equalsIgnoreCase("none")) {
+				toggleRectDisable(fireButton, 0, false, colour);
+			}
+			if (!currPlayerIceTxt.getText().equalsIgnoreCase("none")) {
+				toggleRectDisable(iceButton, 0, false, colour);
+			}
+			if (!currPlayerDoubleMoveTxt.getText().equalsIgnoreCase("none")) {
+				toggleRectDisable(doubleMoveButton, 0, false, colour);
+			}
+			if (!currPlayerBacktrackTxt.getText().equalsIgnoreCase("none")) {
+				toggleRectDisable(backTrackButton, 0, false, colour);
+			}
+			gameLog.appendText("Please select one of your available powers.\n");
 		}
 	}
 
@@ -854,7 +986,8 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void fireClick() {
 		disableActionSelect();
-		gameLog.appendText("Choose a tile to cast FIRE on.\n");
+		gameLog.appendText("Choose an island to cast FIRE on.\n");
+		setPlayableTiles("fire");
 //		useActionTile("fire");
 	}
 
@@ -864,7 +997,8 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void iceClick() {
 		disableActionSelect();
-		gameLog.appendText("Choose a tile to cast ICE on.\n");
+		gameLog.appendText("Choose an island to cast ICE on.\n");
+		setPlayableTiles("ice");
 //		useActionTile("ice");
 	}
 
@@ -875,7 +1009,7 @@ public class GameScreenController implements Initializable {
 	private void doubleMoveClick() {
 		isDoubleMoveUsed = true;
 		disableActionSelect();
-		gameLog.appendText("Double Move was case on " + currPlayer.getName()
+		gameLog.appendText("Double Move was cast on " + currPlayer.getName()
 				+ ". You can now move twice on this turn.\n");
 //		useActionTile("doubleMove");
 	}
@@ -886,7 +1020,7 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void backTrackClick() {
 		disableActionSelect();
-		gameLog.appendText("Choose a player to cast BACKTRACK on.\n");
+		gameLog.appendText("Choose a fellow deity to cast BACKTRACK on.\n");
 //		useActionTile("backTrack");
 	}
 
@@ -909,7 +1043,7 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void skipActionClick() {
-		gameLog.appendText(currPlayer.getName() + " skipped playing an action tile.\n");
+		gameLog.appendText(currPlayer.getName() + " skipped casting an ability.\n");
 		startMoveActionTurn();
 	}
 
@@ -932,18 +1066,16 @@ public class GameScreenController implements Initializable {
 					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isWest() + ",");
 
 			if (!playerMoves.isEmpty()) {
-				// Removing tiles with players on TODO - properly implement players blocking other players
+				// Removing tiles with players on
 				for (Player player : playerRoster) {
 					playerMoves.remove(player.getCurrentFloor(gameBoard));
 				}
 				// Highlighting the available tiles
 				for (Floor tile : playerMoves) {
-					StackPane stack = boardImg[tile.getRow() + 1][tile.getColumn() + 1];
-					stack.setDisable(false);
-
-					Rectangle floor = (Rectangle) stack.getChildren().get(0);
-					floor.setStroke(currPlayer.getColour());
-					floor.setStrokeWidth(4);
+					if (!tile.getIsFire()) {
+						toggleRectDisable(boardImg[tile.getRow() + 1][tile.getColumn() + 1],
+								0, false, currPlayer.getColour());
+					}
 				}
 			} else {
 				gameLog.appendText("No movement possible, please end your turn.\n");
@@ -972,13 +1104,15 @@ public class GameScreenController implements Initializable {
 			Action tempAction = (Action) silkBagTile;
 			currPlayer.addActionTile(tempAction);
 			silkBagTileImg.setFill(GREY);
-			gameLog.appendText(currPlayer.getName() + "'s tile has been added to their hand.\n");
+			gameLog.appendText(currPlayer.getName() + "'s new ability has been added to their hand.\n");
 		}
 
 		playerRoster.remove(0);
 		playerRoster.add(currPlayer);
 		currPlayer = playerRoster.get(0);
-		gameLog.appendText("Round " + turn + ": Next Player - " + currPlayer.getName() + "!\n");
+
+		int round = (turn + playerRoster.size()) / playerRoster.size();
+		gameLog.appendText("Round " + round + ": Next Deity - " + currPlayer.getName() + "!\n");
 		startNextTurn();
 	}
 

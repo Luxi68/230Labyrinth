@@ -18,8 +18,11 @@ public class Floor extends Tile {
 	private boolean south;
 	private boolean east;
 	private boolean west;
+	private boolean isOnBoard;
 	private boolean isFire;
 	private boolean isIce;
+	private int fireOver;
+	private int iceOver;
 	private int rotation;
 	//private String floorType;
 
@@ -34,6 +37,7 @@ public class Floor extends Tile {
 	public Floor(String tileType, Image image, boolean isFixed)	{
 		super(tileType, image);
 		this.IS_FIXED = isFixed;
+		this.isOnBoard = false;
 		this.isFire = false;
 		this.isIce = false;
 		this.rotation = 0;
@@ -103,8 +107,18 @@ public class Floor extends Tile {
 	}
 
 	public void updateCoords(int row, int column) {
+		this.isOnBoard = true;
 		this.row = row;
 		this.column = column;
+	}
+
+	/**
+	 * Checks if the floor tile is on the board
+	 *
+	 * @return true if floor is on the board
+	 */
+	public boolean isOnBoard() {
+		return isOnBoard;
 	}
 
 	public int getRow() {
@@ -135,6 +149,10 @@ public class Floor extends Tile {
 		return west;
 	}
 
+	public void setIsOnBoard(boolean onBoard) {
+		isOnBoard = onBoard;
+	}
+
 	/**
 	 * 
 	 * @param isFire set to itself
@@ -150,6 +168,23 @@ public class Floor extends Tile {
 	public void setIsIce (boolean isIce) {
 		this.isIce = isIce;
 	}
+
+	/**
+	 *
+	 * @param fireOver - turn when ice effect is over
+	 */
+	public void setFireOver(int fireOver) {
+		this.fireOver = fireOver;
+	}
+
+	/**
+	 *
+	 * @param iceOver - turn when ice effect is over
+	 */
+	public void setIceOver(int iceOver) {
+		this.iceOver = iceOver;
+	}
+
 
 	/**
 	 * 
@@ -181,6 +216,22 @@ public class Floor extends Tile {
 	 */
 	public boolean getIsIce() {
 		return isIce;
+	}
+
+	/**
+	 *
+	 * @return turn number when fire effect is over
+	 */
+	public int getIceOver() {
+		return iceOver;
+	}
+
+	/**
+	 *
+	 * @return turn number when ice effect is over
+	 */
+	public int getFireOver() {
+		return fireOver;
 	}
 
 	/**
