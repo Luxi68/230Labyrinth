@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import service.Motd;
 
 import java.io.IOException;
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
@@ -44,17 +45,21 @@ public class StartScreenController {
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(profileSelectionScene);
 			window.show();
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch (IOException e) {
 			System.out.println("Error starting the profile select screen.");
 			e.printStackTrace();
 		}
 	}
 
-	public void backgroudMusic(){
-		Media backgroudSound = new Media("/Users/albertoortenzi/IdeaProjects/230Labyrinth/resources/sounds/startScreenBackground.mp3");
-		mediaPlayer = new MediaPlayer(backgroudSound);
+	public void backgroundMusic(){
+		Media backgroundSound = new Media(new File("resources/sounds/startScreenBackground.mp3").toURI().toString());
+		mediaPlayer = new MediaPlayer(backgroundSound);
 		mediaPlayer.setAutoPlay(true);
 	}
+
 
 	@FXML
 	private void goToNewGame(ActionEvent actionEvent) {
@@ -64,6 +69,9 @@ public class StartScreenController {
 		Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 		window.setScene(newGameScene);
 		window.show();
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+		mediaPlayer.play();
         } catch (IOException e) {
             System.out.println("Error starting the new game screen.");
             e.printStackTrace();
@@ -78,6 +86,9 @@ public class StartScreenController {
 		Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 		window.setScene(loadGameScene);
 		window.show();
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+		mediaPlayer.play();
         } catch (IOException e) {
             System.out.println("Error starting the load game screen.");
             e.printStackTrace();

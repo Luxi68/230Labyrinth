@@ -11,6 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -59,6 +61,9 @@ public class NewGameController {
 			window.setTitle("The First Olympian");
 			window.setScene(gameScreenScene);
 			window.show();
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 			window.setMaximized(true);
 		} catch (IOException e) {
 			System.out.println("Error starting the Game Screen from new game screen.");
@@ -118,6 +123,9 @@ public class NewGameController {
 	public void chooseProfile(ActionEvent actionEvent) {
 		String selectedProfile = listOfProfiles.getSelectionModel().getSelectedItem();
 		Profile chosenOne = new Profile(selectedProfile);
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+		mediaPlayer.play();
 		if(selectedProfile == null){
 			Alert errorInfo = new Alert(Alert.AlertType.ERROR);
 			errorInfo.setTitle("Error");
@@ -137,12 +145,15 @@ public class NewGameController {
 
 	@FXML
 	private void backToStartScreen(ActionEvent actionEvent) {
-		try{
+		try {
 			Parent startScreenParent = FXMLLoader.load(getClass().getResource("/scene/PlayerSelection.fxml"));
 			Scene startScreenScene = new Scene(startScreenParent);
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(startScreenScene);
 			window.show();
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch (IOException e) {
 			System.out.println("Error returning to the start screen from new game screen.");
 			e.printStackTrace();
