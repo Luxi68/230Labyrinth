@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +21,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 public class LeaderboardController {
@@ -52,6 +55,9 @@ public class LeaderboardController {
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
             window.setScene(profileSelectionScene);
             window.show();
+            Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+            mediaPlayer.play();
         } catch (IOException e) {
             System.out.println("Error returning to the profile selection from leaderboard");
             e.printStackTrace();
