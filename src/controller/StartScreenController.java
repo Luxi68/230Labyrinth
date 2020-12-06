@@ -58,7 +58,6 @@ public class StartScreenController {
 		Media backgroundSound = new Media(new File("resources/sounds/startScreenBackground.mp3").toURI().toString());
 		mediaPlayer = new MediaPlayer(backgroundSound);
 		mediaPlayer.setAutoPlay(true);
-		mediaPlayer.play();
 	}
 
 	@FXML
