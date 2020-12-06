@@ -8,16 +8,20 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import service.Motd;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 public class StartScreenController {
 
 	public Label labelMotd;
+	MediaPlayer mediaPlayer;
 	@FXML
 	private ResourceBundle resources;
 
@@ -44,6 +48,12 @@ public class StartScreenController {
 			System.out.println("Error starting the profile select screen.");
 			e.printStackTrace();
 		}
+	}
+
+	public void backgroudMusic(){
+		Media backgroudSound = new Media("/Users/albertoortenzi/IdeaProjects/230Labyrinth/resources/sounds/startScreenBackground.mp3");
+		mediaPlayer = new MediaPlayer(backgroudSound);
+		mediaPlayer.setAutoPlay(true);
 	}
 
 	@FXML
