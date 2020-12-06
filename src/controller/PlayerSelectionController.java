@@ -30,7 +30,7 @@ public class PlayerSelectionController {
     @FXML
     void backToStartScreen(ActionEvent event) {
         try{
-            Parent startScreenParent = FXMLLoader.load(getClass().getResource("/scene/PlayerSelection.fxml"));
+            Parent startScreenParent = FXMLLoader.load(getClass().getResource("/scene/StartScreen.fxml"));
             Scene startScreenScene = new Scene(startScreenParent);
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
             window.setScene(startScreenScene);
