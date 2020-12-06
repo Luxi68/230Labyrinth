@@ -989,6 +989,7 @@ public class GameScreenController implements Initializable {
 			currPlayer.playActionTile("fire");
 			disableActionSelect();
 			gameLog.appendText("Choose an island to cast FIRE on.\n");
+			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("fire");
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
@@ -1005,6 +1006,7 @@ public class GameScreenController implements Initializable {
 			currPlayer.playActionTile("ice");
 			disableActionSelect();
 			gameLog.appendText("Choose an island to cast ICE on.\n");
+			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("ice");
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
@@ -1022,6 +1024,7 @@ public class GameScreenController implements Initializable {
 			disableActionSelect();
 			gameLog.appendText("Double Move was cast on " + currPlayer.getName()
 					+ ". You can now move twice on this turn.\n");
+			currPlayerBacktrackTxt.setText("Used");
 			moveButton.setDisable(false);
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
@@ -1037,6 +1040,7 @@ public class GameScreenController implements Initializable {
 			currPlayer.playActionTile("backTrack");
 			disableActionSelect();
 			gameLog.appendText("Choose a fellow deity to cast BACKTRACK on.\n");
+			currPlayerBacktrackTxt.setText("Used");
 
 			for (Player player : playerRoster) {
 				if (!player.isBacktracked()) {
@@ -1046,20 +1050,6 @@ public class GameScreenController implements Initializable {
 			}
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
-		}
-	}
-
-	/**
-	 * Sets the action that will be used on this turn
-	 *
-	 * @param actionType - String of the action type
-	 */
-	private void useActionTile(String actionType) {
-		try {
-			actionToUse = currPlayer.playActionTile(actionType);
-			currPlayerFireTxt.setText("Using"); // TODO - Figure out how to change this when others are pressed instead
-		} catch (NullPointerException e) {
-			gameLog.appendText(e.getMessage() + "\n");
 		}
 	}
 
