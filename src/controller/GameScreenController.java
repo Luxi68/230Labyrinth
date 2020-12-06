@@ -192,7 +192,7 @@ public class GameScreenController implements Initializable {
 	private void setupBoard(Board boardObj) {
 		boardRows = boardObj.getHeight() + 2;
 		boardColumns = boardObj.getLength() + 2;
-		int tileSize = 80;
+		int tileSize = 90;
 		int playerTokenSize = 50;
 
 		// Make board for gui
@@ -200,9 +200,6 @@ public class GameScreenController implements Initializable {
 		board.setPrefSize(500, 500);
 		//Padding around the board
 		board.setPadding(new Insets(10, 10, 10, 10));
-		// Setting gaps between tiles
-		board.setVgap(10);
-		board.setHgap(10);
 
 		// Setting up the board image
 		boardImg = new StackPane[boardRows][boardColumns];
@@ -214,8 +211,8 @@ public class GameScreenController implements Initializable {
 				Rectangle tile = new Rectangle(tileSize, tileSize);
 				tile.setFill(new ImagePattern(boardObj.getTileAt(i - 1, j - 1).getImage()));
 				tile.setRotate(boardObj.getTileAt(i - 1, j - 1).getRotation());
-				tile.setStroke(Color.BLACK);
-				tile.setStrokeType(StrokeType.OUTSIDE);
+				tile.setStroke(Color.TRANSPARENT);
+				tile.setStrokeType(StrokeType.INSIDE);
 
 				// Space for Fire gradient
 				Stop[] fireStop = {new Stop(0, Color.ORANGERED), new Stop(0.5, Color.TRANSPARENT)};
@@ -277,11 +274,11 @@ public class GameScreenController implements Initializable {
 							for (Player player : playerRoster) {
 //								int row = player.getRowLoc();
 //								int col = player.getColumnLoc();
-//								toggleRectDisable(boardImg[row + 1][col + 1], true, Color.BLACK);
+//								toggleRectDisable(boardImg[row + 1][col + 1], true, Color.TRANSPARENT);
 //								if (row == finalI - 1 && col == finalJ) {
 //									victim = player;
 //								}
-								toggleRectDisable(boardImg[player.getRowLoc() + 1][player.getColumnLoc() + 1], true, Color.BLACK);
+								toggleRectDisable(boardImg[player.getRowLoc() + 1][player.getColumnLoc() + 1], true, Color.TRANSPARENT);
 							}
 							if (victim != null) {
 								try {
@@ -302,7 +299,7 @@ public class GameScreenController implements Initializable {
 							// Remove the colour and disable tiles
 							for (Floor inflictable : inflictableTiles) {
 								toggleRectDisable(boardImg[inflictable.getRow() + 1][inflictable.getColumn() + 1],
-										true, Color.BLACK);
+										true, Color.TRANSPARENT);
 							}
 
 							Floor currFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
@@ -384,7 +381,7 @@ public class GameScreenController implements Initializable {
 		insertTileButton.getPoints().addAll(20.0, 40.0, 40.0, 40.0, 30.0, 20.0);
 //		Alternate size triangle (15.0, 45.0, 45.0, 45.0, 30.0, 15.0);
 		insertTileButton.setFill(GREY);
-		insertTileButton.setStroke(Color.BLACK);
+		insertTileButton.setStroke(Color.TRANSPARENT);
 		insertTileButton.setStrokeType(StrokeType.OUTSIDE);
 		insertTileButton.setRotate(rotation);
 
@@ -665,10 +662,10 @@ public class GameScreenController implements Initializable {
 	private void disableActionSelect() {
 		takeActionButton.setDisable(true);
 		skipActionButton.setDisable(true);
-		toggleRectDisable(fireButton, true, Color.BLACK);
-		toggleRectDisable(iceButton, true, Color.BLACK);
-		toggleRectDisable(doubleMoveButton, true, Color.BLACK);
-		toggleRectDisable(backTrackButton, true, Color.BLACK);
+		toggleRectDisable(fireButton, true, Color.TRANSPARENT);
+		toggleRectDisable(iceButton, true, Color.TRANSPARENT);
+		toggleRectDisable(doubleMoveButton, true, Color.TRANSPARENT);
+		toggleRectDisable(backTrackButton, true, Color.TRANSPARENT);
 	}
 
 	/**
@@ -818,13 +815,14 @@ public class GameScreenController implements Initializable {
 	private void checkEndMove() {
 		// Removes tile outlines
 		for (Floor tile : playerMoves) {
-			toggleRectDisable(boardImg[tile.getRow() + 1][tile.getColumn() + 1], true, Color.BLACK);
+			toggleRectDisable(boardImg[tile.getRow() + 1][tile.getColumn() + 1], true, Color.TRANSPARENT);
 		}
 		// Checks if move button should be disabled
 		if (!isDoubleMoveUsed) {
 			moveButton.setDisable(true);
 		} else {
 			gameLog.appendText("Double Move was cast upon you earlier, you can move again if you wish.\n");
+			isDoubleMoveUsed = false;
 		}
 		endTurnButton.setDisable(false);
 		isDoubleMoveUsed = false;
