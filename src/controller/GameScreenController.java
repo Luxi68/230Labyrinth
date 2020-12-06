@@ -316,6 +316,9 @@ public class GameScreenController implements Initializable {
 
 							if (colour == Color.ORANGERED) { // Fire was played
 								int endTurn = turn + (playerRoster.size() * 2);
+								Media buttonSound = new Media(new File("resources/sounds/fire.wav").toURI().toString());
+								MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+								mediaPlayer.play();
 
 								for (Floor effected : inflictedTiles) {
 									StackPane tempStack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
@@ -334,6 +337,9 @@ public class GameScreenController implements Initializable {
 
 							} else if (colour == Color.LIGHTBLUE) { // Ice was played
 								int endTurn = turn + playerRoster.size();
+								Media buttonSound = new Media(new File("resources/sounds/ice.wav").toURI().toString());
+								MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+								mediaPlayer.play();
 
 								for (Floor effected : inflictedTiles) {
 									StackPane tempStack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
@@ -1014,9 +1020,9 @@ public class GameScreenController implements Initializable {
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("fire");
 			// Sound effect when the fire action has been played
-			Media buttonSound = new Media(new File("resources/sounds/fire.wav").toURI().toString());
-			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-			mediaPlayer.play();
+			//Media buttonSound = new Media(new File("resources/sounds/fire.wav").toURI().toString());
+			//MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			//mediaPlayer.play();
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
@@ -1035,9 +1041,9 @@ public class GameScreenController implements Initializable {
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("ice");
 			//Sound effect for when ice action has been played
-			Media buttonSound = new Media(new File("resources/sounds/ice.wav").toURI().toString());
-			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-			mediaPlayer.play();
+			//Media buttonSound = new Media(new File("resources/sounds/ice.wav").toURI().toString());
+			//MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			//mediaPlayer.play();
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
