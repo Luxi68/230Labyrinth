@@ -57,6 +57,7 @@ public class CreateProfileController {
             Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             window.setScene(profileSelectionScene);
             window.show();
+
         } catch (IOException e) {
             System.out.println("Error returning to the Profile Selction from create profile screen.");
             e.printStackTrace();
