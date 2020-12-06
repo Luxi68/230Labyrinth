@@ -2,14 +2,13 @@ package controller;
 
 import entity.*;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -46,6 +45,7 @@ TODO - img resources
 public class GameScreenController implements Initializable {
 	// Colour Scheme
 	private final Paint GREY = Paint.valueOf("#3f443e");
+	MediaPlayer mediaPlayer1;
 	public Slider volumeSlider;
 	ArrayList<Integer> rowNoFixed;
 	ArrayList<Integer> columnNoFixed;
@@ -160,6 +160,16 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Round 1: First Deity - " + currPlayer.getName() + "!\n");
 			startNextTurn();
 		});
+		backgroundMusic();
+		volumeSlider.setShowTickLabels(true);
+		volumeSlider.setShowTickMarks(true);
+		volumeSlider.setValue(mediaPlayer1.getVolume() * 100);
+		volumeSlider.valueProperty().addListener(new InvalidationListener() {
+			@Override
+			public void invalidated(Observable observable) {
+				mediaPlayer1.setVolume(volumeSlider.getValue() / 100);
+			}
+		});
 	}
 
 	/**
@@ -263,6 +273,7 @@ public class GameScreenController implements Initializable {
 						Floor currFloor = currPlayer.getCurrentFloor(gameBoard);
 						Floor movedFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
 						currPlayer.movePlayer(gameBoard, movedFloor);
+						mediaPlayer.play();
 
 						// Moving frontend
 						ImageView currFloorImg = (ImageView)
@@ -1179,10 +1190,23 @@ public class GameScreenController implements Initializable {
 		gameLog.appendText("Round " + round + ": Next Deity - " + currPlayer.getName() + "!\n");
 		startNextTurn();
 	}
-
-	public void openGameInstructions(ActionEvent actionEvent) {
+	public void backgroundMusic(){
+		Media backgroundSound = new Media(new File("resources/sounds/gameScreenBackground.wav").toURI().toString());
+		mediaPlayer1 = new MediaPlayer(backgroundSound);
+		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
+		mediaPlayer1.setVolume(0.1);
+		mediaPlayer1.setAutoPlay(true);
 	}
 
 	public void quitGameFromMenu(ActionEvent actionEvent) {
+		Platform.exit();
+	}
+
+	public void openGameInstructions(ActionEvent actionEvent) {
+		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
+		errorInfo.setTitle("Game Instructions");
+		errorInfo.setHeaderText("How to play the game");
+		errorInfo.setContentText("You have not selected a player please do and try again");
+		errorInfo.show();
 	}
 }

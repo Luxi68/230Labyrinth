@@ -10,7 +10,8 @@
 <?import java.lang.Double?>
 <BorderPane fx:id="borderPane" prefWidth="1200" prefHeight="630" xmlns="http://javafx.com/javafx/8.0.241"
 			xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameScreenController">
-	<MenuBar prefHeight="29.0" prefWidth="1200.0">
+	<top>
+	<MenuBar>
 		<menus>
 			<Menu mnemonicParsing="false" text="File">
 				<items>
@@ -33,6 +34,7 @@
 			</Menu>
 		</menus>
 	</MenuBar>
+	</top>
 	<fx:define>
 		<Paint fx:id="grey" fx:value="#3f443e"/>
 	</fx:define>
