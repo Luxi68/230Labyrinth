@@ -70,6 +70,9 @@ public class LeaderboardController {
         Leaderboard knossos = new Leaderboard(1);
         ObservableList<Profile> choices = FXCollections.observableArrayList(knossos.getLeaderboard());
         leaderbordTable.setItems(choices);
+        Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+        mediaPlayer.play();
 
     }
     public void createLeaderboardMarathon(ActionEvent actionEvent) throws FileNotFoundException {
@@ -78,6 +81,9 @@ public class LeaderboardController {
         Leaderboard marathon = new Leaderboard(2);
         ObservableList<Profile> choices = FXCollections.observableArrayList(marathon.getLeaderboard());
         leaderbordTable.setItems(choices);
+        Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+        mediaPlayer.play();
 
     }
 
@@ -87,6 +93,9 @@ public class LeaderboardController {
         Leaderboard sparta = new Leaderboard(3);
         ObservableList<Profile> choices = FXCollections.observableArrayList(sparta.getLeaderboard());
         leaderbordTable.setItems(choices);
+        Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+        mediaPlayer.play();
     }
 
 

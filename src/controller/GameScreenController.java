@@ -14,6 +14,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
@@ -21,6 +23,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -914,6 +917,9 @@ public class GameScreenController implements Initializable {
 		silkBagTileImg.setRotate(0);
 		silkBagTile = silkBag.drawTile();
 		silkBagTileImg.setFill(new ImagePattern(silkBagTile.getImage()));
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+		mediaPlayer.play();
 
 		// Check the type of the tile
 		String tempTileType = silkBagTile.getTileType();
@@ -948,6 +954,9 @@ public class GameScreenController implements Initializable {
 	private void rotateTileClick() {
 		Floor tempFloor = (Floor) silkBagTile;
 		tempFloor.rotate();
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+		mediaPlayer.play();
 
 		// Rotates the image since it is not 'locked' to tile
 		silkBagTileImg.setRotate(tempFloor.getRotation());
@@ -991,6 +1000,9 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Choose an island to cast FIRE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("fire");
+			Media buttonSound = new Media(new File("resources/sounds/fire.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
@@ -1008,6 +1020,9 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Choose an island to cast ICE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("ice");
+			Media buttonSound = new Media(new File("resources/sounds/ice.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
@@ -1060,6 +1075,9 @@ public class GameScreenController implements Initializable {
 	private void skipActionClick() {
 		gameLog.appendText(currPlayer.getName() + " skipped casting an ability.\n");
 		startMoveActionTurn();
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+		mediaPlayer.play();
 	}
 
 	/**
@@ -1069,6 +1087,9 @@ public class GameScreenController implements Initializable {
 	private void moveClick() {
 		try {
 			playerMoves = currPlayer.possibleMoves(gameBoard);
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 //			for (Floor floor : playerMoves) { TODO - print
 //				System.out.println(floor.getRow() + "," + floor.getColumn() + ":"
 //						+ floor.isNorth() + floor.isEast() + floor.isSouth() + floor.isWest());
@@ -1111,6 +1132,9 @@ public class GameScreenController implements Initializable {
 
 		moveButton.setDisable(true); // Just in case it wasn't disabled earlier
 		endTurnButton.setDisable(true);
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+		mediaPlayer.play();
 
 		// Add tile to hand if tile is an action tile and remove from screen
 		if (isNewTileAction) {
