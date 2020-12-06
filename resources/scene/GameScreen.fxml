@@ -10,6 +10,31 @@
 <?import java.lang.Double?>
 <BorderPane fx:id="borderPane" prefWidth="1200" prefHeight="630" xmlns="http://javafx.com/javafx/8.0.241"
 			xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameScreenController">
+	<top>
+	<MenuBar>
+		<menus>
+			<Menu mnemonicParsing="false" text="File">
+				<items>
+					<MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit" />
+				</items>
+			</Menu>
+			<Menu mnemonicParsing="false" text="Help">
+				<items>
+					<MenuItem mnemonicParsing="false" onAction="#openGameInstructions" text="How to play the game" />
+				</items>
+			</Menu>
+			<Menu mnemonicParsing="false" text="Volume Control">
+				<items>
+					<MenuItem mnemonicParsing="false" text="Background Music">
+						<graphic>
+							<Slider fx:id="volumeSlider" />
+						</graphic>
+					</MenuItem>
+				</items>
+			</Menu>
+		</menus>
+	</MenuBar>
+	</top>
 	<fx:define>
 		<Paint fx:id="grey" fx:value="#3f443e"/>
 	</fx:define>

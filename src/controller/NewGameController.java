@@ -120,7 +120,7 @@ public class NewGameController {
 		return profileFileNames;
 	}
 	public void backgroundMusic(){
-		Media backgroundSound = new Media(new File("resources/sounds/startScreenBackground.wav").toURI().toString());
+		Media backgroundSound = new Media(new File("resources/sounds/playerSelectionBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
 		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
 		mediaPlayer1.setVolume(0.1);
