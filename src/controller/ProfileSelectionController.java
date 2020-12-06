@@ -117,6 +117,9 @@ public class ProfileSelectionController {
 			String selectedFilename = profileList.getSelectionModel().getSelectedItem() +".txt";
 			String stats = fileToString(selectedFilename);
 			profileInfo.setContentText(stats);
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 			profileInfo.show();
 		} catch(FileNotFoundException e){
 			Alert errorInfo = new Alert(Alert.AlertType.ERROR);
