@@ -1034,6 +1034,9 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Choose an island to cast FIRE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("fire");
+			Media buttonSound = new Media(new File("resources/sounds/magic.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
@@ -1051,6 +1054,9 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Choose an island to cast ICE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("ice");
+			Media buttonSound = new Media(new File("resources/sounds/magic.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
@@ -1087,9 +1093,9 @@ public class GameScreenController implements Initializable {
 			disableActionSelect();
 			gameLog.appendText("Choose a fellow deity to cast BACKTRACK on.\n");
 			currPlayerBacktrackTxt.setText("Used");
-			//Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
-			//MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-			//mediaPlayer.play();
+			Media buttonSound = new Media(new File("resources/sounds/magic.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 
 			for (Player player : playerRoster) {
 				if (!player.isBacktracked()) {
