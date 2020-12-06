@@ -16,7 +16,7 @@ public abstract class Tile {
 	 * Constructor initialising the type of tile.
 	 *
 	 * @param tileType defines the type of tile.
-	 * @param image    the image associated with the tile
+	 * @param image the image associated with the tile
 	 */
 	protected Tile(String tileType, Image image) {
 		this.tileType = tileType;
