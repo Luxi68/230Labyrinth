@@ -414,6 +414,9 @@ public class GameScreenController implements Initializable {
 			try {
 				if (row == 0 || row == boardRows - 1) {
 					axis = "longitude";
+					Media buttonSound = new Media(new File("resources/sounds/wind.wav").toURI().toString());
+					MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+					mediaPlayer.play();
 					// Move all the tiles along and return the ejected tile
 					if (row == 0) {
 						try {
@@ -484,6 +487,9 @@ public class GameScreenController implements Initializable {
 					}
 				} else if (column == 0 || column == boardColumns - 1) { // Left column
 					axis = "latitude";
+					Media buttonSound = new Media(new File("resources/sounds/wind.wav").toURI().toString());
+					MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+					mediaPlayer.play();
 					// Move all the tiles along and return the ejected tile
 					if (column == 0) {
 						try {
