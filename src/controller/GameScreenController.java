@@ -1093,6 +1093,9 @@ public class GameScreenController implements Initializable {
 				if (!player.isBacktracked()) {
 					StackPane tempStack = boardImg[player.getRowLoc() + 1][player.getColumnLoc() + 1];
 					toggleRectDisable(tempStack, false, currPlayer.getColour());
+					Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
+					MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+					mediaPlayer.play();
 				}
 			}
 		} catch(Exception e) {
