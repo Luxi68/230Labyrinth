@@ -123,9 +123,6 @@ public class NewGameController {
 	public void chooseProfile(ActionEvent actionEvent) {
 		String selectedProfile = listOfProfiles.getSelectionModel().getSelectedItem();
 		Profile chosenOne = new Profile(selectedProfile);
-		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-		mediaPlayer.play();
 		if(selectedProfile == null){
 			Alert errorInfo = new Alert(Alert.AlertType.ERROR);
 			errorInfo.setTitle("Error");
