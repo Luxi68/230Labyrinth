@@ -12,10 +12,9 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import service.Motd;
-import java.net.URI;
-import java.io.File;
 
 import java.io.IOException;
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
@@ -46,7 +45,7 @@ public class StartScreenController {
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(profileSelectionScene);
 			window.show();
-			Media buttonSound = new Media(new File("/Users/ryzz4/IdeaProjects/230Labyrinth/resources/sounds/button.wav").toURI().toString());
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
 			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 			mediaPlayer.play();
 		} catch (IOException e) {
@@ -69,7 +68,7 @@ public class StartScreenController {
 		Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 		window.setScene(newGameScene);
 		window.show();
-		Media buttonSound = new Media(new File("/Users/ryzz4/IdeaProjects/230Labyrinth/resources/sounds/button.wav").toURI().toString());
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
 		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 		mediaPlayer.play();
         } catch (IOException e) {
@@ -86,7 +85,7 @@ public class StartScreenController {
 		Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 		window.setScene(loadGameScene);
 		window.show();
-		Media buttonSound = new Media(new File("/Users/ryzz4/IdeaProjects/230Labyrinth/resources/sounds/button.wav").toURI().toString());
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
 		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 		mediaPlayer.play();
         } catch (IOException e) {
