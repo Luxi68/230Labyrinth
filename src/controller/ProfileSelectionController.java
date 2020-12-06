@@ -99,6 +99,9 @@ public class ProfileSelectionController {
 		Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 		window.setScene(createProfileScene);
 		window.show();
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+		mediaPlayer.play();
     }
 
 	/**
@@ -184,6 +187,9 @@ public class ProfileSelectionController {
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(leaderboardScene);
 			window.show();
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch (IOException e) {
 			System.out.println("Error accessing leaderboard from profile selection");
 			e.printStackTrace();

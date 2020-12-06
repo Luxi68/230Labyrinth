@@ -140,7 +140,7 @@ public class NewGameController {
 	@FXML
 	private void backToStartScreen(ActionEvent actionEvent) {
 		try {
-			Parent startScreenParent = FXMLLoader.load(getClass().getResource("/scene/StartScreen.fxml"));
+			Parent startScreenParent = FXMLLoader.load(getClass().getResource("/scene/PlayerSelection.fxml"));
 			Scene startScreenScene = new Scene(startScreenParent);
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(startScreenScene);
