@@ -156,7 +156,16 @@ public class ProfileSelectionController {
 		while (in.hasNextLine()){
 			String currentLine = in.nextLine();
 			String[] splitted = currentLine.split(",");
-			outputText += "Board " + splitted[0] + " Stats: " + System.lineSeparator();
+			switch (splitted[0]){
+				case "1":
+					outputText += "Knossos board Stats: " + System.lineSeparator();
+					break;
+				case "2":
+					outputText += "Marathon board Stats: " + System.lineSeparator();
+					break;
+				case "3":
+					outputText += "Sparta board Stats: " + System.lineSeparator();
+			}
 			outputText += "Games Played: " + splitted[1] + System.lineSeparator();
 			outputText += "Games Won: " + splitted[2] + System.lineSeparator() + System.lineSeparator();
 		}
