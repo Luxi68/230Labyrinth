@@ -319,6 +319,7 @@ public class GameScreenController implements Initializable {
 								Media buttonSound = new Media(new File("resources/sounds/fire.wav").toURI().toString());
 								MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 								mediaPlayer.play();
+								mediaPlayer.setVolume(0.7);
 
 								for (Floor effected : inflictedTiles) {
 									StackPane tempStack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
@@ -340,6 +341,7 @@ public class GameScreenController implements Initializable {
 								Media buttonSound = new Media(new File("resources/sounds/ice.wav").toURI().toString());
 								MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 								mediaPlayer.play();
+								mediaPlayer.setVolume(0.7);
 
 								for (Floor effected : inflictedTiles) {
 									StackPane tempStack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
@@ -423,6 +425,7 @@ public class GameScreenController implements Initializable {
 					Media buttonSound = new Media(new File("resources/sounds/wind.wav").toURI().toString());
 					MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 					mediaPlayer.play();
+					mediaPlayer.setVolume(0.3);
 					// Move all the tiles along and return the ejected tile
 					if (row == 0) {
 						try {
