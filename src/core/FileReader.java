@@ -126,11 +126,11 @@ public class FileReader {
 
                         if (name.equals("corner") || name.equals("straight") || name.equals("tee")){
                             for (int i = 0; i < num; ++i) {
-                                bag.addTile(true, new Floor(name, new Image("/assets/" + name + ".png"), false));
+                                bag.addTile(false, new Floor(name, new Image("/assets/" + name + ".png"), false));
                             }
                         } else {
                             for (int i = 0; i < num; ++i) {
-                                bag.addTile(true, new Action(name, new Image("/assets/" + name + ".png")));
+                                bag.addTile(false, new Action(name, new Image("/assets/" + name + ".png")));
                             }
                         }
 
