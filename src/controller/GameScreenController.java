@@ -1000,6 +1000,9 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Choose an island to cast FIRE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("fire");
+			Media buttonSound = new Media(new File("resources/sounds/fire.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
@@ -1017,6 +1020,9 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Choose an island to cast ICE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("ice");
+			Media buttonSound = new Media(new File("resources/sounds/ice.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
@@ -1081,6 +1087,9 @@ public class GameScreenController implements Initializable {
 	private void moveClick() {
 		try {
 			playerMoves = currPlayer.possibleMoves(gameBoard);
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 //			for (Floor floor : playerMoves) { TODO - print
 //				System.out.println(floor.getRow() + "," + floor.getColumn() + ":"
 //						+ floor.isNorth() + floor.isEast() + floor.isSouth() + floor.isWest());
