@@ -253,14 +253,13 @@ public class GameScreenController implements Initializable {
 					Paint colour = tile.getStroke();
 
 					if (actionTrackerMove.getFill() == currPlayer.getColour()) { // If movement turn
-						//sound effect when player moves
-						Media buttonSound = new Media(new File("resources/sounds/footsteps.wav").toURI().toString());
-						MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-						mediaPlayer.play();
 						// Moving backend
 						Floor currFloor = currPlayer.getCurrentFloor(gameBoard);
 						Floor movedFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
 						currPlayer.movePlayer(gameBoard, movedFloor);
+						Media buttonSound = new Media(new File("resources/sounds/footsteps.wav").toURI().toString());
+						MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+						mediaPlayer.play();
 
 						// Moving frontend
 						ImageView currFloorImg = (ImageView)
