@@ -1,20 +1,20 @@
 package controller;
 
 import entity.*;
+import entity.Action;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.*;
@@ -23,6 +23,10 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.net.URL;
@@ -45,8 +49,8 @@ TODO - img resources
 public class GameScreenController implements Initializable {
 	// Colour Scheme
 	private final Paint GREY = Paint.valueOf("#3f443e");
-	MediaPlayer mediaPlayer1;
 	public Slider volumeSlider;
+	MediaPlayer mediaPlayer1;
 	ArrayList<Integer> rowNoFixed;
 	ArrayList<Integer> columnNoFixed;
 	// Game components
@@ -170,6 +174,17 @@ public class GameScreenController implements Initializable {
 				mediaPlayer1.setVolume(volumeSlider.getValue() / 100);
 			}
 		});
+	}
+
+	/**
+	 * Method to start background music
+	 */
+	public void backgroundMusic() {
+		Media backgroundSound = new Media(new File("resources/sounds/gameScreenBackground.wav").toURI().toString());
+		mediaPlayer1 = new MediaPlayer(backgroundSound);
+		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
+		mediaPlayer1.setVolume(0.1);
+		mediaPlayer1.setAutoPlay(true);
 	}
 
 	/**
@@ -434,8 +449,8 @@ public class GameScreenController implements Initializable {
 			Floor ejectedTile;
 			Player ejectedPlayer;
 			Floor insertedTile = (Floor) silkBagTile;
-			String axis = "";
-			String direction = "";
+			String axis;
+			String direction;
 
 			try {
 				if (row == 0 || row == boardRows - 1) {
@@ -874,7 +889,11 @@ public class GameScreenController implements Initializable {
 	 * Method that runs when the game ends. Will announce the winner and exit from the game
 	 */
 	private void endGame() { // TODO - flesh out
-		gameLog.appendText(currPlayer.getName() + " wins!!\nThank you for playing!!\n");
+		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
+		errorInfo.setTitle("GAME WON!!!");
+		errorInfo.setHeaderText("GAME WON!!!");
+		errorInfo.setContentText(currPlayer.getName() + " wins!!\nThank you for playing!!\n");
+		errorInfo.show();
 	}
 
 	/**
@@ -1043,7 +1062,7 @@ public class GameScreenController implements Initializable {
 			Media buttonSound = new Media(new File("resources/sounds/magic.wav").toURI().toString());
 			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 			mediaPlayer.play();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
 
@@ -1063,7 +1082,7 @@ public class GameScreenController implements Initializable {
 			Media buttonSound = new Media(new File("resources/sounds/magic.wav").toURI().toString());
 			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 			mediaPlayer.play();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
 	}
@@ -1084,7 +1103,7 @@ public class GameScreenController implements Initializable {
 			Media buttonSound = new Media(new File("resources/sounds/doublemove.wav").toURI().toString());
 			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 			mediaPlayer.play();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
 	}
@@ -1109,7 +1128,7 @@ public class GameScreenController implements Initializable {
 					toggleRectDisable(tempStack, false, currPlayer.getColour());
 				}
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
 	}
@@ -1201,23 +1220,52 @@ public class GameScreenController implements Initializable {
 		gameLog.appendText("Round " + round + ": Next Deity - " + currPlayer.getName() + "!\n");
 		startNextTurn();
 	}
-	public void backgroundMusic(){
-		Media backgroundSound = new Media(new File("resources/sounds/gameScreenBackground.wav").toURI().toString());
-		mediaPlayer1 = new MediaPlayer(backgroundSound);
-		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
-		mediaPlayer1.setVolume(0.1);
-		mediaPlayer1.setAutoPlay(true);
-	}
 
-	public void quitGameFromMenu(ActionEvent actionEvent) {
-		Platform.exit();
-	}
-
-	public void openGameInstructions(ActionEvent actionEvent) {
+	/**
+	 * Opens the game instructions
+	 */
+	@FXML
+	private void openGameInstructionsButton() {
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Instructions");
 		errorInfo.setHeaderText("How to play the game");
 		errorInfo.setContentText("You have not selected a player please do and try again");
 		errorInfo.show();
+	}
+
+	@FXML
+	private void saveGameButton() {
+		borderPane.setEffect(new GaussianBlur());
+
+		VBox saveGameScreen = new VBox(10);
+		saveGameScreen.setPadding(new Insets(10, 10, 10, 10));
+		Label header = new Label("Save Game");
+		TextField filename = new TextField("filename");
+		Button saveAndQuit = new Button("Save and Quit");
+		saveGameScreen.getChildren().addAll(header, saveAndQuit);
+		saveGameScreen.setAlignment(Pos.CENTER);
+
+		Stage popupStage = new Stage(StageStyle.TRANSPARENT);
+		popupStage.setScene(new Scene(saveGameScreen, Color.TRANSPARENT));
+		popupStage.setAlwaysOnTop(true);
+		popupStage.initModality(Modality.APPLICATION_MODAL);
+		popupStage.show();
+
+		saveAndQuit.setOnAction(e -> {
+			if (filename.getText().isEmpty()) {
+
+			} else {
+				borderPane.setEffect(null);
+				popupStage.hide();
+			}
+		});
+	}
+
+	/**
+	 * Button that quits the game when pressed
+	 */
+	@FXML
+	private void quitGameFromMenuButton() {
+		Platform.exit();
 	}
 }

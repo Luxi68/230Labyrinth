@@ -18,8 +18,11 @@ public class Floor extends Tile {
     private boolean south;
     private boolean east;
     private boolean west;
+    private boolean isOnBoard;
     private boolean isFire;
     private boolean isIce;
+    private int fireOver;
+    private int iceOver;
     private int rotation;
 
 
@@ -33,6 +36,7 @@ public class Floor extends Tile {
     public Floor(String tileType, Image image, boolean isFixed) {
         super(tileType, image);
         this.IS_FIXED = isFixed;
+        this.isOnBoard = false;
         this.isFire = false;
         this.isIce = false;
         this.rotation = 0;
@@ -110,6 +114,7 @@ public class Floor extends Tile {
      * @param column - the column coordinate of the tile
      */
     public void updateCoords(int row, int column) {
+        this.isOnBoard = true;
         this.row = row;
         this.column = column;
     }
@@ -170,21 +175,12 @@ public class Floor extends Tile {
     }
 
     /**
-     * Sets the tile on fire
+     * Checks if the floor tile is on the board
      *
-     * @param isFire tells if the tile is on fire
+     * @return true if floor is on the board
      */
-    public void setIsFire(boolean isFire) {
-        this.isFire = isFire;
-    }
-
-    /**
-     * Sets the tile on ice
-     *
-     * @param isIce tells if the tile is on ice
-     */
-    public void setIsIce(boolean isIce) {
-        this.isIce = isIce;
+    public boolean isOnBoard() {
+        return isOnBoard;
     }
 
     /**
@@ -224,6 +220,24 @@ public class Floor extends Tile {
     }
 
     /**
+     * Get when the fire infliction is over
+     *
+     * @return turn number when fire effect is over
+     */
+    public int getIceOver() {
+        return iceOver;
+    }
+
+    /**
+     * Gets when the ice effect is over
+     *
+     * @return turn number when ice effect is over
+     */
+    public int getFireOver() {
+        return fireOver;
+    }
+
+    /**
      * Gets the rotation of the tile
      *
      * @return - The rotation in degrees
@@ -239,6 +253,60 @@ public class Floor extends Tile {
             return 0;
         }
     }
+    
+    /**
+     * Get the floor's type
+     *
+     * @return the floor type
+     */
+    public Type getFloorType() {
+        return FLOOR_TYPE;
+    }
+
+    /**
+     * Sets a boolean value to check if the tile is one the board or not
+     *
+     * @param onBoard - if the tile is on the board
+     */
+    public void setIsOnBoard(boolean onBoard) {
+        isOnBoard = onBoard;
+    }
+
+    /**
+     * Sets the tile on fire
+     *
+     * @param isFire tells if the tile is on fire
+     */
+    public void setIsFire(boolean isFire) {
+        this.isFire = isFire;
+    }
+
+    /**
+     * Sets the tile on ice
+     *
+     * @param isIce tells if the tile is on ice
+     */
+    public void setIsIce(boolean isIce) {
+        this.isIce = isIce;
+    }
+
+    /**
+     * Sets when the fire infliction is over
+     *
+     * @param fireOver - turn when ice effect is over
+     */
+    public void setFireOver(int fireOver) {
+        this.fireOver = fireOver;
+    }
+
+    /**
+     * Sets when the ice infliction is over
+     *
+     * @param iceOver - turn when ice effect is over
+     */
+    public void setIceOver(int iceOver) {
+        this.iceOver = iceOver;
+    }
 
     /**
      * Sets the rotation of the board
@@ -249,16 +317,6 @@ public class Floor extends Tile {
 
         this.rotation = rotation;
     }
-
-    /**
-     * Get the floor's type
-     *
-     * @return the floor type
-     */
-    public Type getFloorType() {
-        return FLOOR_TYPE;
-    }
-
 
     /**
      * Method that rotates the tile 90 degrees clockwise once
