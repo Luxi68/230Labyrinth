@@ -111,7 +111,7 @@ public class Board {
             return ejectedTile;
         } else {
             throw new IllegalStateException(
-                    "ERROR: This column cannot be moved as there are iced tiles in the way.\n");
+                    "WARNING: These islands cannot be moved as they have been ice over.\n");
         }
     }
 
@@ -137,7 +137,7 @@ public class Board {
             return ejectedTile;
         } else {
             throw new IllegalStateException(
-                    "ERROR: This row cannot be moved as there are iced tiles in the way.\n");
+                    "WARNING: These islands cannot be moved as they have been ice over.\n");
         }
     }
 
@@ -163,7 +163,7 @@ public class Board {
             return ejectedTile;
         } else {
             throw new IllegalStateException(
-                    "ERROR: This row cannot be moved as there are iced tiles in the way.\n");
+                    "WARNING: These islands cannot be moved as they have been ice over.\n");
         }
     }
 
@@ -189,7 +189,7 @@ public class Board {
             return ejectedTile;
         } else {
             throw new IllegalStateException(
-                    "ERROR: This column cannot be moved as there are iced tiles in the way.\n");
+                    "WARNING: These islands cannot be moved as they have been ice over.\n");
         }
     }
 

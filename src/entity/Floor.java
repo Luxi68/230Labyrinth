@@ -292,4 +292,5 @@ public class Floor extends Tile {
 	public boolean[] exitPoints() {
 		return new boolean [] {north, east, south, west};
 	}
+
 }
