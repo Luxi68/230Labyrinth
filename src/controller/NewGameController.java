@@ -61,6 +61,9 @@ public class NewGameController {
 			window.setTitle("The First Olympian");
 			window.setScene(gameScreenScene);
 			window.show();
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 			window.setMaximized(true);
 		} catch (IOException e) {
 			System.out.println("Error starting the Game Screen from new game screen.");
@@ -120,6 +123,9 @@ public class NewGameController {
 	public void chooseProfile(ActionEvent actionEvent) {
 		String selectedProfile = listOfProfiles.getSelectionModel().getSelectedItem();
 		Profile chosenOne = new Profile(selectedProfile);
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+		mediaPlayer.play();
 		if(selectedProfile == null){
 			Alert errorInfo = new Alert(Alert.AlertType.ERROR);
 			errorInfo.setTitle("Error");
