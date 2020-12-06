@@ -7,34 +7,38 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NewGameController">
-	<MenuBar VBox.vgrow="NEVER">
-		<Menu mnemonicParsing="false" text="File">
-			<MenuItem mnemonicParsing="false" text="New" />
-			<MenuItem mnemonicParsing="false" text="Open…" />
-			<Menu mnemonicParsing="false" text="Open Recent" />
-			<SeparatorMenuItem mnemonicParsing="false" />
-			<MenuItem mnemonicParsing="false" text="Close" />
-			<MenuItem mnemonicParsing="false" text="Save" />
-			<MenuItem mnemonicParsing="false" text="Save As…" />
-			<MenuItem mnemonicParsing="false" text="Revert" />
-			<SeparatorMenuItem mnemonicParsing="false" />
-			<MenuItem mnemonicParsing="false" text="Preferences…" />
-			<SeparatorMenuItem mnemonicParsing="false" />
-			<MenuItem mnemonicParsing="false" text="Quit" />
-		</Menu>
-		<Menu mnemonicParsing="false" text="Help">
-			<MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-		</Menu>
-	</MenuBar>
+   <MenuBar>
+      <menus>
+         <Menu mnemonicParsing="false" text="File">
+            <items>
+               <MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit" />
+            </items>
+         </Menu>
+         <Menu mnemonicParsing="false" text="Help">
+            <items>
+               <MenuItem mnemonicParsing="false" onAction="#openGameInstructions" text="How to play the game" />
+            </items>
+         </Menu>
+         <Menu mnemonicParsing="false" text="Volume Control">
+            <items>
+               <MenuItem mnemonicParsing="false" text="Background Music">
+                  <graphic>
+                     <Slider fx:id="volumeSlider" />
+                  </graphic>
+               </MenuItem>
+            </items>
+         </Menu>
+      </menus>
+   </MenuBar>
 	<AnchorPane VBox.vgrow="ALWAYS">
-		<Label alignment="CENTER" layoutX="138.0" style="&#10;" text="LABYRINTH - New Game" textAlignment="CENTER" textFill="#c96704">
+		<Label alignment="CENTER" layoutX="68.0" style="&#10;" text="THE FIRST OLYMPIAN - New Game" textAlignment="CENTER" textFill="#c96704">
 			<font>
 				<Font size="31.0" />
 			</font>

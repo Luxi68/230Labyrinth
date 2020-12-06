@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -13,18 +14,27 @@
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StartScreenController">
 	<MenuBar VBox.vgrow="NEVER">
 		<Menu mnemonicParsing="false" text="File">
-			<MenuItem mnemonicParsing="false" text="Quit" />
+			<MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit" />
 		</Menu>
 		<Menu mnemonicParsing="false" text="Help">
-			<MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+			<MenuItem mnemonicParsing="false" onAction="#openGameInstructions" text="How to play the game" />
 		</Menu>
+      <Menu mnemonicParsing="false" text="Volume Control">
+         <items>
+            <MenuItem mnemonicParsing="false" text="Background Music">
+               <graphic>
+                  <Slider fx:id="volumeSlider" />
+               </graphic>
+            </MenuItem>
+         </items>
+      </Menu>
 	</MenuBar>
 	<AnchorPane VBox.vgrow="ALWAYS">
 		<Button layoutX="281.0" layoutY="111.0" mnemonicParsing="false" onAction="#goToNewGame" text="New Game" />
 		<Button layoutX="280.0" layoutY="153.0" mnemonicParsing="false" onAction="#goToLoadGame" text="Load Game" />
 		<Button layoutX="291.0" layoutY="193.0" mnemonicParsing="false" onAction="#goToProfileSelection" text="Profiles" />
-		<Button layoutX="302.0" layoutY="233.0" mnemonicParsing="false" onAction="#closeApplication" text="Quit" />
-		<Label layoutX="215.0" layoutY="14.0" text="LABYRINTH" textFill="#e86a0b">
+		<Button layoutX="302.0" layoutY="233.0" mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit" />
+		<Label layoutX="115.0" layoutY="14.0" text="THE FIRST OLYMPIAN" textFill="#e86a0b">
 			<font>
 				<Font size="39.0" />
 			</font>

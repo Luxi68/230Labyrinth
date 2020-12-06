@@ -1,5 +1,8 @@
 package controller;
 
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,7 +11,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -23,6 +28,8 @@ import java.util.Scanner;
 public class LoadGameController {
 
 	public ChoiceBox<String> savesChoice;
+	public Slider volumeSlider;
+    MediaPlayer mediaPlayer1;
 	@FXML
 	private ResourceBundle resources;
 
@@ -33,6 +40,16 @@ public class LoadGameController {
 	public void initialize() {
 		ObservableList<String> choices = FXCollections.observableArrayList(getAllLevelFilenames());
 		savesChoice.setItems(choices);
+		backgroundMusic();
+		volumeSlider.setShowTickLabels(true);
+		volumeSlider.setShowTickMarks(true);
+		volumeSlider.setValue(mediaPlayer1.getVolume() * 100);
+		volumeSlider.valueProperty().addListener(new InvalidationListener() {
+			@Override
+			public void invalidated(Observable observable) {
+				mediaPlayer1.setVolume(volumeSlider.getValue() / 100);
+			}
+		});
 	}
 
 	@FXML
@@ -57,6 +74,7 @@ public class LoadGameController {
 			System.out.println("Error starting the Game Screen from load game screen.");
 			e.printStackTrace();
 		}
+		mediaPlayer1.stop();
 	}
 
 	public ArrayList<String> getAllLevelFilenames(){
@@ -68,6 +86,13 @@ public class LoadGameController {
 			levelFileNames.add(currentFile.getName());
 		}
 		return levelFileNames;
+	}
+	public void backgroundMusic(){
+		Media backgroundSound = new Media(new File("resources/sounds/startScreenBackground.wav").toURI().toString());
+		mediaPlayer1 = new MediaPlayer(backgroundSound);
+		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
+		mediaPlayer1.setVolume(0.1);
+		mediaPlayer1.setAutoPlay(true);
 	}
 
 	@FXML
@@ -85,5 +110,17 @@ public class LoadGameController {
 			System.out.println("Error returning to the start screen from load game screen.");
 			e.printStackTrace();
 		}
+		mediaPlayer1.stop();
+	}
+	public void quitGameFromMenu(ActionEvent actionEvent) {
+		Platform.exit();
+	}
+
+	public void openGameInstructions(ActionEvent actionEvent) {
+		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
+		errorInfo.setTitle("Game Instructions");
+		errorInfo.setHeaderText("How to play the game");
+		errorInfo.setContentText("You have not selected a player please do and try again");
+		errorInfo.show();
 	}
 }

@@ -2,20 +2,46 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PlayerSelectionController">
    <children>
       <Button layoutX="129.0" layoutY="173.0" mnemonicParsing="false" onAction="#twoPlayersSelected" text="2 Players" />
       <Button layoutX="396.0" layoutY="173.0" mnemonicParsing="false" onAction="#fourPlayersSelected" text="4 Players" />
       <Button layoutX="263.0" layoutY="173.0" mnemonicParsing="false" onAction="#threePlayersSelected" text="3 Players" />
-      <Label layoutX="129.0" layoutY="14.0" text="Please Select Number Of Players" textFill="#d76814">
+      <Label layoutX="129.0" layoutY="37.0" text="Please Select Number Of Players" textFill="#d76814">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
       </Label>
       <Button layoutX="537.0" layoutY="359.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Back" />
+      <MenuBar prefHeight="29.0" prefWidth="600.0">
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#openGameInstructions" text="How to play the game" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Volume Control">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Background Music">
+                     <graphic>
+                        <Slider fx:id="volumeSlider" />
+                     </graphic>
+                  </MenuItem>
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
    </children>
 </AnchorPane>
