@@ -1,0 +1,17 @@
+7,4
+f,corner,1,0,3
+f,corner,0,0,0
+f,corner,2,6,3
+f,corner,3,6,0
+f,goal,0,4,2
+1,0,0
+2,0,3
+3,6,3
+4,6,0
+b,corner,32
+b,straight,25
+b,tee,28
+b,fire,5
+b,ice,5
+b,doubleMove,9
+b,backTrack,8
