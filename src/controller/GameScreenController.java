@@ -155,7 +155,6 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Round 1: First Deity - " + currPlayer.getName() + "!\n");
 			startNextTurn();
 		});
-		// TODO - Code that either loads past game or starts new game
 	}
 
 	/**
@@ -691,7 +690,7 @@ public class GameScreenController implements Initializable {
 	private void disableActionSelect() {
 		Paint colour = currPlayer.getColour();
 		takeActionButton.setDisable(true);
-//		skipActionButton.setDisable(true); TODO - Uncomment once actions work
+		skipActionButton.setDisable(true);
 		toggleRectDisable(fireButton, 0, true, colour);
 		toggleRectDisable(iceButton, 0, true, colour);
 		toggleRectDisable(doubleMoveButton, 0, true, colour);
@@ -730,13 +729,14 @@ public class GameScreenController implements Initializable {
 	 * Checks if there are any inflictions that have worn out
 	 */
 	private void checkInflictions() {
+		ArrayList<Floor> removed = new ArrayList<>();
 		StackPane stack;
 		Rectangle effect;
 		boolean changed = false;
 		for (Floor effected : fireInfectedTiles) {
 			if (!effected.isOnBoard() || effected.getFireOver() < turn) {
 				effected.setIsFire(false);
-				fireInfectedTiles.remove(effected);
+				removed.add(effected);
 			} else if (effected.getFireOver() == turn) {
 				stack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
 				effect = (Rectangle) stack.getChildren().get(1);
@@ -749,10 +749,12 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Fire, that were burning on some islands, have now died down.\n");
 			changed = false;
 		}
+		fireInfectedTiles.removeAll(removed);
+		removed = new ArrayList<>();
 		for (Floor effected : iceInfectedTiles) {
 			if (!effected.isOnBoard() || effected.getIceOver() < turn) {
 				effected.setIsIce(false);
-				iceInfectedTiles.remove(effected);
+				removed.add(effected);
 			} else if (effected.getIceOver() == turn) {
 				stack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
 				effect = (Rectangle) stack.getChildren().get(2);
@@ -764,6 +766,7 @@ public class GameScreenController implements Initializable {
 		if (changed) {
 			gameLog.appendText("Some ice, that were freezing some islands still, have now melted.\n");
 		}
+		iceInfectedTiles.removeAll(removed);
 	}
 
 	/**
@@ -929,7 +932,7 @@ public class GameScreenController implements Initializable {
 				|| tempTileType.equalsIgnoreCase("tee")) {
 			// If is a floor type
 			isNewTileAction = false;
-			gameLog.appendText(currPlayer.getName() + " discovered a new island!\n");
+			gameLog.appendText(currPlayer.getName() + " was gifted a new island!\n");
 			takeSilkBagTileButton.setDisable(true);
 			silkBagTileRotate.setDisable(false);
 			setDisabledBoardArrows(false);
@@ -939,7 +942,7 @@ public class GameScreenController implements Initializable {
 				|| tempTileType.equalsIgnoreCase("backTrack")) {
 			// If is action type
 			isNewTileAction = true;
-			gameLog.appendText(currPlayer.getName() + " drew a powerful tile!\n");
+			gameLog.appendText(currPlayer.getName() + " was gifted a powerful ability!\n");
 			takeSilkBagTileButton.setDisable(true);
 			startPlayActionTurn();
 		} else {
@@ -994,7 +997,6 @@ public class GameScreenController implements Initializable {
 		disableActionSelect();
 		gameLog.appendText("Choose an island to cast FIRE on.\n");
 		setPlayableTiles("fire");
-//		useActionTile("fire");
 	}
 
 	/**
@@ -1005,7 +1007,6 @@ public class GameScreenController implements Initializable {
 		disableActionSelect();
 		gameLog.appendText("Choose an island to cast ICE on.\n");
 		setPlayableTiles("ice");
-//		useActionTile("ice");
 	}
 
 	/**
@@ -1017,7 +1018,6 @@ public class GameScreenController implements Initializable {
 		disableActionSelect();
 		gameLog.appendText("Double Move was cast on " + currPlayer.getName()
 				+ ". You can now move twice on this turn.\n");
-//		useActionTile("doubleMove");
 	}
 
 	/**
@@ -1087,7 +1087,7 @@ public class GameScreenController implements Initializable {
 				endTurnButton.setDisable(false);
 			}
 		} catch (Exception e) {
-			System.out.println("Move button failed to work again because of " + e); // TODO - Remove once move works
+			System.out.println("Move button failed to work again because of " + e);
 			endTurnButton.setDisable(false);
 		}
 	}

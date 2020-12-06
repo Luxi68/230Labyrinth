@@ -44,6 +44,7 @@ public class LoadGameController {
 
 			Scene gameScreenScene = new Scene(gameScreenParent);
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+			window.setTitle("The First Olympian");
 			window.setScene(gameScreenScene);
 			window.show();
 			window.setMaximized(true);
