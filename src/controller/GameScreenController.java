@@ -254,12 +254,12 @@ public class GameScreenController implements Initializable {
 
 					if (actionTrackerMove.getFill() == currPlayer.getColour()) { // If movement turn
 						// Moving backend
+						Media buttonSound = new Media(new File("resources/sounds/footstep.wav").toURI().toString());
+						MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+						mediaPlayer.play();
 						Floor currFloor = currPlayer.getCurrentFloor(gameBoard);
 						Floor movedFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
 						currPlayer.movePlayer(gameBoard, movedFloor);
-						Media buttonSound = new Media(new File("resources/sounds/footsteps.wav").toURI().toString());
-						MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-						mediaPlayer.play();
 
 						// Moving frontend
 						ImageView currFloorImg = (ImageView)
