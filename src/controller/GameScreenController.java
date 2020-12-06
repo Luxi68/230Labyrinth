@@ -1068,6 +1068,9 @@ public class GameScreenController implements Initializable {
 					+ ". You can now move twice on this turn.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			moveButton.setDisable(false);
+			Media buttonSound = new Media(new File("resources/sounds/doublemove.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch(Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
@@ -1083,14 +1086,14 @@ public class GameScreenController implements Initializable {
 			disableActionSelect();
 			gameLog.appendText("Choose a fellow deity to cast BACKTRACK on.\n");
 			currPlayerBacktrackTxt.setText("Used");
+			Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 
 			for (Player player : playerRoster) {
 				if (!player.isBacktracked()) {
 					StackPane tempStack = boardImg[player.getRowLoc() + 1][player.getColumnLoc() + 1];
 					toggleRectDisable(tempStack, false, currPlayer.getColour());
-					Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
-					MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-					mediaPlayer.play();
 				}
 			}
 		} catch(Exception e) {
