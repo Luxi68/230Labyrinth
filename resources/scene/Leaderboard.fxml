@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -12,6 +13,29 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LeaderboardController">
    <children>
+      <MenuBar prefHeight="29.0" prefWidth="600.0">
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#openGameInstructions" text="How to play the game" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Volume Control">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Background Music">
+                     <graphic>
+                        <Slider fx:id="volumeSlider" />
+                     </graphic>
+                  </MenuItem>
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
       <TableView fx:id="leaderbordTable" layoutX="118.0" layoutY="112.0" prefHeight="200.0" prefWidth="351.0">
         <columns>
             <TableColumn fx:id="rankCol" prefWidth="75.0" text="Rank" />
@@ -20,25 +44,11 @@
             <TableColumn fx:id="gameWonCol" prefWidth="87.0" text="Games Won" />
         </columns>
       </TableView>
-      <Label fx:id="tableHeader" layoutX="203.0" layoutY="84.0" text="User Leaderboard ">
+      <Label fx:id="tableHeader" layoutX="118.0" layoutY="84.0" text="User Leaderboard ">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-      <MenuBar prefHeight="29.0" prefWidth="600.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
       <Button layoutX="537.0" layoutY="359.0" mnemonicParsing="false" onAction="#backToProfileSelection" text="Back" />
       <Button layoutX="118.0" layoutY="312.0" mnemonicParsing="false" onAction="#createLeaderboardKnossos" text="Knossos" />
       <Button layoutX="265.0" layoutY="312.0" mnemonicParsing="false" onAction="#createLeaderboardSparta" text="Sparta" />

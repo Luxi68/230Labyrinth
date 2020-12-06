@@ -2,11 +2,13 @@ package controller;
 
 import entity.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,6 +46,7 @@ TODO - img resources
 public class GameScreenController implements Initializable {
 	// Colour Scheme
 	private final Paint GREY = Paint.valueOf("#3f443e");
+	public Slider volumeSlider;
 	ArrayList<Integer> rowNoFixed;
 	ArrayList<Integer> columnNoFixed;
 	// Game components
@@ -1159,4 +1162,9 @@ public class GameScreenController implements Initializable {
 		startNextTurn();
 	}
 
+	public void openGameInstructions(ActionEvent actionEvent) {
+	}
+
+	public void quitGameFromMenu(ActionEvent actionEvent) {
+	}
 }
