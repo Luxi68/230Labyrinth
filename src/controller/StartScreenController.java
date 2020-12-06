@@ -60,6 +60,7 @@ public class StartScreenController {
 		mediaPlayer.setAutoPlay(true);
 	}
 
+
 	@FXML
 	private void goToNewGame(ActionEvent actionEvent) {
 	    try {

@@ -49,6 +49,9 @@ public class LoadGameController {
 			window.setTitle("The First Olympian");
 			window.setScene(gameScreenScene);
 			window.show();
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 			window.setMaximized(true);
 		} catch (IOException e) {
 			System.out.println("Error starting the Game Screen from load game screen.");
