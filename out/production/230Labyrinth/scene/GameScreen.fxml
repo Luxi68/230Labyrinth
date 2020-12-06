@@ -10,12 +10,33 @@
 <?import java.lang.Double?>
 <BorderPane fx:id="borderPane" prefWidth="1200" prefHeight="630" xmlns="http://javafx.com/javafx/8.0.241"
 			xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameScreenController">
+	<top>
+	<MenuBar>
+		<menus>
+			<Menu mnemonicParsing="false" text="File">
+				<items>
+					<MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit" />
+				</items>
+			</Menu>
+			<Menu mnemonicParsing="false" text="Help">
+				<items>
+					<MenuItem mnemonicParsing="false" onAction="#openGameInstructions" text="How to play the game" />
+				</items>
+			</Menu>
+			<Menu mnemonicParsing="false" text="Volume Control">
+				<items>
+					<MenuItem mnemonicParsing="false" text="Background Music">
+						<graphic>
+							<Slider fx:id="volumeSlider" />
+						</graphic>
+					</MenuItem>
+				</items>
+			</Menu>
+		</menus>
+	</MenuBar>
+	</top>
 	<fx:define>
 		<Paint fx:id="grey" fx:value="#3f443e"/>
-		<!--		<Paint fx:id="Red" fx:value="#b53232"/>-->
-		<!--		<Paint fx:id="Pink" fx:value="#c677b3"/>-->
-		<!--		<Paint fx:id="Green" fx:value="#55b54c"/>-->
-		<!--		<Paint fx:id="Gold" fx:value="#fdd14b"/>-->
 	</fx:define>
 	<left>
 		<!--Left Sidebar: where all the buttons and user interaction is-->
@@ -24,7 +45,7 @@
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
 			</padding>
 			<!--Silk Bag: Area that shows the current taken tile and the options for it-->
-			<Text text="Silk Bag" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
+			<Text text="Nesoi's Gift" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
 				<VBox.margin>
 					<Insets bottom="5.0" top="5.0"/>
 				</VBox.margin>
@@ -39,12 +60,12 @@
 				</padding>
 
 				<Button fx:id="takeSilkBagTileButton" mnemonicParsing="false" onMouseClicked="#takeTileClick"
-						text="Take a new tile" disable="true"/>
+						text="Receive a new gift" disable="true"/>
 				<Button fx:id="silkBagTileRotate" mnemonicParsing="false" onMouseClicked="#rotateTileClick"
-						text="Rotate Tile" disable="true"/>
+						text="Rotate island" disable="true"/>
 			</HBox>
 			<!--Current player: Area that shows the current player's items-->
-			<Text text="Current Player" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
+			<Text text="Head Deity" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
 				<VBox.margin>
 					<Insets bottom="5.0" top="5.0"/>
 				</VBox.margin>
@@ -68,9 +89,11 @@
 					<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
 				</padding>
 				<!--TODO - Implement action button and popup-->
-				<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
+				<StackPane fx:id="fireButton" prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
+						   onMouseClicked="#fireClick" disable="true">
 					<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
-							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
+							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e" stroke="black"
+							   strokeType="OUTSIDE"/>
 					<ImageView fx:id="currPlayerFireImg" fitHeight="$currActionTileSize"
 							   fitWidth="$currActionTileSize"/>
 					<Label fx:id="currPlayerFireTxt" textAlignment="JUSTIFY" wrapText="true">
@@ -79,9 +102,11 @@
 						</font>
 					</Label>
 				</StackPane>
-				<StackPane>
+				<StackPane fx:id="iceButton" prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
+						   onMouseClicked="#iceClick" disable="true">
 					<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
-							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
+							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e" stroke="black"
+							   strokeType="OUTSIDE"/>
 					<ImageView fx:id="currPlayerIceImg" fitHeight="$currActionTileSize"
 							   fitWidth="$currActionTileSize"/>
 					<Label fx:id="currPlayerIceTxt" textAlignment="JUSTIFY" wrapText="true">
@@ -90,9 +115,11 @@
 						</font>
 					</Label>
 				</StackPane>
-				<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
+				<StackPane fx:id="doubleMoveButton" prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
+						   onMouseClicked="#doubleMoveClick" disable="true">
 					<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
-							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
+							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e" stroke="black"
+							   strokeType="OUTSIDE"/>
 					<ImageView fx:id="currPlayerDoubleMoveImg" fitHeight="$currActionTileSize"
 							   fitWidth="$currActionTileSize"/>
 					<Label fx:id="currPlayerDoubleMoveTxt" textAlignment="JUSTIFY" wrapText="true">
@@ -101,9 +128,11 @@
 						</font>
 					</Label>
 				</StackPane>
-				<StackPane prefHeight="$currActionTileSize" prefWidth="$currActionTileSize">
+				<StackPane fx:id="backTrackButton" prefHeight="$currActionTileSize" prefWidth="$currActionTileSize"
+						   onMouseClicked="#backTrackClick" disable="true">
 					<Rectangle height="$currActionTileSize" width="$currActionTileSize" arcHeight="$roundedCorners"
-							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e"/>
+							   arcWidth="$roundedCorners" style="-fx-background-color: #3f443e" stroke="black"
+							   strokeType="OUTSIDE"/>
 					<ImageView fx:id="currPlayerBacktrackImg" fitHeight="$currActionTileSize"
 							   fitWidth="$currActionTileSize"/>
 					<Label fx:id="currPlayerBacktrackTxt" textAlignment="JUSTIFY" wrapText="true">
@@ -114,11 +143,10 @@
 				</StackPane>
 			</HBox>
 			<HBox spacing="10" alignment="CENTER">
-				<!--TODO - Use Action button click-->
-				<Button fx:id="takeAction" mnemonicParsing="false" onMouseClicked="#skipActionClick"
-						text="Use Action" disable="true"/>
+				<Button fx:id="takeActionButton" mnemonicParsing="false" onMouseClicked="#takeActionClick"
+						text="Cast Ability" disable="true"/>
 				<Button fx:id="skipActionButton" mnemonicParsing="false" onMouseClicked="#skipActionClick"
-						text="Skip Action" disable="true"/>
+						text="Skip Casting" disable="true"/>
 			</HBox>
 			<Button fx:id="moveButton" mnemonicParsing="false" onMouseClicked="#moveClick"
 					text="See movement options"
@@ -155,12 +183,12 @@
 				</padding>
 				<StackPane prefHeight="50" prefWidth="50">
 					<Circle fx:id="actionTrackerDraw" fill="$grey" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
-					<Label text="Draw" textAlignment="CENTER" wrapText="true"/>
+					<Label text="Gift" textAlignment="CENTER" wrapText="true"/>
 				</StackPane>
 				<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0"/>
 				<StackPane prefHeight="50" prefWidth="50">
 					<Circle fx:id="actionTrackerPlay" fill="$grey" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
-					<Label text="Action" textAlignment="CENTER" wrapText="true"/>
+					<Label text="Cast" textAlignment="CENTER" wrapText="true"/>
 				</StackPane>
 				<Polyline points="-50.0, -22.0, -26.0, -9.5, -50.0, 3.0" strokeType="INSIDE" strokeWidth="5.0"/>
 				<StackPane prefHeight="50" prefWidth="50">
@@ -169,7 +197,7 @@
 				</StackPane>
 			</HBox>
 			<!--Player Order: Track who's turn it is next-->
-			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Player Order" textAlignment="CENTER">
+			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Deity Rank" textAlignment="CENTER">
 				<VBox.margin>
 					<Insets bottom="5.0" top="5.0"/>
 				</VBox.margin>
@@ -216,7 +244,7 @@
 					</font>
 				</Label>
 			</HBox>
-			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Game Log" textAlignment="CENTER">
+			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="The Fates' Tapestry" textAlignment="CENTER">
 				<VBox.margin>
 					<Insets bottom="5.0" top="5.0"/>
 				</VBox.margin>

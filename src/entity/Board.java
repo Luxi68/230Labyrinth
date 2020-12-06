@@ -1,4 +1,4 @@
-package entity;//package game;
+package entity;
 
 import java.util.ArrayList;
 
@@ -66,6 +66,8 @@ public class Board {
      */
     public void insertTileAt(int row, int column, Floor insert) {
         BOARD[row][column] = insert;
+        insert.updateCoords(row, column);
+        insert.setIsOnBoard(true);
     }
 	/*
 	 * insertFloor inserts a Floor tile to the board and shifts relevant tiles
@@ -97,6 +99,7 @@ public class Board {
     public Floor insertFromTop(Floor insert, int column) throws IllegalStateException {
         if (checkIfColumnMovable(column)) {
             Floor ejectedTile = BOARD[HEIGHT - 1][column];
+            ejectedTile.setIsOnBoard(false);
             for (int i = HEIGHT - 1; i > 0; i--) {
                 Floor movedFloor = BOARD[i - 1][column];
                 BOARD[i][column] = movedFloor;
@@ -104,10 +107,11 @@ public class Board {
             }
             BOARD[0][column] = insert;
             insert.updateCoords(0, column);
+            insert.setIsOnBoard(true);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
-                    "ERROR: This column cannot be moved as there are iced tiles in the way.\n");
+                    "WARNING: These islands cannot be moved as they have been ice over.\n");
         }
     }
 
@@ -121,6 +125,7 @@ public class Board {
     public Floor insertFromRight(Floor insert, int row) throws IllegalStateException {
         if (checkIfRowMovable(row)) {
             Floor ejectedTile = BOARD[row][0];
+            ejectedTile.setIsOnBoard(false);
             for (int i = 0; i < LENGTH - 1; i++) {
                 Floor movedFloor = BOARD[row][i + 1];
                 BOARD[row][i] = movedFloor;
@@ -128,10 +133,11 @@ public class Board {
             }
             BOARD[row][LENGTH - 1] = insert;
             insert.updateCoords(row, LENGTH - 1);
+            insert.setIsOnBoard(true);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
-                    "ERROR: This row cannot be moved as there are iced tiles in the way.\n");
+                    "WARNING: These islands cannot be moved as they have been ice over.\n");
         }
     }
 
@@ -145,6 +151,7 @@ public class Board {
     public Floor insertFromLeft(Floor insert, int row) throws IllegalStateException {
         if (checkIfRowMovable(row)) {
             Floor ejectedTile = BOARD[row][LENGTH - 1];
+            ejectedTile.setIsOnBoard(false);
             for (int i = LENGTH - 1; i > 0; i--) {
                 Floor movedFloor = BOARD[row][i - 1];
                 BOARD[row][i] = movedFloor;
@@ -152,10 +159,11 @@ public class Board {
             }
             BOARD[row][0] = insert;
             insert.updateCoords(row, 0);
+            insert.setIsOnBoard(true);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
-                    "ERROR: This row cannot be moved as there are iced tiles in the way.\n");
+                    "WARNING: These islands cannot be moved as they have been ice over.\n");
         }
     }
 
@@ -168,18 +176,20 @@ public class Board {
      */
     public Floor insertFromBottom(Floor insert, int column) throws IllegalStateException {
         if (checkIfColumnMovable(column)) {
-            Floor ejectedTile = BOARD[HEIGHT - 1][column];
+            Floor ejectedTile = BOARD[0][column];
+            ejectedTile.setIsOnBoard(false);
             for (int i = 0 ; i < HEIGHT - 1; i++) {
                 Floor movedFloor = BOARD[i + 1][column];
                 BOARD[i][column] = movedFloor;
                 movedFloor.updateCoords(i, column);
             }
-            BOARD[0][column] = insert;
-            insert.updateCoords(0, column);
+            BOARD[HEIGHT-1][column] = insert;
+            insert.updateCoords(HEIGHT - 1, column);
+            insert.setIsOnBoard(true);
             return ejectedTile;
         } else {
             throw new IllegalStateException(
-                    "ERROR: This column cannot be moved as there are iced tiles in the way.\n");
+                    "WARNING: These islands cannot be moved as they have been ice over.\n");
         }
     }
 
@@ -226,7 +236,7 @@ public class Board {
 
         for (int r = row - 1; r < row + 2;r++){
             for (int c = column - 1; c < column + 2;c++){
-                if (c < 0 || r < 0 || c > HEIGHT || r > LENGTH){
+                if (c < 0 || r < 0 || c > HEIGHT - 1 || r > LENGTH - 1){
                     //outta range
                 }else{
                     affectedTilesR.add(getTileAt(r, c));

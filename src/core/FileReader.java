@@ -31,7 +31,8 @@ public class FileReader {
         //Scanner in = new Scanner();
         Scanner in = null;
         try {
-            File input = new File(filename);
+            String fileN = "resources/levels/"+filename;
+            File input = new File(fileN);
             in = new Scanner(input);
         } catch (FileNotFoundException e) {
             System.out.println("File " + filename + " does not exist.");
@@ -107,19 +108,10 @@ public class FileReader {
                         int tRows = Integer.parseInt(splitted[3]);
                         int tColumns = Integer.parseInt(splitted[4]);
 
-                        switch (type) {
-                            case "corner":
-                                gBoard.insertTileAt(tRows, tColumns, new Floor("corner", new Image("/assets/fixedcorner.png"), true));
-                                break;
-                            case "straight":
-                                gBoard.insertTileAt(tRows, tColumns, new Floor("straight", new Image("/assets/fixedstraight.png"), true));
-                                break;
-                            case "tee":
-                                gBoard.insertTileAt(tRows, tColumns, new Floor("tee", new Image("/assets/fixedtee.png"), true));
-                                break;
-                            case "goal":
-                                gBoard.insertTileAt(tRows, tColumns, new Floor("goal", new Image("/assets/goal.png"), true));
-                                break;
+                        if (type.equals("goal")){
+                            gBoard.insertTileAt(tRows, tColumns, new Floor("goal", new Image("/assets/goal.png"), true));
+                        } else {
+                            gBoard.insertTileAt(tRows, tColumns, new Floor(type, new Image("/assets/fixed" + type + ".png"), true));
                         }
                         for (int i = 0; i < rot; ++i) {
                             gBoard.getTileAt(tRows, tColumns).rotate();
@@ -132,45 +124,14 @@ public class FileReader {
                         String name = splitted[1];
                         int num = Integer.parseInt(splitted[2]);
 
-                        switch (name) {
-                            case "corner":
-                                for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Floor("corner", new Image("/assets/corner.png"), false));
-                                }
-                                break;
-                            case "straight":
-                                for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Floor("straight", new Image("/assets/straight.png"), false));
-                                }
-                                break;
-                            case "tee":
-                                for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Floor("tee", new Image("/assets/tee.png"), false));
-                                }
-                                break;
-                            case "fire":
-                                for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("fire", new Image("/assets/fire.png")));
-                                }
-                                break;
-                            case "ice":
-                                for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("ice", new Image("/assets/ice.png")));
-                                }
-                                break;
-                            case "doubleMove":
-                                for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("doubleMove", new Image("/assets/doublemove.png")));
-                                }
-                                break;
-                            case "backTrack":
-                                for (int i = 0; i < num; ++i) {
-                                    bag.addTile(new Action("backTrack", new Image("/assets/backtrack.png")));
-                                }
-                                break;
-                            default:
-                                System.out.println("What is this?");
-                                break;
+                        if (name.equals("corner") || name.equals("straight") || name.equals("tee")){
+                            for (int i = 0; i < num; ++i) {
+                                bag.addTile(false, new Floor(name, new Image("/assets/" + name + ".png"), false));
+                            }
+                        } else {
+                            for (int i = 0; i < num; ++i) {
+                                bag.addTile(false, new Action(name, new Image("/assets/" + name + ".png")));
+                            }
                         }
 
                         break;
@@ -248,5 +209,3 @@ public class FileReader {
     }
 
 }
-
-

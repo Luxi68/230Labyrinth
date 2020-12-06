@@ -1,5 +1,8 @@
 package controller;
 
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +11,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -27,6 +33,8 @@ import java.util.Scanner;
 public class ProfileSelectionController {
 
     public ListView<String> profileList;
+    public MediaPlayer mediaPlayer1;
+	public Slider volumeSlider;
     @FXML
 	private ResourceBundle resources;
 
@@ -37,6 +45,16 @@ public class ProfileSelectionController {
 	@FXML
 	public void initialize() {
 		displayAllProfiles();
+		backgroundMusic();
+		volumeSlider.setShowTickLabels(true);
+		volumeSlider.setShowTickMarks(true);
+		volumeSlider.setValue(mediaPlayer1.getVolume() * 100);
+		volumeSlider.valueProperty().addListener(new InvalidationListener() {
+			@Override
+			public void invalidated(Observable observable) {
+				mediaPlayer1.setVolume(volumeSlider.getValue() / 100);
+			}
+		});
 	}
 
 	/**
@@ -51,10 +69,14 @@ public class ProfileSelectionController {
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(startScreenScene);
 			window.show();
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch (IOException e) {
 			System.out.println("Error returning to the main screen from profile selection.");
 			e.printStackTrace();
 		}
+		mediaPlayer1.stop();
 	}
 
 	/**
@@ -94,6 +116,10 @@ public class ProfileSelectionController {
 		Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 		window.setScene(createProfileScene);
 		window.show();
+		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+		mediaPlayer.play();
+		mediaPlayer1.stop();
     }
 
 	/**
@@ -109,6 +135,9 @@ public class ProfileSelectionController {
 			String selectedFilename = profileList.getSelectionModel().getSelectedItem() +".txt";
 			String stats = fileToString(selectedFilename);
 			profileInfo.setContentText(stats);
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 			profileInfo.show();
 		} catch(FileNotFoundException e){
 			Alert errorInfo = new Alert(Alert.AlertType.ERROR);
@@ -156,7 +185,16 @@ public class ProfileSelectionController {
 		while (in.hasNextLine()){
 			String currentLine = in.nextLine();
 			String[] splitted = currentLine.split(",");
-			outputText += "Board " + splitted[0] + " Stats: " + System.lineSeparator();
+			switch (splitted[0]){
+				case "1":
+					outputText += "Knossos board Stats: " + System.lineSeparator();
+					break;
+				case "2":
+					outputText += "Marathon board Stats: " + System.lineSeparator();
+					break;
+				case "3":
+					outputText += "Sparta board Stats: " + System.lineSeparator();
+			}
 			outputText += "Games Played: " + splitted[1] + System.lineSeparator();
 			outputText += "Games Won: " + splitted[2] + System.lineSeparator() + System.lineSeparator();
 		}
@@ -170,9 +208,31 @@ public class ProfileSelectionController {
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(leaderboardScene);
 			window.show();
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
 		} catch (IOException e) {
 			System.out.println("Error accessing leaderboard from profile selection");
 			e.printStackTrace();
 		}
+		mediaPlayer1.stop();
+	}
+	public void backgroundMusic(){
+		Media backgroundSound = new Media(new File("resources/sounds/profileSelectionBackground.wav").toURI().toString());
+		mediaPlayer1 = new MediaPlayer(backgroundSound);
+		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
+		mediaPlayer1.setVolume(0.1);
+		mediaPlayer1.setAutoPlay(true);
+	}
+	public void quitGameFromMenu(ActionEvent actionEvent) {
+		Platform.exit();
+	}
+
+	public void openGameInstructions(ActionEvent actionEvent) {
+		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
+		errorInfo.setTitle("Game Instructions");
+		errorInfo.setHeaderText("How to play the game");
+		errorInfo.setContentText("You have not selected a player please do and try again");
+		errorInfo.show();
 	}
 }

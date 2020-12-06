@@ -57,10 +57,10 @@ public class GameScreen extends Application {
 			tempProfiles.add(rhys);
 
 			// Reading the data from file into controller
-			controller.initData(FileReader.readDataFile("resources/levels/placeholder.txt", tempProfiles));
+			controller.initData(FileReader.readDataFile("placeholder.txt", tempProfiles));
 
 			// Display the scene on the stage
-			primaryStage.setTitle("Labyrinth");
+			primaryStage.setTitle("The First Olympian");
 			primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
 			primaryStage.show();
 
