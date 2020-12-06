@@ -266,11 +266,12 @@ public class GameScreenController implements Initializable {
 					Paint colour = tile.getStroke();
 
 					if (actionTrackerMove.getFill() == currPlayer.getColour()) { // If movement turn
-						// Moving backend
+						// Sound effect of footsteps when player moves from one tile to the next
 						Media buttonSound = new Media(new File("resources/sounds/footstep.wav").toURI().toString());
 						MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 						mediaPlayer.play();
 						mediaPlayer.setVolume(1.5);
+						// Moving backend
 						Floor currFloor = currPlayer.getCurrentFloor(gameBoard);
 						Floor movedFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
 						currPlayer.movePlayer(gameBoard, movedFloor);
@@ -332,6 +333,7 @@ public class GameScreenController implements Initializable {
 
 							if (colour == Color.ORANGERED) { // Fire was played
 								int endTurn = turn + (playerRoster.size() * 2);
+								//Sound effect for when a tile is clicked to be on fire
 								Media buttonSound = new Media(new File("resources/sounds/fire.wav").toURI().toString());
 								MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 								mediaPlayer.play();
@@ -354,6 +356,7 @@ public class GameScreenController implements Initializable {
 
 							} else if (colour == Color.LIGHTBLUE) { // Ice was played
 								int endTurn = turn + playerRoster.size();
+								//Sound effect for when a tile is clicked to be on ice
 								Media buttonSound = new Media(new File("resources/sounds/ice.wav").toURI().toString());
 								MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 								mediaPlayer.play();
@@ -437,6 +440,7 @@ public class GameScreenController implements Initializable {
 			try {
 				if (row == 0 || row == boardRows - 1) {
 					axis = "longitude";
+					//Sound effect of when a tile is inserted into the board
 					Media buttonSound = new Media(new File("resources/sounds/wind.wav").toURI().toString());
 					MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 					mediaPlayer.play();
