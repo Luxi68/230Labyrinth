@@ -314,6 +314,7 @@ public class GameScreenController implements Initializable {
 									Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
 									MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 									mediaPlayer.play();
+									mediaPlayer.setVolume(0.5);
 								} catch (Exception e) {
 									gameLog.appendText(e.getMessage());
 								}
@@ -334,6 +335,7 @@ public class GameScreenController implements Initializable {
 								Media buttonSound = new Media(new File("resources/sounds/fire.wav").toURI().toString());
 								MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 								mediaPlayer.play();
+								mediaPlayer.setVolume(0.5);
 
 								for (Floor effected : inflictedTiles) {
 									StackPane tempStack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
