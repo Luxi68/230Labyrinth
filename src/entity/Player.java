@@ -3,7 +3,6 @@ package entity;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -11,8 +10,10 @@ import java.util.ArrayList;
  *
  * @author Nouran, Chris, Junjie.
  */
-public class Player implements Serializable {
+public class Player {
 	private final String NAME;
+	private final Image IMAGE;
+	private final Paint COLOUR;
 	private final Profile PROFILE;
 	private final ArrayList<Action> HAND;
 	private int rowLoc;
@@ -20,7 +21,6 @@ public class Player implements Serializable {
 	private int[] lastPosiRow = new int[3];
 	private int[] lastPosiColumn = new int[3];
 	private boolean backtracked;
-	private String hexColour;
 
 	// TODO - implement backtrack + bool check
 
@@ -28,16 +28,17 @@ public class Player implements Serializable {
 	/**
 	 * Constructor to create new player object
 	 *
-	 * @param hexColour - Image representing the player token
+	 * @param image - Image representing the player token
 	 */
-	public Player(String hexColour, int rowStart, int columnStart, Board board, Profile profile) {
+	public Player(Image image, String hexColour, int rowStart, int columnStart, Profile profile) {
 		this.NAME = profile.getPlayerName();
+		this.IMAGE = image;
+		this.COLOUR = Paint.valueOf(hexColour);
 		this.HAND = new ArrayList<>();
 		this.rowLoc = rowStart;
 		this.columnLoc = columnStart;
 		this.PROFILE = profile;
 		this.backtracked = false;
-		this.hexColour = hexColour;
 	}
 
 
@@ -56,21 +57,7 @@ public class Player implements Serializable {
 	 * @return - This player's image
 	 */
 	public Image getImage() {
-		Image img;
-		switch(hexColour) {
-			case "#b53232":
-				img = new Image("/assets/aries.png");
-				break;
-			case "#c677b3":
-				img = new Image("/assets/aphrodite.png");
-				break;
-			case "#55b54c":
-				img = new Image("/assets/apollo.png");
-				break;
-			default:
-				img = new Image("/assets/artemis.png");
-		}
-		return img;
+		return IMAGE;
 	}
 
 	/**
@@ -79,7 +66,7 @@ public class Player implements Serializable {
 	 * @return - The colour as a paint value
 	 */
 	public Paint getColour() {
-		return Paint.valueOf(hexColour);
+		return COLOUR;
 	}
 
 	/**
@@ -111,8 +98,8 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * @param board the board where we are looking
-	 * @return the co ords of the player on the board
+	 * @param board
+	 * @return
 	 */
 	public Floor getCurrentFloor(Board board) {
 		return board.getTileAt(this.rowLoc, this.columnLoc);
@@ -120,7 +107,7 @@ public class Player implements Serializable {
 
 	/**
 	 *
-	 * @return whether the player has been backtracked or not
+	 * @return
 	 */
 	public boolean isBacktracked() {
 		return backtracked;
