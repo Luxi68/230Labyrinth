@@ -18,7 +18,6 @@ public class Player {
 	private final ArrayList<Action> HAND;
 	private int rowLoc;
 	private int columnLoc;
-	private boolean isGoal;
 	private int[] lastPosiRow = new int[3];
 	private int[] lastPosiColumn = new int[3];
 	private boolean backtracked;
@@ -31,7 +30,7 @@ public class Player {
 	 *
 	 * @param image - Image representing the player token
 	 */
-	public Player(Image image, String hexColour, int rowStart, int columnStart, Board board, Profile profile) {
+	public Player(Image image, String hexColour, int rowStart, int columnStart, Profile profile) {
 		this.NAME = profile.getPlayerName();
 		this.IMAGE = image;
 		this.COLOUR = Paint.valueOf(hexColour);

@@ -4,6 +4,7 @@ import entity.Profile;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -61,6 +62,7 @@ public class GameScreen extends Application {
 
 			// Display the scene on the stage
 			primaryStage.setTitle("The First Olympian");
+			primaryStage.getIcons().add(new Image("assets/olympian.png"));
 			primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
 			primaryStage.show();
 
