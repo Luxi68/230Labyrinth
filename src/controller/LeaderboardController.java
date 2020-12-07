@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 import entity.Leaderboard;
 import entity.Profile;
@@ -187,7 +188,14 @@ public class LeaderboardController {
      * to play the game.
      * @param actionEvent - the action of selecting the option in the menu bar.
      */
-    public void openGameInstructions(ActionEvent actionEvent) {
+    public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
+        File instructions = new File("src/Instructions.txt");
+        String outputText = "";
+        Scanner in;
+        in = new Scanner(instructions);
+        while (in.hasNextLine()){
+            outputText += in.nextLine() + System.lineSeparator();
+        }
         Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
         errorInfo.setTitle("Game Instructions");
         errorInfo.setHeaderText("How to play the game");

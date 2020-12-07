@@ -249,7 +249,14 @@ public class ProfileSelectionController {
 	 * to play the game.
 	 * @param actionEvent - the action of selecting the option in the menu bar.
 	 */
-	public void openGameInstructions(ActionEvent actionEvent) {
+	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
+		File instructions = new File("src/Instructions.txt");
+		String outputText = "";
+		Scanner in;
+		in = new Scanner(instructions);
+		while (in.hasNextLine()){
+			outputText += in.nextLine() + System.lineSeparator();
+		}
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Instructions");
 		errorInfo.setHeaderText("How to play the game");

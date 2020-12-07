@@ -18,11 +18,13 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import service.Motd;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 /**
  * StartScreenController.java
@@ -154,11 +156,18 @@ public class StartScreenController {
 	 * to play the game.
 	 * @param actionEvent - the action of selecting the option in the menu bar.
 	 */
-	public void openGameInstructions(ActionEvent actionEvent) {
+	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
+		File instructions = new File("src/Instructions.txt");
+		String outputText = "";
+		Scanner in;
+		in = new Scanner(instructions);
+		while (in.hasNextLine()){
+			outputText += in.nextLine() + System.lineSeparator();
+		}
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Instructions");
 		errorInfo.setHeaderText("How to play the game");
-		errorInfo.setContentText("You have not selected a player please do and try again");
+		errorInfo.setContentText(outputText);
 		errorInfo.show();
 	}
 }

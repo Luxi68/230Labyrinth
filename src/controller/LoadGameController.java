@@ -19,6 +19,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -153,7 +154,14 @@ public class LoadGameController {
 	 * to play the game.
 	 * @param actionEvent - the action of selecting the option in the menu bar.
 	 */
-	public void openGameInstructions(ActionEvent actionEvent) {
+	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
+		File instructions = new File("src/Instructions.txt");
+		String outputText = "";
+		Scanner in;
+		in = new Scanner(instructions);
+		while (in.hasNextLine()){
+			outputText += in.nextLine() + System.lineSeparator();
+		}
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Instructions");
 		errorInfo.setHeaderText("How to play the game");
