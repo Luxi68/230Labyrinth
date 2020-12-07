@@ -28,6 +28,8 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -54,6 +56,7 @@ public class GameScreenController implements Initializable {
 	ArrayList<Integer> rowNoFixed;
 	ArrayList<Integer> columnNoFixed;
 	// Game components
+	public int boardNum;
 	private Board gameBoard;
 	private SilkBag silkBag;
 	private Tile silkBagTile;
@@ -62,6 +65,7 @@ public class GameScreenController implements Initializable {
 	private Action actionToUse;
 	// Game info
 	private int turn;
+	private Player playerWon;
 	private ArrayList<Floor> playerMoves;
 	private int boardRows; // Board height + 2 for arrow buttons
 	private int boardColumns; // Board length + 2 for arrow buttons
@@ -1273,6 +1277,70 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Button that quits the game when pressed
 	 */
+	public void updateProfiles() throws IOException {
+		Profile currentPlayer = new Profile("");
+		ArrayList<String> updatedFileContent = new ArrayList<>();
+		Scanner in;
+		for(int i=0; i<playerRoster.size(); i++){
+			File currentProfileFile = new File("resources/users/"+playerRoster.get(i).getName()+".txt");
+			FileWriter wr = new FileWriter(currentProfileFile);
+			in = new Scanner(currentProfileFile);
+			while(in.hasNextLine()){
+				String currentLine = in.nextLine();
+				updatedFileContent.add(currentLine);
+			}
+			switch (boardNum){
+				case 1:
+					String knossosData = updatedFileContent.get(1);
+					String[] knossosSplitted = knossosData.split(",");
+					if(playerRoster.get(i)==playerWon){
+						knossosSplitted[1] += 1;
+						knossosSplitted[2] += 1;
+					}else{
+						knossosSplitted[2] += 1;
+					}
+					String knossosLineToBeWritten = String.join(",",knossosSplitted);
+					updatedFileContent.set(1,knossosLineToBeWritten);
+					for (String s : updatedFileContent) {
+						wr.write(s);
+						wr.write(System.lineSeparator());
+					}
+					break;
+				case 2:
+					String marathonData= updatedFileContent.get(2);
+					String[] marathonSplitted = marathonData.split(",");
+					if(playerRoster.get(i)==playerWon){
+						marathonSplitted[1] += 1;
+						marathonSplitted[2] += 1;
+					}else{
+						marathonSplitted[2] += 1;
+					}
+					String marathonLineToBeWritten = String.join(",",marathonSplitted);
+					updatedFileContent.set(1,marathonLineToBeWritten);
+					for (String s : updatedFileContent) {
+						wr.write(s);
+						wr.write(System.lineSeparator());
+					}
+					break;
+				case 3:
+					String spartaData= updatedFileContent.get(3);
+					String[] spartaSplitted = spartaData.split(",");
+					if(playerRoster.get(i)==playerWon){
+						spartaSplitted[1] += 1;
+						spartaSplitted[2] += 1;
+					}else{
+						spartaSplitted[2] += 1;
+					}
+					String spartaLineToBeWritten = String.join(",",spartaSplitted);
+					updatedFileContent.set(1,spartaLineToBeWritten);
+					for (String s : updatedFileContent) {
+						wr.write(s);
+						wr.write(System.lineSeparator());
+					}
+					break;
+			}
+		}
+	}
 	@FXML
 	private void quitGameFromMenuButton() {
 		Platform.exit();
