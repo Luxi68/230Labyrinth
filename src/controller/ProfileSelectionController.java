@@ -42,6 +42,10 @@ public class ProfileSelectionController {
 	private URL location;
 
 
+	/**
+	 * This method is called everytime the class is initialised. It executes the backgroundMusic method
+	 * which starts the background music and it also sets up the volume control slider.
+	 */
 	@FXML
 	public void initialize() {
 		displayAllProfiles();
@@ -200,7 +204,10 @@ public class ProfileSelectionController {
 		}
 		return outputText;
 	}
-
+	/**
+	 * This method loads the leaderboard scene and plays a sound effect when the button is clicked
+	 * @param actionEvent - the action of clicking the button.
+	 */
 	public void goToLeaderboard(ActionEvent actionEvent) {
 		try {
 			Parent leaderboardParent = FXMLLoader.load(getClass().getResource("/scene/Leaderboard.fxml"));
@@ -217,6 +224,11 @@ public class ProfileSelectionController {
 		}
 		mediaPlayer1.stop();
 	}
+	/**
+	 * This method created a new media object and then passes it to a predefined mediaPlayer object.
+	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
+	 * until the users leaves the page.
+	 */
 	public void backgroundMusic(){
 		Media backgroundSound = new Media(new File("resources/sounds/profileSelectionBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
@@ -224,10 +236,19 @@ public class ProfileSelectionController {
 		mediaPlayer1.setVolume(0.1);
 		mediaPlayer1.setAutoPlay(true);
 	}
+	/**
+	 * This method quits the application on action. This is used for the menu bar under file
+	 * @param actionEvent - the action of selecting the option in the menubar
+	 */
 	public void quitGameFromMenu(ActionEvent actionEvent) {
 		Platform.exit();
 	}
 
+	/**
+	 * This method opens an information alert which contains the essential game information to know in order
+	 * to play the game.
+	 * @param actionEvent - the action of selecting the option in the menu bar.
+	 */
 	public void openGameInstructions(ActionEvent actionEvent) {
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Instructions");

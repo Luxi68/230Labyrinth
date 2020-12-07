@@ -153,6 +153,7 @@ public class GameScreenController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		Platform.runLater(() -> {
 			setupBoard(gameBoard);
+			borderPane.setStyle("-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");
 			setupPlayerTokens();
 			currPlayerFireImg.setImage(new Image("/assets/fire.png"));
 			currPlayerIceImg.setImage(new Image("/assets/ice.png"));
@@ -321,11 +322,11 @@ public class GameScreenController implements Initializable {
 								try {
 									setPlayerImg(null,
 											victim.getRowLoc() + 1, victim.getColumnLoc() + 1);
-									System.out.println((victim.getRowLoc() + 1) + "," + (victim.getColumnLoc() + 1));
+//									System.out.println((victim.getRowLoc() + 1) + "," + (victim.getColumnLoc() + 1)); TODO - print
 									victim.backtrack(gameBoard);
 									setPlayerImg(victim.getImage(),
 											victim.getRowLoc() + 1, victim.getColumnLoc() + 1);
-									System.out.println((victim.getRowLoc() + 1) + "," + (victim.getColumnLoc() + 1));
+//									System.out.println((victim.getRowLoc() + 1) + "," + (victim.getColumnLoc() + 1));
 									gameLog.appendText(victim.getName() + " was forcibly moved back in time.\n");
 									Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
 									MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);

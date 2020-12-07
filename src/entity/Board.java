@@ -69,26 +69,6 @@ public class Board {
         insert.updateCoords(row, column);
         insert.setIsOnBoard(true);
     }
-	/*
-	 * insertFloor inserts a Floor tile to the board and shifts relevant tiles
-	 * @param insert The Floor tile that needs to be inserted
-	 * @param The y coordinate of the row we need to insert the tile into
-	 
-	public void insertFloor(Floor insert, int x, int y, button?) {
-		//change it to switch statement!!
-		if (button says insert from left) {
-			insertFromLeft(insert, x, y);
-		} else if (button says insert from right) {
-			insertFromRight(insert, x, y);
-		} else if (button says insert from top) {
-			insertFromTop(insert, x, y);
-		} else if (button says insert from botom) {
-			insertFromBottom(insert, x, y);
-		}
-			
-	}*/
-
-
     /**
      * insertFromTop inserts a Floor tile to the board and shifts relevant tiles from the top of the board
      * @param insert The Floor tile that needs to be inserted
@@ -243,109 +223,6 @@ public class Board {
                 }
             }
         }
-
-        /*
-         Floor[] affectedTiles = null;
-        String errorMsg = "Inflicted tile is not on the board. Please choose another floor tile\n";
-
-        if (inflictedTile.getRow() == 0) {
-            if (inflictedTile.getColumn() == 0) {
-                // Top Left
-                affectedTiles = new Floor[4];
-                affectedTiles[0] = BOARD[0][0];
-                affectedTiles[1] = BOARD[1][0];
-                affectedTiles[2] = BOARD[0][1];
-                affectedTiles[3] = BOARD[1][1];
-
-            } else if (inflictedTile.getColumn() == LENGTH - 1) {
-                // Top Right
-                affectedTiles = new Floor[4];
-                affectedTiles[0] = BOARD[0][LENGTH - 1];
-                affectedTiles[1] = BOARD[0][LENGTH - 2];
-                affectedTiles[2] = BOARD[1][LENGTH - 1];
-                affectedTiles[3] = BOARD[1][LENGTH - 2];
-
-            } else if (inflictedTile.getColumn() > 0 && inflictedTile.getColumn() < LENGTH - 1) {
-                // Top Row
-                affectedTiles = new Floor[6];
-                affectedTiles[0] = BOARD[0][inflictedTile.getColumn()];
-                affectedTiles[1] = BOARD[0][inflictedTile.getColumn() + 1];
-                affectedTiles[2] = BOARD[0][inflictedTile.getColumn() - 1];
-                affectedTiles[3] = BOARD[1][inflictedTile.getColumn()];
-                affectedTiles[4] = BOARD[1][inflictedTile.getColumn() + 1];
-                affectedTiles[5] = BOARD[1][inflictedTile.getColumn() - 1];
-            } else {
-                throw new IndexOutOfBoundsException(errorMsg);
-            }
-        } else if (inflictedTile.getRow() == HEIGHT - 1) {
-            if (inflictedTile.getColumn() == 0) {
-                // Bottom Left
-                affectedTiles = new Floor[4];
-                affectedTiles[0] = BOARD[HEIGHT - 1][0];
-                affectedTiles[1] = BOARD[HEIGHT - 2][0];
-                affectedTiles[2] = BOARD[HEIGHT - 1][1];
-                affectedTiles[3] = BOARD[HEIGHT - 2][1];
-
-            } else if (inflictedTile.getColumn() == LENGTH - 1) {
-                // Bottom Right
-                affectedTiles = new Floor[4];
-                affectedTiles[0] = BOARD[HEIGHT - 1][LENGTH - 1];
-                affectedTiles[1] = BOARD[HEIGHT - 2][LENGTH - 1];
-                affectedTiles[2] = BOARD[HEIGHT - 1][LENGTH - 2];
-                affectedTiles[3] = BOARD[HEIGHT - 2][LENGTH - 2];
-
-            } else if (inflictedTile.getColumn() > 0 && inflictedTile.getColumn() < LENGTH - 1) {
-                // Bottom Row
-                affectedTiles = new Floor[6];
-                affectedTiles[0] = BOARD[HEIGHT - 1][inflictedTile.getColumn()];
-                affectedTiles[1] = BOARD[HEIGHT - 1][inflictedTile.getColumn() + 1];
-                affectedTiles[2] = BOARD[HEIGHT - 1][inflictedTile.getColumn() - 1];
-                affectedTiles[3] = BOARD[HEIGHT - 2][inflictedTile.getColumn()];
-                affectedTiles[4] = BOARD[HEIGHT - 2][inflictedTile.getColumn() + 1];
-                affectedTiles[5] = BOARD[HEIGHT - 2][inflictedTile.getColumn() - 1];
-            } else {
-                throw new IndexOutOfBoundsException(errorMsg);
-            }
-        } else if (inflictedTile.getRow() > 0 && inflictedTile.getRow() < HEIGHT - 1) {
-            if (inflictedTile.getColumn() == 0) {
-                // Left Column
-                affectedTiles = new Floor[6];
-                affectedTiles[0] = BOARD[inflictedTile.getRow()][0];
-                affectedTiles[1] = BOARD[inflictedTile.getRow() + 1][0];
-                affectedTiles[2] = BOARD[inflictedTile.getRow() - 1][0];
-                affectedTiles[3] = BOARD[inflictedTile.getRow()][1];
-                affectedTiles[3] = BOARD[inflictedTile.getRow() + 1][1];
-                affectedTiles[3] = BOARD[inflictedTile.getRow() - 1][1];
-
-            } else if (inflictedTile.getColumn() == LENGTH - 1) {
-                // Right Column
-                affectedTiles = new Floor[6];
-                affectedTiles[0] = BOARD[inflictedTile.getRow()][LENGTH - 1];
-                affectedTiles[1] = BOARD[inflictedTile.getRow() + 1][LENGTH - 1];
-                affectedTiles[2] = BOARD[inflictedTile.getRow() - 1][LENGTH - 1];
-                affectedTiles[3] = BOARD[inflictedTile.getRow()][LENGTH - 2];
-                affectedTiles[3] = BOARD[inflictedTile.getRow() + 1][LENGTH - 2];
-                affectedTiles[3] = BOARD[inflictedTile.getRow() - 1][LENGTH - 2];
-
-            } else if (inflictedTile.getColumn() > 0 && inflictedTile.getColumn() < LENGTH - 1) {
-                // Centre (all 3x3 square is affected)
-                affectedTiles = new Floor[9];
-                affectedTiles[0] = BOARD[inflictedTile.getRow()][inflictedTile.getColumn()];
-                affectedTiles[1] = BOARD[inflictedTile.getRow()][inflictedTile.getColumn() + 1];
-                affectedTiles[2] = BOARD[inflictedTile.getRow()][inflictedTile.getColumn() - 1];
-                affectedTiles[3] = BOARD[inflictedTile.getRow() + 1][inflictedTile.getColumn()];
-                affectedTiles[4] = BOARD[inflictedTile.getRow() + 1][inflictedTile.getColumn() + 1];
-                affectedTiles[5] = BOARD[inflictedTile.getRow() + 1][inflictedTile.getColumn() - 1];
-                affectedTiles[5] = BOARD[inflictedTile.getRow() - 1][inflictedTile.getColumn()];
-                affectedTiles[5] = BOARD[inflictedTile.getRow() - 1][inflictedTile.getColumn() + 1];
-                affectedTiles[5] = BOARD[inflictedTile.getRow() - 1][inflictedTile.getColumn() - 1];
-            } else {
-                throw new IndexOutOfBoundsException(errorMsg);
-            }
-        } else {
-            throw new IndexOutOfBoundsException(errorMsg);
-        }
-        */
         return affectedTilesR;
     }
 }
