@@ -17,5 +17,5 @@ b,straight,10
 b,tee,10
 b,fire,5
 b,ice,5
-b,doubleMove,20
+b,doubleMove,5
 b,backTrack,5
