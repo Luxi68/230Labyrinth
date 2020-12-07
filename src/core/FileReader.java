@@ -86,15 +86,15 @@ public class FileReader {
                                 break;
                             case 3:
                                 img = new Image("/assets/apollo.png");
-                                hex = "#55b54c";
+                                hex = "#fdd14b";
                                 break;
                             case 4:
                                 img = new Image("/assets/artemis.png");
-                                hex = "#fdd14b";
+                                hex = "#55b54c";
                                 break;
                         }
                         if (a.size() > pn - 1) {
-                            players.add(new Player(hex, pColumns, pRows,gBoard, a.get(pn - 1)));
+                            players.add(new Player(img, hex, pColumns, pRows, a.get(pn - 1)));
                         }
                         break;
                 }
