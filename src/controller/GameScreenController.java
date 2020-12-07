@@ -1257,6 +1257,7 @@ public class GameScreenController implements Initializable {
 				Media buttonSound = new Media(new File("resources/sounds/nope.wav").toURI().toString());
 				MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 				mediaPlayer.play();
+				mediaPlayer.setVolume(3);
 
 			} else {
 				borderPane.setEffect(null);
