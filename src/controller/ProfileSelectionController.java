@@ -27,15 +27,16 @@ import java.util.Scanner;
 /**
  * ProfileSelectionController.java
  * This class is the controller for the profileSelection.fxml file
+ *
  * @author Alberto Ortenzi
  */
 
 public class ProfileSelectionController {
 
-    public ListView<String> profileList;
-    public MediaPlayer mediaPlayer1;
+	public ListView<String> profileList;
+	public MediaPlayer mediaPlayer1;
 	public Slider volumeSlider;
-    @FXML
+	@FXML
 	private ResourceBundle resources;
 
 	@FXML
@@ -63,12 +64,14 @@ public class ProfileSelectionController {
 
 	/**
 	 * This method on the button click goes back to the startScreen loading the scene
+	 *
 	 * @param actionEvent - event of button click
 	 */
 	@FXML
 	private void backToStartScreen(ActionEvent actionEvent) {
 		try {
 			Parent startScreenParent = FXMLLoader.load(getClass().getResource("/scene/StartScreen.fxml"));
+			startScreenParent.setStyle("-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");
 			Scene startScreenScene = new Scene(startScreenParent);
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(startScreenScene);
@@ -87,15 +90,16 @@ public class ProfileSelectionController {
 	 * This method takes the results of the getAllProfiles method and iterates through it displaying all
 	 * available profiles and adds them to the listview. It also removes the .txt file extension
 	 */
-	private void displayAllProfiles(){
-		for(int i=0; i<getAllProfiles().size(); i++){
+	private void displayAllProfiles() {
+		for (int i = 0; i < getAllProfiles().size(); i++) {
 			String currentProfile = getAllProfiles().get(i);
-			profileList.getItems().add(currentProfile.substring(0, currentProfile.length()-4));
+			profileList.getItems().add(currentProfile.substring(0, currentProfile.length() - 4));
 		}
 	}
 
 	/**
 	 * This method reads all the files in the folder resources/users and adds their filenames to an arraylist
+	 *
 	 * @return - the arraylist of filenames
 	 */
 	public ArrayList<String> getAllProfiles() {
@@ -111,10 +115,11 @@ public class ProfileSelectionController {
 
 	/**
 	 * This method on button click loads the createprofile.fxml scene
+	 *
 	 * @param actionEvent - the button click
 	 * @throws IOException - in case the file doesn't exist
 	 */
-    public void goToCreateProfile(ActionEvent actionEvent) throws IOException {
+	public void goToCreateProfile(ActionEvent actionEvent) throws IOException {
 		Parent createProfileParent = FXMLLoader.load(getClass().getResource("/scene/CreateProfile.fxml"));
 		Scene createProfileScene = new Scene(createProfileParent);
 		Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -124,26 +129,27 @@ public class ProfileSelectionController {
 		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 		mediaPlayer.play();
 		mediaPlayer1.stop();
-    }
+	}
 
 	/**
 	 * This method on button click opens an alert either displaying the selected profile info or opens
 	 * an error window saying that there has been an error
+	 *
 	 * @param actionEvent - The button click
 	 */
-	public void viewProfileInformation(ActionEvent actionEvent)  {
+	public void viewProfileInformation(ActionEvent actionEvent) {
 		try {
 			Alert profileInfo = new Alert(Alert.AlertType.INFORMATION);
 			profileInfo.setTitle("Profile Information");
 			profileInfo.setHeaderText("Profile Information");
-			String selectedFilename = profileList.getSelectionModel().getSelectedItem() +".txt";
+			String selectedFilename = profileList.getSelectionModel().getSelectedItem() + ".txt";
 			String stats = fileToString(selectedFilename);
 			profileInfo.setContentText(stats);
 			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
 			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 			mediaPlayer.play();
 			profileInfo.show();
-		} catch(FileNotFoundException e){
+		} catch (FileNotFoundException e) {
 			Alert errorInfo = new Alert(Alert.AlertType.ERROR);
 			errorInfo.setTitle("Error");
 			errorInfo.setHeaderText("Please Select a Player !");
@@ -151,17 +157,18 @@ public class ProfileSelectionController {
 			errorInfo.show();
 		}
 
-    }
+	}
 
 	/**
 	 * This method on button deletes the selected file or opens an error window
 	 * saying that there has been an error
+	 *
 	 * @param actionEvent - the button click
 	 */
-	public void deleteFile(ActionEvent actionEvent){
+	public void deleteFile(ActionEvent actionEvent) {
 		String filename = profileList.getSelectionModel().getSelectedItem() + ".txt";
 		File fileToBeDeleted = new File("resources/users/" + filename);
-		if (fileToBeDeleted.delete()){
+		if (fileToBeDeleted.delete()) {
 			profileList.getItems().clear();
 			displayAllProfiles();
 		} else {
@@ -176,20 +183,21 @@ public class ProfileSelectionController {
 	/**
 	 * This method takes in a filename and converts the contents to a string so that it can be outputted
 	 * in future methods
+	 *
 	 * @param filename - the file to be converted to string
 	 * @return outputText - the string containing the file info
 	 * @throws FileNotFoundException - if the file doesn't exist but it will always
 	 */
 	public String fileToString(String filename) throws FileNotFoundException {
-		File selectedFile = new File("resources/users/"+filename);
+		File selectedFile = new File("resources/users/" + filename);
 		String outputText;
 		Scanner in = null;
 		in = new Scanner(selectedFile);
 		outputText = "Profile Name: " + in.nextLine() + System.lineSeparator() + System.lineSeparator();
-		while (in.hasNextLine()){
+		while (in.hasNextLine()) {
 			String currentLine = in.nextLine();
 			String[] splitted = currentLine.split(",");
-			switch (splitted[0]){
+			switch (splitted[0]) {
 				case "1":
 					outputText += "Knossos board Stats: " + System.lineSeparator();
 					break;
@@ -204,13 +212,16 @@ public class ProfileSelectionController {
 		}
 		return outputText;
 	}
+
 	/**
 	 * This method loads the leaderboard scene and plays a sound effect when the button is clicked
+	 *
 	 * @param actionEvent - the action of clicking the button.
 	 */
 	public void goToLeaderboard(ActionEvent actionEvent) {
 		try {
 			Parent leaderboardParent = FXMLLoader.load(getClass().getResource("/scene/Leaderboard.fxml"));
+			leaderboardParent.setStyle("-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");
 			Scene leaderboardScene = new Scene(leaderboardParent);
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(leaderboardScene);
@@ -224,20 +235,23 @@ public class ProfileSelectionController {
 		}
 		mediaPlayer1.stop();
 	}
+
 	/**
 	 * This method created a new media object and then passes it to a predefined mediaPlayer object.
 	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
 	 * until the users leaves the page.
 	 */
-	public void backgroundMusic(){
+	public void backgroundMusic() {
 		Media backgroundSound = new Media(new File("resources/sounds/profileSelectionBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
 		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
 		mediaPlayer1.setVolume(0.1);
 		mediaPlayer1.setAutoPlay(true);
 	}
+
 	/**
 	 * This method quits the application on action. This is used for the menu bar under file
+	 *
 	 * @param actionEvent - the action of selecting the option in the menubar
 	 */
 	public void quitGameFromMenu(ActionEvent actionEvent) {
@@ -247,6 +261,7 @@ public class ProfileSelectionController {
 	/**
 	 * This method opens an information alert which contains the essential game information to know in order
 	 * to play the game.
+	 *
 	 * @param actionEvent - the action of selecting the option in the menu bar.
 	 */
 	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
@@ -254,7 +269,7 @@ public class ProfileSelectionController {
 		String outputText = "";
 		Scanner in;
 		in = new Scanner(instructions);
-		while (in.hasNextLine()){
+		while (in.hasNextLine()) {
 			outputText += in.nextLine() + System.lineSeparator();
 		}
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);

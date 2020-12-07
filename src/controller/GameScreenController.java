@@ -3,9 +3,11 @@ package controller;
 import entity.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.GaussianBlur;
@@ -199,7 +201,7 @@ public class GameScreenController implements Initializable {
 	public void initData(ArrayList<Object> data) {
 		gameBoard = (Board) data.get(0);
 		silkBag = (SilkBag) data.get(1);
-		boardNum = (Integer) data.get(5);
+		boardNum = (int) data.get(5);
 
 		// There are coming from file reader so i'm 100% sure on the contents of data
 		@SuppressWarnings("unchecked")
@@ -845,15 +847,20 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Method that runs when the game ends. Will announce the winner and exit from the game
 	 */
-	private void endGame() throws IOException { // TODO - flesh out
+	private void endGame(){ // TODO - flesh out
 		playerWon = currPlayer;
-		//updateProfiles();
+		try {
+			updateProfiles();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Over");
 		errorInfo.setHeaderText("GAME WON!!!");
 		errorInfo.setContentText(playerWon.getName() + " wins!!\nThank you for playing!!\n");
 		errorInfo.show();
 
+		returnToMain();
 	}
 
 	/**
@@ -1127,7 +1134,7 @@ public class GameScreenController implements Initializable {
 	 * Button that will wraps up the current players turn and start the next player's turn
 	 */
 	@FXML
-	private void endTurnClick() throws IOException {
+	private void endTurnClick() {
 		if (currPlayer.getCurrentFloor(gameBoard).getIsGoal()) {
 			endGame();
 			playSoundEffect("yay", 0.8);
@@ -1195,6 +1202,27 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
+	 * Button to return to the main menu
+	 */
+	@FXML
+	private void returnToMain() {
+		try {
+			URL url = getClass().getResource("/scene/StartScreen.fxml");
+			FXMLLoader loader = new FXMLLoader(url);
+			Parent startScreenParent = loader.load();
+			startScreenParent.setStyle("-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");
+			Stage startScreenScene = (Stage) endTurnButton.getScene().getWindow();
+			startScreenScene.setTitle("The First Olympian");
+			startScreenScene.setScene(new Scene(startScreenParent, 640, 371));
+			startScreenScene.show();
+		} catch (IOException e) {
+			System.out.println("Error starting the Game Screen from new game screen.");
+			e.printStackTrace();
+		}
+		mediaPlayer1.stop();
+	}
+
+	/**
 	 * Button that quits the game when pressed
 	 */
 	@FXML
@@ -1241,12 +1269,18 @@ public class GameScreenController implements Initializable {
 			popupStage.hide();
 		});
 	}
-	/*
+
+	/**
+	 * Updates the profile statistics
+	 *
+	 * @throws IOException - If improper data has been added
+	 */
 	public void updateProfiles() throws IOException {
 		ArrayList<String> updatedFileContent = new ArrayList<>();
 		Scanner in;
 		for(int i=0; i<playerRoster.size(); i++){
 			File currentProfileFile = new File("resources/users/"+playerRoster.get(i).getName()+".txt");
+			FileWriter wr = new FileWriter(currentProfileFile);
 			in = new Scanner(currentProfileFile);
 			while(in.hasNextLine()){
 				String currentLine = in.nextLine();
@@ -1257,21 +1291,20 @@ public class GameScreenController implements Initializable {
 					String knossosData = updatedFileContent.get(1);
 					String[] knossosSplitted = knossosData.split(",");
 					if(playerRoster.get(i)==playerWon){
-						knossosSplitted[1] = Integer.toString(Integer.parseInt(knossosSplitted[1]) + 1);
-						knossosSplitted[2] = Integer.toString(Integer.parseInt(knossosSplitted[2]) + 1);
+						knossosSplitted[1] += 1;
+						knossosSplitted[2] += 1;
 					}else{
-						knossosSplitted[2] = Integer.toString(Integer.parseInt(knossosSplitted[2]) + 1);
+						knossosSplitted[2] += 1;
 					}
 					String knossosLineToBeWritten = String.join(",",knossosSplitted);
 					updatedFileContent.set(1,knossosLineToBeWritten);
 					for (String s : updatedFileContent) {
-						FileWriter wr = new FileWriter(currentProfileFile, false);
 						wr.write(s);
 						wr.write(System.lineSeparator());
 					}
 					break;
 				case 2:
-					String marathonData = updatedFileContent.get(2);
+					String marathonData= updatedFileContent.get(2);
 					String[] marathonSplitted = marathonData.split(",");
 					if(playerRoster.get(i)==playerWon){
 						marathonSplitted[1] += 1;
@@ -1280,9 +1313,8 @@ public class GameScreenController implements Initializable {
 						marathonSplitted[2] += 1;
 					}
 					String marathonLineToBeWritten = String.join(",",marathonSplitted);
-					updatedFileContent.set(2,marathonLineToBeWritten);
+					updatedFileContent.set(1,marathonLineToBeWritten);
 					for (String s : updatedFileContent) {
-						FileWriter wr = new FileWriter(currentProfileFile, false);
 						wr.write(s);
 						wr.write(System.lineSeparator());
 					}
@@ -1291,21 +1323,19 @@ public class GameScreenController implements Initializable {
 					String spartaData= updatedFileContent.get(3);
 					String[] spartaSplitted = spartaData.split(",");
 					if(playerRoster.get(i)==playerWon){
-						spartaSplitted[1] = Integer.toString(Integer.parseInt(spartaSplitted[1]) + 1);
-						spartaSplitted[2] = Integer.toString(Integer.parseInt(spartaSplitted[2]) + 1);
+						spartaSplitted[1] += 1;
+						spartaSplitted[2] += 1;
 					}else{
-						spartaSplitted[2] = Integer.toString(Integer.parseInt(spartaSplitted[2]) + 1);
+						spartaSplitted[2] += 1;
 					}
 					String spartaLineToBeWritten = String.join(",",spartaSplitted);
-					updatedFileContent.set(3,spartaLineToBeWritten);
+					updatedFileContent.set(1,spartaLineToBeWritten);
 					for (String s : updatedFileContent) {
-						FileWriter wr = new FileWriter(currentProfileFile, false);
-						wr.write("joe");
+						wr.write(s);
 						wr.write(System.lineSeparator());
 					}
 					break;
 			}
 		}
 	}
-	 */
 }
