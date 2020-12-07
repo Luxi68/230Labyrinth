@@ -26,6 +26,8 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -843,8 +845,9 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Method that runs when the game ends. Will announce the winner and exit from the game
 	 */
-	private void endGame() { // TODO - flesh out
+	private void endGame() throws IOException { // TODO - flesh out
 		playerWon = currPlayer;
+		updateProfiles();
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Over");
 		errorInfo.setHeaderText("GAME WON!!!");
@@ -1124,7 +1127,7 @@ public class GameScreenController implements Initializable {
 	 * Button that will wraps up the current players turn and start the next player's turn
 	 */
 	@FXML
-	private void endTurnClick() {
+	private void endTurnClick() throws IOException {
 		if (currPlayer.getCurrentFloor(gameBoard).getIsGoal()) {
 			endGame();
 			playSoundEffect("yay", 0.8);
@@ -1237,5 +1240,68 @@ public class GameScreenController implements Initializable {
 			borderPane.setEffect(null);
 			popupStage.hide();
 		});
+	}
+	public void updateProfiles() throws IOException {
+		ArrayList<String> updatedFileContent = new ArrayList<>();
+		Scanner in;
+		for(int i=0; i<playerRoster.size(); i++){
+			File currentProfileFile = new File("resources/users/"+playerRoster.get(i).getName()+".txt");
+			FileWriter wr = new FileWriter(currentProfileFile);
+			in = new Scanner(currentProfileFile);
+			while(in.hasNextLine()){
+				String currentLine = in.nextLine();
+				updatedFileContent.add(currentLine);
+			}
+			switch (boardNum){
+				case 1:
+					String knossosData = updatedFileContent.get(1);
+					String[] knossosSplitted = knossosData.split(",");
+					if(playerRoster.get(i)==playerWon){
+						knossosSplitted[1] += 1;
+						knossosSplitted[2] += 1;
+					}else{
+						knossosSplitted[2] += 1;
+					}
+					String knossosLineToBeWritten = String.join(",",knossosSplitted);
+					updatedFileContent.set(1,knossosLineToBeWritten);
+					for (String s : updatedFileContent) {
+						wr.write(s);
+						wr.write(System.lineSeparator());
+					}
+					break;
+				case 2:
+					String marathonData= updatedFileContent.get(2);
+					String[] marathonSplitted = marathonData.split(",");
+					if(playerRoster.get(i)==playerWon){
+						marathonSplitted[1] += 1;
+						marathonSplitted[2] += 1;
+					}else{
+						marathonSplitted[2] += 1;
+					}
+					String marathonLineToBeWritten = String.join(",",marathonSplitted);
+					updatedFileContent.set(1,marathonLineToBeWritten);
+					for (String s : updatedFileContent) {
+						wr.write(s);
+						wr.write(System.lineSeparator());
+					}
+					break;
+				case 3:
+					String spartaData= updatedFileContent.get(3);
+					String[] spartaSplitted = spartaData.split(",");
+					if(playerRoster.get(i)==playerWon){
+						spartaSplitted[1] += 1;
+						spartaSplitted[2] += 1;
+					}else{
+						spartaSplitted[2] += 1;
+					}
+					String spartaLineToBeWritten = String.join(",",spartaSplitted);
+					updatedFileContent.set(1,spartaLineToBeWritten);
+					for (String s : updatedFileContent) {
+						wr.write(s);
+						wr.write(System.lineSeparator());
+					}
+					break;
+			}
+		}
 	}
 }
