@@ -1,7 +1,6 @@
 package controller;
 
 import entity.*;
-import entity.Action;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -24,7 +23,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -453,158 +451,152 @@ public class GameScreenController implements Initializable {
 			String axis;
 			String direction;
 
-			try {
-				if (row == 0 || row == boardRows - 1) {
-					axis = "longitude";
-					//Sound effect of when a tile is inserted into the board
-					Media buttonSound = new Media(new File("resources/sounds/wind.wav").toURI().toString());
-					MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-					mediaPlayer.play();
-					// Move all the tiles along and return the ejected tile
-					if (row == 0) {
-						try {
-							direction = "north";
-							ejectedTile = gameBoard.insertFromTop(insertedTile, colImg - 1);
-							silkBag.addTile(true, ejectedTile); //tile is removed
-							ejectedPlayer = checkPlayerLoc(boardRows - 3, colImg - 1);
+			if (row == 0 || row == boardRows - 1) {
+				axis = "longitude";
+				//Sound effect of when a tile is inserted into the board
+				Media buttonSound = new Media(new File("resources/sounds/wind.wav").toURI().toString());
+				MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+				mediaPlayer.play();
+				// Move all the tiles along and return the ejected tile
+				if (row == 0) {
+					try {
+						direction = "north";
+						ejectedTile = gameBoard.insertFromTop(insertedTile, colImg - 1);
+						silkBag.addTile(true, ejectedTile); //tile is removed
+						ejectedPlayer = checkPlayerLoc(boardRows - 3, colImg - 1);
 
-							// Loop up through the column to update all images
-							for (int i = boardRows - 2; i > 0; i--) {
-								updateTileImgs(i, colImg);
-								Player token = checkPlayerLoc(i - 1, colImg - 1);
-								if (token != null) {
-									setPlayerImg(null, i, colImg);
+						// Loop up through the column to update all images
+						for (int i = boardRows - 2; i > 0; i--) {
+							updateTileImgs(i, colImg);
+							Player token = checkPlayerLoc(i - 1, colImg - 1);
+							if (token != null) {
+								setPlayerImg(null, i, colImg);
 //								System.out.println("oldLoc: " + (i - 1) + "," + (colImg - 1)); TODO - print
-									if (i != boardRows - 2) {
-										// set image of tile below
-										setPlayerImg(token.getImage(), i + 1, colImg);
-										token.movePlayer(gameBoard, gameBoard.getTileAt(i, colImg - 1));
+								if (i != boardRows - 2) {
+									// set image of tile below
+									setPlayerImg(token.getImage(), i + 1, colImg);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(i, colImg - 1));
 //									System.out.println("newLoc: " + (i) + "," + (colImg - 1)); TODO - print
-									}
 								}
 							}
-							if (ejectedPlayer != null) {
-								ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(0, colImg - 1));
-								setPlayerImg(ejectedPlayer.getImage(), 1, colImg);
-							}
-							endDrawTurn(axis, direction, colImg - 1);
-						} catch (Exception e) {
-							gameLog.appendText(e.getMessage());
 						}
-					} else {
-						try {
-							direction = "south";
-							ejectedTile = gameBoard.insertFromBottom(insertedTile, colImg - 1);
-							silkBag.addTile(true, ejectedTile); //tile is removed
-							ejectedPlayer = checkPlayerLoc(0, colImg - 1);
+						if (ejectedPlayer != null) {
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(0, colImg - 1));
+							setPlayerImg(ejectedPlayer.getImage(), 1, colImg);
+						}
+						endDrawTurn(axis, direction, colImg - 1);
+					} catch (Exception e) {
+						gameLog.appendText(e.getMessage());
+					}
+				} else {
+					try {
+						direction = "south";
+						ejectedTile = gameBoard.insertFromBottom(insertedTile, colImg - 1);
+						silkBag.addTile(true, ejectedTile); //tile is removed
+						ejectedPlayer = checkPlayerLoc(0, colImg - 1);
 
-							// Loop down through the column to update all images
-							for (int i = 1; i < boardRows - 1; i++) {
-								updateTileImgs(i, colImg);
-								Player token = checkPlayerLoc(i - 1, colImg - 1);
-								if (token != null) {
-									setPlayerImg(null, i, colImg);
+						// Loop down through the column to update all images
+						for (int i = 1; i < boardRows - 1; i++) {
+							updateTileImgs(i, colImg);
+							Player token = checkPlayerLoc(i - 1, colImg - 1);
+							if (token != null) {
+								setPlayerImg(null, i, colImg);
 //								System.out.println("oldLoc: " + (i - 1) + "," + (colImg - 1)); TODO - print
-									if (i != 1) {
-										// set image of tile above
-										setPlayerImg(token.getImage(), i - 1, colImg);
-										token.movePlayer(gameBoard, gameBoard.getTileAt(i - 2, colImg - 1));
+								if (i != 1) {
+									// set image of tile above
+									setPlayerImg(token.getImage(), i - 1, colImg);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(i - 2, colImg - 1));
 //									System.out.println("newLoc: " + (i - 2) + "," + (colImg - 1)); TODO - print
-									}
 								}
 							}
-							if (ejectedPlayer != null) {
+						}
+						if (ejectedPlayer != null) {
 //							System.out.println("newLoc: " + (boardRows - 3) + "," + (colImg - 1));TODO - print
 //							System.out.println(ejectedPlayer.getName()
 //									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
-								ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(boardRows - 3, colImg - 1));
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(boardRows - 3, colImg - 1));
 //							System.out.println(ejectedPlayer.getName()
 //									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
-								setPlayerImg(ejectedPlayer.getImage(), boardRows - 2, colImg);
+							setPlayerImg(ejectedPlayer.getImage(), boardRows - 2, colImg);
 
-							}
-							endDrawTurn(axis, direction, colImg - 1);
-						} catch (Exception e) {
-							gameLog.appendText(e.getMessage());
 						}
+						endDrawTurn(axis, direction, colImg - 1);
+					} catch (Exception e) {
+						gameLog.appendText(e.getMessage());
 					}
-				} else if (column == 0 || column == boardColumns - 1) { // Left column
-					axis = "latitude";
-					Media buttonSound = new Media(new File("resources/sounds/wind.wav").toURI().toString());
-					MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-					mediaPlayer.play();
-					// Move all the tiles along and return the ejected tile
-					if (column == 0) {
-						try {
-							direction = "west";
-							ejectedTile = gameBoard.insertFromLeft(insertedTile, rowImg - 1);
-							silkBag.addTile(true, ejectedTile);
-							ejectedPlayer = checkPlayerLoc(rowImg - 1, boardColumns - 3);
+				}
+			} else if (column == 0 || column == boardColumns - 1) { // Left column
+				axis = "latitude";
+				Media buttonSound = new Media(new File("resources/sounds/wind.wav").toURI().toString());
+				MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+				mediaPlayer.play();
+				// Move all the tiles along and return the ejected tile
+				if (column == 0) {
+					try {
+						direction = "west";
+						ejectedTile = gameBoard.insertFromLeft(insertedTile, rowImg - 1);
+						silkBag.addTile(true, ejectedTile);
+						ejectedPlayer = checkPlayerLoc(rowImg - 1, boardColumns - 3);
 
-							// Loop right through the row to update all images
-							for (int i = boardColumns - 2; i > 0; i--) {
-								updateTileImgs(rowImg, i);
-								Player token = checkPlayerLoc(rowImg - 1, i - 1);
-								if (token != null) {
-									setPlayerImg(null, rowImg, i);
+						// Loop right through the row to update all images
+						for (int i = boardColumns - 2; i > 0; i--) {
+							updateTileImgs(rowImg, i);
+							Player token = checkPlayerLoc(rowImg - 1, i - 1);
+							if (token != null) {
+								setPlayerImg(null, rowImg, i);
 //								System.out.println("oldLoc: " + (rowImg - 1) + "," + (i - 1));TODO - print
-									if (i != boardColumns - 2) {
-										// set image of tile right
-										setPlayerImg(token.getImage(), rowImg, i + 1);
-										token.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, i));
+								if (i != boardColumns - 2) {
+									// set image of tile right
+									setPlayerImg(token.getImage(), rowImg, i + 1);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, i));
 //									System.out.println("newLoc: " + (rowImg - 1) + "," + (i)); TODO - print
-									}
 								}
 							}
-							if (ejectedPlayer != null) {
-								ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, 0));
-								setPlayerImg(ejectedPlayer.getImage(), rowImg, 1);
-							}
-							endDrawTurn(axis, direction, rowImg - 1);
-						} catch (Exception e) {
-							gameLog.appendText(e.getMessage());
 						}
-					} else {
-						try {
-							direction = "east";
-							ejectedTile = gameBoard.insertFromRight(insertedTile, rowImg - 1);
-							silkBag.addTile(true, ejectedTile);
-							ejectedPlayer = checkPlayerLoc(rowImg - 1, 0);
+						if (ejectedPlayer != null) {
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, 0));
+							setPlayerImg(ejectedPlayer.getImage(), rowImg, 1);
+						}
+						endDrawTurn(axis, direction, rowImg - 1);
+					} catch (Exception e) {
+						gameLog.appendText(e.getMessage());
+					}
+				} else {
+					try {
+						direction = "east";
+						ejectedTile = gameBoard.insertFromRight(insertedTile, rowImg - 1);
+						silkBag.addTile(true, ejectedTile);
+						ejectedPlayer = checkPlayerLoc(rowImg - 1, 0);
 
-							// Loop left through the row to update all images
-							for (int i = 1; i < boardColumns - 1; i++) {
-								updateTileImgs(rowImg, i);
-								Player token = checkPlayerLoc(rowImg - 1, i - 1);
-								if (token != null) {
-									setPlayerImg(null, rowImg, i);
+						// Loop left through the row to update all images
+						for (int i = 1; i < boardColumns - 1; i++) {
+							updateTileImgs(rowImg, i);
+							Player token = checkPlayerLoc(rowImg - 1, i - 1);
+							if (token != null) {
+								setPlayerImg(null, rowImg, i);
 //								System.out.println("oldLoc: " + (rowImg - 1) + "," + (i - 1)); TODO - print
-									if (i != 1) {
-										// set image of tile left
-										setPlayerImg(token.getImage(), rowImg, i - 1);
-										token.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, i - 2));
+								if (i != 1) {
+									// set image of tile left
+									setPlayerImg(token.getImage(), rowImg, i - 1);
+									token.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, i - 2));
 //									System.out.println("newLoc: " + (rowImg - 1) + "," + (i - 2)); TODO - print
-									}
 								}
 							}
-							if (ejectedPlayer != null) {
+						}
+						if (ejectedPlayer != null) {
 //							System.out.println("newLoc: " + (rowImg - 1) + "," + (boardColumns - 3)); TODO - print
 //							System.out.println(ejectedPlayer.getName()
 //									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
-								ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, boardColumns - 3));
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, boardColumns - 3));
 //							System.out.println(ejectedPlayer.getName()
 //									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
-								setPlayerImg(ejectedPlayer.getImage(), rowImg, boardColumns - 2);
-							}
-							endDrawTurn(axis, direction, rowImg - 1);
-						} catch (Exception e) {
-							gameLog.appendText(e.getMessage());
+							setPlayerImg(ejectedPlayer.getImage(), rowImg, boardColumns - 2);
 						}
+						endDrawTurn(axis, direction, rowImg - 1);
+					} catch (Exception e) {
+						gameLog.appendText(e.getMessage());
 					}
 				}
-			} catch (Exception e) {
-//				gameLog.appendText(e.getMessage());
-				gameLog.appendText("WARNING: These islands cannot be moved currently.\n");
-				e.printStackTrace();
 			}
 		});
 	}
@@ -634,6 +626,8 @@ public class GameScreenController implements Initializable {
 		Rectangle tempRect = (Rectangle) tempStack.getChildren().get(0);
 		tempRect.setFill(new ImagePattern(tempFloor.getImage()));
 		tempRect.setRotate(tempFloor.getRotation());
+		System.out.println("(" + (boardImgRow - 1) + ", " + (boardImgCol - 1) + ") " // TODO - print
+				+ tempFloor.getRotation() + " " + tempRect.getRotate());
 		// Update fire infliction locations
 		Rectangle tempFire = (Rectangle) tempStack.getChildren().get(1);
 		if (tempFloor.getIsFire()) {
@@ -797,7 +791,7 @@ public class GameScreenController implements Initializable {
 		}
 		iceInfectedTiles.removeAll(removed);
 //		System.out.println(fireInfectedTiles); // TODO - print
-		System.out.println(iceInfectedTiles);
+//		System.out.println(iceInfectedTiles);
 	}
 
 	/**
@@ -833,8 +827,6 @@ public class GameScreenController implements Initializable {
 	 */
 	private void endDrawTurn(String axis, String direction, int printNum) {
 		silkBagTileImg.setFill(GREY);
-		Floor tempFloor = (Floor) silkBagTile;
-		tempFloor.setRotation(0);
 
 		gameLog.appendText("Island slid at " + axis + " " + printNum + " from " + direction + ".\n");
 		startPlayActionTurn();
@@ -973,8 +965,8 @@ public class GameScreenController implements Initializable {
 //			System.out.println(player.getName() + "(" + player.getRowLoc() + ", " + player.getColumnLoc() + ")");
 //		}
 
-		silkBagTileImg.setRotate(0);
 		silkBagTile = silkBag.drawTile();
+		silkBagTileImg.setRotate(0);
 		silkBagTileImg.setFill(new ImagePattern(silkBagTile.getImage()));
 		// Sound effect when the button is clicked
 		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
@@ -987,6 +979,8 @@ public class GameScreenController implements Initializable {
 				|| tempTileType.equalsIgnoreCase("straight")
 				|| tempTileType.equalsIgnoreCase("tee")) {
 			// If is a floor type
+			Floor tempFloor = (Floor) silkBagTile;
+			tempFloor.setRotation(0);
 			isNewTileAction = false;
 			gameLog.appendText(currPlayer.getName() + " was gifted a new island!\n");
 			takeSilkBagTileButton.setDisable(true);
