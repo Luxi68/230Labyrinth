@@ -12,23 +12,22 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import service.Motd;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.File;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
 /**
  * StartScreenController.java
  * This class is the controller for the fxml file. StartScreen.fxml
+ *
  * @author - Alberto Ortenzi
  */
 public class StartScreenController {
@@ -67,12 +66,14 @@ public class StartScreenController {
 
 	/**
 	 * This method loads the profile selection scene and plays a sound effect when the button is clicked
+	 *
 	 * @param actionEvent - the action of clicking the button.
 	 */
 	@FXML
 	private void goToProfileSelection(javafx.event.ActionEvent actionEvent) {
 		try {
 			Parent profileSelectionParent = FXMLLoader.load(getClass().getResource("/scene/ProfileSelection.fxml"));
+			profileSelectionParent.setStyle("-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");
 			Scene profileSelectionScene = new Scene(profileSelectionParent);
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setScene(profileSelectionScene);
@@ -92,59 +93,65 @@ public class StartScreenController {
 	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
 	 * until the users leaves the page.
 	 */
-	public void backgroundMusic(){
+	public void backgroundMusic() {
 		Media backgroundSound = new Media(new File("resources/sounds/startScreenBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
 		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
 		mediaPlayer1.setVolume(0.1);
 		mediaPlayer1.setAutoPlay(true);
 	}
+
 	/**
 	 * This method loads the new game scene and plays a sound effect when the button is clicked
+	 *
 	 * @param actionEvent - the action of clicking the button.
 	 */
 	@FXML
 	private void goToNewGame(ActionEvent actionEvent) {
-	    try {
-		Parent newGameParent = FXMLLoader.load(getClass().getResource("/scene/PlayerSelection.fxml"));
-		Scene newGameScene = new Scene(newGameParent);
-		Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-		window.setScene(newGameScene);
-		window.show();
-		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-		mediaPlayer.play();
-        } catch (IOException e) {
-            System.out.println("Error starting the new game screen.");
-            e.printStackTrace();
-        }
-	    mediaPlayer1.stop();
+		try {
+			Parent newGameParent = FXMLLoader.load(getClass().getResource("/scene/PlayerSelection.fxml"));
+			newGameParent.setStyle("-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");
+			Scene newGameScene = new Scene(newGameParent);
+			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+			window.setScene(newGameScene);
+			window.show();
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
+		} catch (IOException e) {
+			System.out.println("Error starting the new game screen.");
+			e.printStackTrace();
+		}
+		mediaPlayer1.stop();
 	}
 
 	/**
 	 * This method loads the load game scene and plays a sound effect when the button is clicked
+	 *
 	 * @param actionEvent - the action of clicking the button.
 	 */
 	@FXML
 	private void goToLoadGame(ActionEvent actionEvent) {
-	    try {
-		Parent loadGameParent = FXMLLoader.load(getClass().getResource("/scene/LoadGame.fxml"));
-		Scene loadGameScene = new Scene(loadGameParent);
-		Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-		window.setScene(loadGameScene);
-		window.show();
-		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-		mediaPlayer.play();
-        } catch (IOException e) {
-            System.out.println("Error starting the load game screen.");
-            e.printStackTrace();
-        }
+		try {
+			Parent loadGameParent = FXMLLoader.load(getClass().getResource("/scene/LoadGame.fxml"));
+			loadGameParent.setStyle("-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");
+			Scene loadGameScene = new Scene(loadGameParent);
+			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+			window.setScene(loadGameScene);
+			window.show();
+			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
+		} catch (IOException e) {
+			System.out.println("Error starting the load game screen.");
+			e.printStackTrace();
+		}
 		mediaPlayer1.stop();
 	}
 
 	/**
 	 * This method quits the application on action. This is used for the menu bar under file
+	 *
 	 * @param actionEvent - the action of selecting the option in the menubar
 	 */
 	public void quitGameFromMenu(ActionEvent actionEvent) {
@@ -154,6 +161,7 @@ public class StartScreenController {
 	/**
 	 * This method opens an information alert which contains the essential game information to know in order
 	 * to play the game.
+	 *
 	 * @param actionEvent - the action of selecting the option in the menu bar.
 	 */
 	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
@@ -161,7 +169,7 @@ public class StartScreenController {
 		String outputText = "";
 		Scanner in;
 		in = new Scanner(instructions);
-		while (in.hasNextLine()){
+		while (in.hasNextLine()) {
 			outputText += in.nextLine() + System.lineSeparator();
 		}
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);

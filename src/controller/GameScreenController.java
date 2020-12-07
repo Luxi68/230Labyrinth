@@ -847,9 +847,13 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Method that runs when the game ends. Will announce the winner and exit from the game
 	 */
-	private void endGame() throws IOException { // TODO - flesh out
+	private void endGame(){ // TODO - flesh out
 		playerWon = currPlayer;
-		updateProfiles();
+		try {
+			updateProfiles();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Over");
 		errorInfo.setHeaderText("GAME WON!!!");
