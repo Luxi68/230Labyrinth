@@ -33,7 +33,7 @@ public class Floor extends Tile {
      * @param image    what the tile looks like
      * @param isFixed  true if tile is fixed, false if not
      */
-    public Floor(String tileType, Image image, boolean isFixed) {
+    public Floor(String tileType, Image image, boolean isFixed) throws IllegalStateException {
         super(tileType, image);
         this.IS_FIXED = isFixed;
         this.isOnBoard = false;
@@ -76,8 +76,7 @@ public class Floor extends Tile {
 
             default: // TODO - Maybe throw an exception?
                 this.FLOOR_TYPE = null;
-                System.out.println("Error: Tried to create floor tile with invalid type");
-                break;
+                throw new IllegalStateException("Floor tile type does not exist");
         }
 
     }
