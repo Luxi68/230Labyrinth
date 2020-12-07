@@ -253,7 +253,7 @@ public class Floor extends Tile {
             return 0;
         }
     }
-    
+
     /**
      * Get the floor's type
      *
