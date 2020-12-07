@@ -890,7 +890,7 @@ public class GameScreenController implements Initializable {
 	 */
 	private void endGame() { // TODO - flesh out
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
-		errorInfo.setTitle("GAME WON!!!");
+		errorInfo.setTitle("Game Over");
 		errorInfo.setHeaderText("GAME WON!!!");
 		errorInfo.setContentText(currPlayer.getName() + " wins!!\nThank you for playing!!\n");
 		errorInfo.show();
@@ -1240,9 +1240,9 @@ public class GameScreenController implements Initializable {
 		VBox saveGameScreen = new VBox(10);
 		saveGameScreen.setPadding(new Insets(10, 10, 10, 10));
 		Label header = new Label("Save Game");
-		TextField filename = new TextField("filename");
+		TextField filename = new TextField();
 		Button saveAndQuit = new Button("Save and Quit");
-		saveGameScreen.getChildren().addAll(header, saveAndQuit);
+		saveGameScreen.getChildren().addAll(header, filename, saveAndQuit);
 		saveGameScreen.setAlignment(Pos.CENTER);
 
 		Stage popupStage = new Stage(StageStyle.TRANSPARENT);
