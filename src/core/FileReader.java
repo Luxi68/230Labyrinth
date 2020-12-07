@@ -86,11 +86,11 @@ public class FileReader {
                                 break;
                             case 3:
                                 img = new Image("/assets/apollo.png");
-                                hex = "#55b54c";
+                                hex = "#fdd14b";
                                 break;
                             case 4:
                                 img = new Image("/assets/artemis.png");
-                                hex = "#fdd14b";
+                                hex = "#55b54c";
                                 break;
                         }
                         if (a.size() > pn - 1) {

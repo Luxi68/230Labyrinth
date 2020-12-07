@@ -77,19 +77,23 @@ public class NewGameController {
 	private void startGame(ActionEvent actionEvent) {
 		if(fileChoice.getValue() != null && areAllProfilesChosen()){
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/scene/GameScreen.fxml"));
+			URL url = getClass().getResource("/scene/GameScreen.fxml");
+			FXMLLoader loader = new FXMLLoader(url);
 			Parent gameScreenParent = loader.load();
+
 			GameScreenController controller = loader.getController();
 			controller.initData(FileReader.readDataFile(fileChoice.getValue(),profiles));
+
 			Scene gameScreenScene = new Scene(gameScreenParent);
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 			window.setTitle("The First Olympian");
 			window.setScene(gameScreenScene);
 			window.show();
+			window.setMaximized(true);
+
 			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
 			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 			mediaPlayer.play();
-			window.setMaximized(true);
 		} catch (IOException e) {
 			System.out.println("Error starting the Game Screen from new game screen.");
 			e.printStackTrace();

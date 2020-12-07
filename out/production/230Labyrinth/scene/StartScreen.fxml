@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.Glow?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-	  fx:controller="controller.StartScreenController" alignment="CENTER">
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.241"
+	  xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StartScreenController">
 	<MenuBar VBox.vgrow="NEVER">
 		<Menu mnemonicParsing="false" text="File">
 			<MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit"/>
@@ -23,19 +23,24 @@
 		</Menu>
 	</MenuBar>
 	<AnchorPane VBox.vgrow="ALWAYS">
-		<Button layoutX="281.0" layoutY="111.0" mnemonicParsing="false" onAction="#goToNewGame" text="New Game"/>
-		<Button layoutX="280.0" layoutY="153.0" mnemonicParsing="false" onAction="#goToLoadGame" text="Load Game"/>
-		<Button layoutX="291.0" layoutY="193.0" mnemonicParsing="false" onAction="#goToProfileSelection"
-				text="Profiles"/>
-		<Button layoutX="302.0" layoutY="233.0" mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit"/>
-		<Label layoutX="115.0" layoutY="14.0" text="THE FIRST OLYMPIAN" textFill="#e86a0b" textAlignment="CENTER">
-			<font>
-				<Font size="39.0"/>
-			</font>
-			<effect>
-				<Glow/>
-			</effect>
-		</Label>
-		<Label fx:id="labelMotd" layoutX="14.0" layoutY="284.0" text="Label"/>
+		<padding>
+			<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+		</padding>
+		<VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="20.0"
+			  AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="20.0">
+			<Label text="THE FIRST OLYMPIAN" textAlignment="CENTER" textFill="black">
+				<font>
+					<Font name="System Bold" size="39.0"/>
+				</font>
+				<effect>
+					<Glow/>
+				</effect>
+			</Label>
+			<Button mnemonicParsing="false" onAction="#goToNewGame" text="New Game"/>
+			<Button mnemonicParsing="false" onAction="#goToLoadGame" text="Load Game"/>
+			<Button mnemonicParsing="false" onAction="#goToProfileSelection" text="Profiles"/>
+			<Button mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit"/>
+			<Label fx:id="labelMotd" text="Label" alignment="CENTER"/>
+		</VBox>
 	</AnchorPane>
 </VBox>
