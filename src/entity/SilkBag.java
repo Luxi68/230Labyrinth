@@ -39,6 +39,7 @@ public class SilkBag {
 	/**
 	 * Method used to check which type of tile was taken from silk bag to see which bag it goes back into
 	 *
+	 * @param isRemoved if the tile is being removed from the board/game
 	 * @param removedTile the tile type passed in to check where it goes.
 	 */
 	public void addTile(boolean isRemoved, Tile removedTile) {

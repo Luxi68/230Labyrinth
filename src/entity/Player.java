@@ -26,6 +26,10 @@ public class Player {
 	 * Constructor to create new player object
 	 *
 	 * @param image - Image representing the player token
+	 * @param hexColour - The hex value assosiated with this player
+	 * @param rowStart - The row the player starts on
+	 * @param columnStart - The column the player starts on
+	 * @param profile - The profile that is playing this player
 	 */
 	public Player(Image image, String hexColour, int rowStart, int columnStart, Profile profile) {
 		this.NAME = profile.getPlayerName();
@@ -95,15 +99,19 @@ public class Player {
 	}
 
 	/**
-	 * @param board
-	 * @return
+	 * Returns the current floor the player is on
+	 *
+	 * @param board - The board that player is on
+	 * @return - The floor tile the player is on
 	 */
 	public Floor getCurrentFloor(Board board) {
 		return board.getTileAt(this.rowLoc, this.columnLoc);
 	}
 
 	/**
-	 * @return
+	 * Checks if the player bas been backtracked before
+	 *
+	 * @return - true if backtrack has been used on the player before
 	 */
 	public boolean isBacktracked() {
 		return backtracked;
@@ -128,6 +136,7 @@ public class Player {
 	/**
 	 * Moves the player to the tile he selects if possible
 	 *
+	 * @param board - The board the player wants to move on top of
 	 * @param moveTo - The tile the player wants to move to
 	 */
 	public void movePlayer(Board board, Floor moveTo) {
@@ -139,6 +148,7 @@ public class Player {
 	/**
 	 * Returns all the possible moves a player can male from his current location
 	 *
+	 * @param board - The board the player wants to check the moves on
 	 * @return an arrayList of all possible tiles he can move to
 	 */
 	public ArrayList<Floor> possibleMoves(Board board) {
@@ -174,6 +184,7 @@ public class Player {
 	/**
 	 * Checks if it is possible to move to the tile on the right
 	 *
+	 * @param board The board the player wants to find out if movement is possible
 	 * @return true if it is possible to move east, false otherwise
 	 */
 	public boolean isEastPossible(Board board) { //right
@@ -188,6 +199,7 @@ public class Player {
 	/**
 	 * Checks if it is possible to move to the tile on the left
 	 *
+	 * @param board The board the player wants to find out if movement is possible
 	 * @return true if it is possible to move west, false otherwise
 	 */
 	public boolean isWestPossible(Board board) {
@@ -202,6 +214,7 @@ public class Player {
 	/**
 	 * Checks if it is possible to move to the tile above
 	 *
+	 * @param board The board the player wants to find out if movement is possible
 	 * @return true if it is possible to move upwards, false otherwise
 	 */
 	public boolean isNorthPossible(Board board) {
@@ -216,6 +229,7 @@ public class Player {
 	/**
 	 * Checks if it is possible to move to the tile below
 	 *
+	 * @param board The board the player wants to find out if movement is possible
 	 * @return true if it is possible to move down, false otherwise
 	 */
 	public boolean isSouthPossible(Board board) {
@@ -251,6 +265,7 @@ public class Player {
 	/**
 	 * This is going to be used when a backtrack tile is being played on them
 	 *
+	 * @param board The board the player wants to backtrack on
 	 * @throws NullPointerException if the player cannot be backtracked
 	 */
 	public void backtrack(Board board) throws NullPointerException {

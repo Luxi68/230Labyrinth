@@ -59,7 +59,7 @@ public class Leaderboard {
 	/**
 	 * This method is to get the leaderboard arraylist for the current leaderboard object
 	 *
-	 * @return
+	 * @return - The current leaderboard no updating
 	 */
 	public ArrayList<Profile> getLeaderboard() {
 		return Leaderboard;

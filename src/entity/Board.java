@@ -66,6 +66,7 @@ public class Board {
 	 *
 	 * @param row    The coordinate we want to insert the tile at
 	 * @param column The coordinate we want to insert the tile at
+	 * @param insert The floor tile being inserted
 	 */
 	public void insertTileAt(int row, int column, Floor insert) {
 		BOARD[row][column] = insert;

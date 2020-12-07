@@ -163,6 +163,7 @@ public class LoadGameController {
 	 * to play the game.
 	 *
 	 * @param actionEvent - the action of selecting the option in the menu bar.
+	 * @throws FileNotFoundException - the path to instructions could not be specified
 	 */
 	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
 		File instructions = new File("src/Instructions.txt");

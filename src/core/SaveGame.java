@@ -59,8 +59,8 @@ public class SaveGame {
      *
      * @param name the name of the file to be loaded from not the path to it
      * @return a list of information which will allow the game to be recreated to the point it was saved at
-     * @throws IOException
-     * @throws ClassNotFoundException // todo fix the throws
+     * @throws IOException - there was an error in reading the contents of the file
+     * @throws ClassNotFoundException - there was trouble constructing one of the objects
      */
 
     public static ArrayList<Object> loadSave (String name) throws IOException, ClassNotFoundException {

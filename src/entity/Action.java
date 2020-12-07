@@ -16,6 +16,7 @@ public class Action extends Tile {
 	 * The constructor initialising the type of action tile it is.
 	 *
 	 * @param tileType inherited from Tile.java to see which action tile it is.
+	 * @param image  - The image associated with the action tile
 	 */
 	public Action(String tileType, Image image) {
 		super(tileType, image);

@@ -197,6 +197,8 @@ public class GameScreenController implements Initializable {
 
 	/**
 	 * Initialises data necessary to setup game
+	 *
+	 * @param data - all the game components from the filereader needed to start the game
 	 */
 	public void initData(ArrayList<Object> data) {
 		gameBoard = (Board) data.get(0);

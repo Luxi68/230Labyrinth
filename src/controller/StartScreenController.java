@@ -45,6 +45,8 @@ public class StartScreenController {
 	 * This method is called everytime the class is initialised. It executes the backgroundMusic method
 	 * which starts the background music and it also sets up the volume control slider. It also creates a Motd
 	 * object. and then sets a specific label to become equal to the newly created message of the day string.
+	 *
+	 * @throws IOException - there was an error in passing the message of the day
 	 */
 	@FXML
 	public void initialize() throws IOException {
