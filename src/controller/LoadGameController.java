@@ -165,7 +165,7 @@ public class LoadGameController {
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Instructions");
 		errorInfo.setHeaderText("How to play the game");
-		errorInfo.setContentText("You have not selected a player please do and try again");
+		errorInfo.setContentText(outputText);
 		errorInfo.show();
 	}
 }
