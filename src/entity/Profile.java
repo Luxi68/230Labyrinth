@@ -1,9 +1,6 @@
 package entity;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 /**
@@ -11,7 +8,7 @@ import java.util.Scanner;
  * This class defines the player profile object.
  * @author - Alberto Ortenzi
  */
-public class Profile implements Comparable<Profile> {
+public class Profile implements Comparable<Profile>, Serializable {
     String playerName;
     int numberOfWins = 0;
     int numberOfGamesPlayed = 0;
