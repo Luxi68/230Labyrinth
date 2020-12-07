@@ -1,48 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane fx:id="createProfilePane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateProfileController">
-   <children>
-      <MenuBar prefHeight="29.0" prefWidth="600.0">
-         <menus>
-            <Menu mnemonicParsing="false" text="File">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openGameInstructions" text="How to play the game" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Volume Control">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Background Music">
-                     <graphic>
-                        <Slider fx:id="volumeSlider" />
-                     </graphic>
-                  </MenuItem>
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
-      <Label layoutX="186.0" layoutY="37.0" text="CREATE PROFILE" textFill="#e47e1f">
-         <font>
-            <Font name="System Bold" size="28.0" />
-         </font>
-      </Label>
-      <TextField fx:id="profileName" layoutX="271.0" layoutY="102.0" />
-      <Label layoutX="177.0" layoutY="107.0" text="Profile Name" />
-      <Button layoutX="234.0" layoutY="149.0" mnemonicParsing="false" onAction="#createNewProfile" text="Create New Profile" />
-      <Button layoutX="216.0" layoutY="241.0" mnemonicParsing="false" onAction="#goBackToProfileSelection" text="Back to Profile Selection" />
-   </children>
+<AnchorPane fx:id="createProfilePane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.241"
+			xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateProfileController">
+	<children>
+		<MenuBar prefHeight="29.0" prefWidth="600.0">
+			<menus>
+				<Menu mnemonicParsing="false" text="File">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit"/>
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Help">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#openGameInstructions" text="How to play the game"/>
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Volume Control">
+					<items>
+						<MenuItem mnemonicParsing="false" text="Background Music">
+							<graphic>
+								<Slider fx:id="volumeSlider"/>
+							</graphic>
+						</MenuItem>
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+		<VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="20.0"
+			  AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="20.0">
+			<children>
+				<Label text="CREATE PROFILE">
+					<font>
+						<Font name="System Bold" size="28.0"/>
+					</font>
+				</Label>
+				<TextField fx:id="profileName"/>
+				<Label text="Profile Name"/>
+				<Button mnemonicParsing="false" onAction="#createNewProfile" text="Create New Profile"/>
+				<Button mnemonicParsing="false" onAction="#goBackToProfileSelection" text="Back to Profile Selection"/>
+			</children>
+		</VBox>
+	</children>
 </AnchorPane>

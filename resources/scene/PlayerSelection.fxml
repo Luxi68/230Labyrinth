@@ -1,61 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PlayerSelectionController">
-   <children>
-      <Button layoutX="54.0" layoutY="249.0" mnemonicParsing="false" onAction="#twoPlayersSelected" text="2 Players" />
-      <Button layoutX="487.0" layoutY="249.0" mnemonicParsing="false" onAction="#fourPlayersSelected" text="4 Players" />
-      <Button layoutX="263.0" layoutY="249.0" mnemonicParsing="false" onAction="#threePlayersSelected" text="3 Players" />
-      <Label layoutX="129.0" layoutY="37.0" text="Please Select Number Of Players" textFill="#d76814">
-         <font>
-            <Font name="System Bold" size="22.0" />
-         </font>
-      </Label>
-      <Button layoutX="537.0" layoutY="359.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Back" />
-      <MenuBar prefHeight="29.0" prefWidth="600.0">
-         <menus>
-            <Menu mnemonicParsing="false" text="File">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openGameInstructions" text="How to play the game" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Volume Control">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Background Music">
-                     <graphic>
-                        <Slider fx:id="volumeSlider" />
-                     </graphic>
-                  </MenuItem>
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
-      <ImageView fitHeight="133.0" fitWidth="130.0" layoutX="27.0" layoutY="95.0" pickOnBounds="true">
-         <image>
-            <Image url="/assets/numerlTwo.png" />
-         </image></ImageView>
-      <ImageView fitHeight="133.0" fitWidth="130.0" layoutX="236.0" layoutY="95.0" pickOnBounds="true">
-         <image>
-            <Image url="/assets/numeralThree.png" />
-         </image></ImageView>
-      <ImageView fitHeight="150.0" fitWidth="130.0" layoutX="456.0" layoutY="87.0" pickOnBounds="true">
-         <image>
-            <Image url="/assets/numeralFour.png" />
-         </image></ImageView>
-   </children>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171"
+			xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PlayerSelectionController">
+	<children>
+		<VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="30.0"
+			  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+			<children>
+				<MenuBar prefHeight="29.0" prefWidth="600.0">
+					<menus>
+						<Menu mnemonicParsing="false" text="File">
+							<items>
+								<MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit"/>
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="Help">
+							<items>
+								<MenuItem mnemonicParsing="false" onAction="#openGameInstructions"
+										  text="How to play the game"/>
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="Volume Control">
+							<items>
+								<MenuItem mnemonicParsing="false" text="Background Music">
+									<graphic>
+										<Slider fx:id="volumeSlider"/>
+									</graphic>
+								</MenuItem>
+							</items>
+						</Menu>
+					</menus>
+				</MenuBar>
+				<Label text="Please Select Number Of Players">
+					<font>
+						<Font name="System Bold" size="22.0"/>
+					</font>
+				</Label>
+				<HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0" VBox.vgrow="SOMETIMES">
+					<children>
+						<VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0"
+							  HBox.hgrow="SOMETIMES">
+							<children>
+								<ImageView fitHeight="150.0" fitWidth="130.0" pickOnBounds="true">
+									<image>
+										<Image url="/assets/numerlTwo.png"/>
+									</image>
+								</ImageView>
+								<Button mnemonicParsing="false" onAction="#twoPlayersSelected" text="2 Players"/>
+							</children>
+						</VBox>
+						<VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0"
+							  HBox.hgrow="SOMETIMES">
+							<children>
+								<ImageView fitHeight="150.0" fitWidth="130.0" pickOnBounds="true">
+									<image>
+										<Image url="/assets/numeralThree.png"/>
+									</image>
+								</ImageView>
+								<Button mnemonicParsing="false" onAction="#threePlayersSelected" text="3 Players"/>
+							</children>
+						</VBox>
+						<VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0"
+							  HBox.hgrow="SOMETIMES">
+							<children>
+								<ImageView fitHeight="150.0" fitWidth="130.0" pickOnBounds="true">
+									<image>
+										<Image url="/assets/numeralFour.png"/>
+									</image>
+								</ImageView>
+								<Button mnemonicParsing="false" onAction="#fourPlayersSelected" text="4 Players"/>
+							</children>
+						</VBox>
+					</children>
+					<VBox.margin>
+						<Insets/>
+					</VBox.margin>
+				</HBox>
+				<Button mnemonicParsing="false" onAction="#backToStartScreen" text="Back"/>
+			</children>
+		</VBox>
+	</children>
 </AnchorPane>

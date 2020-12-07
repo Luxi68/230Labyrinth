@@ -121,7 +121,8 @@ public class ProfileSelectionController {
 	 */
 	public void goToCreateProfile(ActionEvent actionEvent) throws IOException {
 		Parent createProfileParent = FXMLLoader.load(getClass().getResource("/scene/CreateProfile.fxml"));
-		Scene createProfileScene = new Scene(createProfileParent);
+		createProfileParent.setStyle(
+				"-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");	Scene createProfileScene = new Scene(createProfileParent);
 		Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 		window.setScene(createProfileScene);
 		window.show();

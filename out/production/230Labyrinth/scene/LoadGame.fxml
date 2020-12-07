@@ -1,53 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.effect.Glow?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoadGameController">
-   <MenuBar>
-      <menus>
-         <Menu mnemonicParsing="false" text="File">
-            <items>
-               <MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit" />
-            </items>
-         </Menu>
-         <Menu mnemonicParsing="false" text="Help">
-            <items>
-               <MenuItem mnemonicParsing="false" onAction="#openGameInstructions" text="How to play the game" />
-            </items>
-         </Menu>
-         <Menu mnemonicParsing="false" text="Volume Control">
-            <items>
-               <MenuItem mnemonicParsing="false" text="Background Music">
-                  <graphic>
-                     <Slider fx:id="volumeSlider" />
-                  </graphic>
-               </MenuItem>
-            </items>
-         </Menu>
-      </menus>
-   </MenuBar>
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1"
+	  fx:controller="controller.LoadGameController">
+	<MenuBar>
+		<menus>
+			<Menu mnemonicParsing="false" text="File">
+				<items>
+					<MenuItem mnemonicParsing="false" onAction="#quitGameFromMenu" text="Quit"/>
+				</items>
+			</Menu>
+			<Menu mnemonicParsing="false" text="Help">
+				<items>
+					<MenuItem mnemonicParsing="false" onAction="#openGameInstructions" text="How to play the game"/>
+				</items>
+			</Menu>
+			<Menu mnemonicParsing="false" text="Volume Control">
+				<items>
+					<MenuItem mnemonicParsing="false" text="Background Music">
+						<graphic>
+							<Slider fx:id="volumeSlider"/>
+						</graphic>
+					</MenuItem>
+				</items>
+			</Menu>
+		</menus>
+	</MenuBar>
 	<AnchorPane VBox.vgrow="ALWAYS">
-		<Label alignment="CENTER" layoutX="101.0" layoutY="14.0" style="&#10;" text="THE FIRST OLYMPIAN - Load Game" textAlignment="CENTER" textFill="#f28140">
-			<font>
-				<Font size="26.0" />
-			</font>
-			<effect>
-				<Glow />
-			</effect>
-		</Label>
-		<Label layoutX="209.0" layoutY="97.0" text="Select File.." />
-		<ChoiceBox fx:id="savesChoice" layoutX="320.0" layoutY="92.0" prefWidth="150.0" />
-		<Button layoutX="577.0" layoutY="330.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Back" />
-		<Button layoutX="276.0" layoutY="172.0" mnemonicParsing="false" onAction="#loadGame" text="Load Game" />
+		<VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="20.0"
+			  AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="20.0">
+			<children>
+				<Label alignment="CENTER" style="&#10;" text="THE FIRST OLYMPIAN - Load Game" textAlignment="CENTER">
+					<font>
+						<Font name="System Bold" size="26.0"/>
+					</font>
+					<effect>
+						<Glow/>
+					</effect>
+				</Label>
+				<Label text="Select File.."/>
+				<ChoiceBox fx:id="savesChoice" prefWidth="150.0"/>
+				<Button mnemonicParsing="false" onAction="#backToStartScreen" text="Back"/>
+				<Button mnemonicParsing="false" onAction="#loadGame" text="Load Game"/>
+			</children>
+		</VBox>
 	</AnchorPane>
 </VBox>

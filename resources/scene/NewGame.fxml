@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.effect.Glow?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NewGameController">
+<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NewGameController">
    <MenuBar>
       <menus>
          <Menu mnemonicParsing="false" text="File">
@@ -38,22 +31,63 @@
       </menus>
    </MenuBar>
 	<AnchorPane VBox.vgrow="ALWAYS">
-		<Label alignment="CENTER" layoutX="68.0" style="&#10;" text="THE FIRST OLYMPIAN - New Game" textAlignment="CENTER" textFill="#c96704">
-			<font>
-				<Font size="31.0" />
-			</font>
-			<effect>
-				<Glow />
-			</effect>
-		</Label>
-		<Label fx:id="labelSelectPlayers" layoutX="14.0" layoutY="72.0" text="Please Select" />
-		<Label layoutX="418.0" layoutY="207.0" text="Game File" />
-		<ChoiceBox fx:id="fileChoice" layoutX="490.0" layoutY="202.0" prefHeight="27.0" prefWidth="136.0" />
-		<Button layoutX="455.0" layoutY="254.0" mnemonicParsing="false" onAction="#startGame" prefHeight="57.0" prefWidth="150.0" text="Start Game" />
-		<Button layoutX="577.0" layoutY="330.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Back" />
-      <ListView fx:id="listOfProfiles" layoutX="14.0" layoutY="95.0" prefHeight="268.0" prefWidth="175.0" />
-      <Button fx:id="chooseProfileButton" layoutX="476.0" layoutY="95.0" mnemonicParsing="false" onAction="#chooseProfile" text="Choose Profile" />
-      <ListView fx:id="chosenProfiles" layoutX="216.0" layoutY="95.0" prefHeight="268.0" prefWidth="175.0" />
-      <Label layoutX="255.0" layoutY="72.0" text="Chosen Profiles" />
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+      		<Label alignment="CENTER" style="&#10;" text="THE FIRST OLYMPIAN - New Game" textAlignment="CENTER">
+      			<font>
+      				<Font name="System Bold" size="31.0" />
+      			</font>
+      			<effect>
+      				<Glow />
+      			</effect>
+      		</Label>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="SOMETIMES">
+                     <children>
+                  		<Label fx:id="labelSelectPlayers" text="Please Select" />
+                        <ListView fx:id="listOfProfiles" prefHeight="268.0" prefWidth="175.0" />
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="SOMETIMES">
+                     <children>
+                        <Label text="Chosen Profiles" />
+                        <ListView fx:id="chosenProfiles" prefHeight="268.0" prefWidth="175.0" />
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="SOMETIMES">
+                     <children>
+                        <Button fx:id="chooseProfileButton" mnemonicParsing="false" onAction="#chooseProfile" text="Choose Profile">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Button>
+                  		<Label text="Game File" />
+                  		<ChoiceBox fx:id="fileChoice" prefHeight="27.0" prefWidth="136.0" />
+                  		<Button mnemonicParsing="false" onAction="#startGame" prefHeight="57.0" prefWidth="150.0" text="Start Game">
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                  		<Button mnemonicParsing="false" onAction="#backToStartScreen" text="Back">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
 	</AnchorPane>
 </VBox>
