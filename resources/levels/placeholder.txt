@@ -15,7 +15,7 @@ f,tee,3,4,2
 b,corner,20
 b,straight,20
 b,tee,20
-b,fire,5
+b,fire,50
 b,ice,50
-b,doubleMove,50
+b,doubleMove,5
 b,backTrack,5

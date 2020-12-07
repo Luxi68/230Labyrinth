@@ -1,20 +1,20 @@
 package controller;
 
 import entity.*;
+import entity.Action;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.*;
@@ -23,6 +23,10 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.net.URL;
@@ -45,8 +49,8 @@ TODO - img resources
 public class GameScreenController implements Initializable {
 	// Colour Scheme
 	private final Paint GREY = Paint.valueOf("#3f443e");
-	MediaPlayer mediaPlayer1;
 	public Slider volumeSlider;
+	MediaPlayer mediaPlayer1;
 	ArrayList<Integer> rowNoFixed;
 	ArrayList<Integer> columnNoFixed;
 	// Game components
@@ -173,6 +177,17 @@ public class GameScreenController implements Initializable {
 	}
 
 	/**
+	 * Method to start background music
+	 */
+	public void backgroundMusic() {
+		Media backgroundSound = new Media(new File("resources/sounds/gameScreenBackground.wav").toURI().toString());
+		mediaPlayer1 = new MediaPlayer(backgroundSound);
+		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
+		mediaPlayer1.setVolume(0.1);
+		mediaPlayer1.setAutoPlay(true);
+	}
+
+	/**
 	 * Initialises data necessary to setup game
 	 */
 	public void initData(ArrayList<Object> data) {
@@ -266,11 +281,12 @@ public class GameScreenController implements Initializable {
 					Paint colour = tile.getStroke();
 
 					if (actionTrackerMove.getFill() == currPlayer.getColour()) { // If movement turn
-						// Moving backend
+						// Sound effect of footsteps when player moves from one tile to the next
 						Media buttonSound = new Media(new File("resources/sounds/footstep.wav").toURI().toString());
 						MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 						mediaPlayer.play();
 						mediaPlayer.setVolume(1.5);
+						// Moving backend
 						Floor currFloor = currPlayer.getCurrentFloor(gameBoard);
 						Floor movedFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
 						currPlayer.movePlayer(gameBoard, movedFloor);
@@ -311,6 +327,10 @@ public class GameScreenController implements Initializable {
 											victim.getRowLoc() + 1, victim.getColumnLoc() + 1);
 									System.out.println((victim.getRowLoc() + 1) + "," + (victim.getColumnLoc() + 1));
 									gameLog.appendText(victim.getName() + " was forcibly moved back in time.\n");
+									Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
+									MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+									mediaPlayer.play();
+									mediaPlayer.setVolume(0.5);
 								} catch (Exception e) {
 									gameLog.appendText(e.getMessage());
 								}
@@ -328,9 +348,11 @@ public class GameScreenController implements Initializable {
 
 							if (colour == Color.ORANGERED) { // Fire was played
 								int endTurn = turn + (playerRoster.size() * 2);
+								//Sound effect for when a tile is clicked to be on fire
 								Media buttonSound = new Media(new File("resources/sounds/fire.wav").toURI().toString());
 								MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 								mediaPlayer.play();
+								mediaPlayer.setVolume(0.5);
 
 								for (Floor effected : inflictedTiles) {
 									StackPane tempStack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
@@ -349,6 +371,7 @@ public class GameScreenController implements Initializable {
 
 							} else if (colour == Color.LIGHTBLUE) { // Ice was played
 								int endTurn = turn + playerRoster.size();
+								//Sound effect for when a tile is clicked to be on ice
 								Media buttonSound = new Media(new File("resources/sounds/ice.wav").toURI().toString());
 								MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 								mediaPlayer.play();
@@ -426,12 +449,13 @@ public class GameScreenController implements Initializable {
 			Floor ejectedTile;
 			Player ejectedPlayer;
 			Floor insertedTile = (Floor) silkBagTile;
-			String axis = "";
-			String direction = "";
+			String axis;
+			String direction;
 
 			try {
 				if (row == 0 || row == boardRows - 1) {
 					axis = "longitude";
+					//Sound effect of when a tile is inserted into the board
 					Media buttonSound = new Media(new File("resources/sounds/wind.wav").toURI().toString());
 					MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 					mediaPlayer.play();
@@ -865,7 +889,11 @@ public class GameScreenController implements Initializable {
 	 * Method that runs when the game ends. Will announce the winner and exit from the game
 	 */
 	private void endGame() { // TODO - flesh out
-		gameLog.appendText(currPlayer.getName() + " wins!!\nThank you for playing!!\n");
+		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
+		errorInfo.setTitle("Game Over");
+		errorInfo.setHeaderText("GAME WON!!!");
+		errorInfo.setContentText(currPlayer.getName() + " wins!!\nThank you for playing!!\n");
+		errorInfo.show();
 	}
 
 	/**
@@ -1031,7 +1059,10 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Choose an island to cast FIRE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("fire");
-		} catch(Exception e) {
+			Media buttonSound = new Media(new File("resources/sounds/magic.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
+		} catch (Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
 
@@ -1048,7 +1079,10 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Choose an island to cast ICE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("ice");
-		} catch(Exception e) {
+			Media buttonSound = new Media(new File("resources/sounds/magic.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+			mediaPlayer.play();
+		} catch (Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
 	}
@@ -1069,7 +1103,7 @@ public class GameScreenController implements Initializable {
 			Media buttonSound = new Media(new File("resources/sounds/doublemove.wav").toURI().toString());
 			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 			mediaPlayer.play();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
 	}
@@ -1084,7 +1118,7 @@ public class GameScreenController implements Initializable {
 			disableActionSelect();
 			gameLog.appendText("Choose a fellow deity to cast BACKTRACK on.\n");
 			currPlayerBacktrackTxt.setText("Used");
-			Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
+			Media buttonSound = new Media(new File("resources/sounds/magic.wav").toURI().toString());
 			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
 			mediaPlayer.play();
 
@@ -1094,7 +1128,7 @@ public class GameScreenController implements Initializable {
 					toggleRectDisable(tempStack, false, currPlayer.getColour());
 				}
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
 	}
@@ -1186,23 +1220,57 @@ public class GameScreenController implements Initializable {
 		gameLog.appendText("Round " + round + ": Next Deity - " + currPlayer.getName() + "!\n");
 		startNextTurn();
 	}
-	public void backgroundMusic(){
-		Media backgroundSound = new Media(new File("resources/sounds/gameScreenBackground.wav").toURI().toString());
-		mediaPlayer1 = new MediaPlayer(backgroundSound);
-		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
-		mediaPlayer1.setVolume(0.1);
-		mediaPlayer1.setAutoPlay(true);
-	}
 
-	public void quitGameFromMenu(ActionEvent actionEvent) {
-		Platform.exit();
-	}
-
-	public void openGameInstructions(ActionEvent actionEvent) {
+	/**
+	 * Opens the game instructions
+	 */
+	@FXML
+	private void openGameInstructionsButton() {
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Instructions");
 		errorInfo.setHeaderText("How to play the game");
 		errorInfo.setContentText("You have not selected a player please do and try again");
 		errorInfo.show();
+	}
+
+	@FXML
+	private void saveGameButton() {
+		borderPane.setEffect(new GaussianBlur());
+
+		VBox saveGameScreen = new VBox(10);
+		saveGameScreen.setPadding(new Insets(10, 10, 10, 10));
+		Label header = new Label("Save Game");
+		TextField filename = new TextField();
+		Button saveAndQuit = new Button("Save and Quit");
+		saveGameScreen.getChildren().addAll(header, filename, saveAndQuit);
+		saveGameScreen.setAlignment(Pos.CENTER);
+
+		Stage popupStage = new Stage(StageStyle.TRANSPARENT);
+		popupStage.setScene(new Scene(saveGameScreen, Color.TRANSPARENT));
+		popupStage.setAlwaysOnTop(true);
+		popupStage.initModality(Modality.APPLICATION_MODAL);
+		popupStage.show();
+
+		saveAndQuit.setOnAction(e -> {
+			if (filename.getText().isEmpty()) {
+				// Sound effect for an error pop up
+				Media buttonSound = new Media(new File("resources/sounds/nope.wav").toURI().toString());
+				MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+				mediaPlayer.play();
+				mediaPlayer.setVolume(3);
+
+			} else {
+				borderPane.setEffect(null);
+				popupStage.hide();
+			}
+		});
+	}
+
+	/**
+	 * Button that quits the game when pressed
+	 */
+	@FXML
+	private void quitGameFromMenuButton() {
+		Platform.exit();
 	}
 }

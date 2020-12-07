@@ -94,7 +94,7 @@ public class FileReader {
                                 break;
                         }
                         if (a.size() > pn - 1) {
-                            players.add(new Player(img, hex, pColumns, pRows, gBoard, a.get(pn - 1)));
+                            players.add(new Player(img, hex, pColumns, pRows, a.get(pn - 1)));
                         }
                         break;
                 }
