@@ -2,8 +2,6 @@ package entity;
 
 import javafx.scene.image.Image;
 
-import java.io.Serializable;
-
 /**
  * Floor.java
  * <p>
@@ -11,23 +9,21 @@ import java.io.Serializable;
  *
  * @author Chris, Nouran, Ryan, Junjie
  */
-public class Floor extends Tile implements Serializable {
-	private final Type FLOOR_TYPE;
-	private final boolean IS_FIXED;
-
-	private int row;
-	private int column;
-	private boolean north;
-	private boolean south;
-	private boolean east;
-	private boolean west;
-	private boolean isOnBoard;
-	private boolean isFire;
-	private boolean isIce;
-	private int fireOver;
-	private int iceOver;
-	private int rotation;
-	//private String floorType;
+public class Floor extends Tile {
+    private final Type FLOOR_TYPE;
+    private final boolean IS_FIXED;
+    private int row;
+    private int column;
+    private boolean north;
+    private boolean south;
+    private boolean east;
+    private boolean west;
+    private boolean isOnBoard;
+    private boolean isFire;
+    private boolean isIce;
+    private int fireOver;
+    private int iceOver;
+    private int rotation;
 
 
     /**
