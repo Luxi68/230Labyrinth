@@ -1,6 +1,5 @@
 package entity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import sun.security.util.Length;
@@ -15,7 +14,7 @@ import sun.security.util.Length;
  * <P>Modified: /2020
  */
 
-public class Board implements Serializable {
+public class Board {
 
     private final Floor[][] BOARD;
     private final int LENGTH; //number of floor tiles in the board vertically
@@ -30,7 +29,8 @@ public class Board implements Serializable {
         this.BOARD = new Floor[HEIGHT][LENGTH];
         this.LENGTH = LENGTH;
         this.HEIGHT = HEIGHT;
-
+        //add tiles setup...
+        //add players arraylist and their starting points...
     }
 
     /**
