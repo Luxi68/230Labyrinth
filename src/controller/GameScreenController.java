@@ -1253,6 +1253,10 @@ public class GameScreenController implements Initializable {
 
 		saveAndQuit.setOnAction(e -> {
 			if (filename.getText().isEmpty()) {
+				// Sound effect for an error pop up
+				Media buttonSound = new Media(new File("resources/sounds/nope.wav").toURI().toString());
+				MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
+				mediaPlayer.play();
 
 			} else {
 				borderPane.setEffect(null);
