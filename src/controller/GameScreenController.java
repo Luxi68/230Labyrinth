@@ -3,9 +3,11 @@ package controller;
 import entity.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.GaussianBlur;
@@ -26,6 +28,7 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -68,6 +71,8 @@ public class GameScreenController implements Initializable {
 	private AnchorPane anchorPaneCentre;
 	@FXML
 	private Slider volumeSlider;
+	@FXML
+	private MenuItem returnMainButton;
 	@FXML
 	private Circle actionTrackerDraw;
 	@FXML
@@ -851,6 +856,7 @@ public class GameScreenController implements Initializable {
 		errorInfo.setContentText(playerWon.getName() + " wins!!\nThank you for playing!!\n");
 		errorInfo.show();
 
+		returnToMain();
 	}
 
 	/**
@@ -1189,6 +1195,27 @@ public class GameScreenController implements Initializable {
 			borderPane.setEffect(null);
 			popupStage.hide();
 		});
+	}
+
+	/**
+	 * Button to return to the main menu
+	 */
+	@FXML
+	private void returnToMain() {
+		try {
+			URL url = getClass().getResource("/scene/StartScreen.fxml");
+			FXMLLoader loader = new FXMLLoader(url);
+			Parent startScreenParent = loader.load();
+			startScreenParent.setStyle("-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");
+			Stage startScreenScene = (Stage) endTurnButton.getScene().getWindow();
+			startScreenScene.setTitle("The First Olympian");
+			startScreenScene.setScene(new Scene(startScreenParent, 640, 371));
+			startScreenScene.show();
+		} catch (IOException e) {
+			System.out.println("Error starting the Game Screen from new game screen.");
+			e.printStackTrace();
+		}
+		mediaPlayer1.stop();
 	}
 
 	/**
