@@ -32,7 +32,7 @@ public class SaveGame {
 
     public static void save(String name, Board board, ArrayList<Player> players, SilkBag bag, ArrayList<Integer> rowNoFixed, ArrayList<Integer> columnNoFixed) throws IOException { //add hashmaps
 
-    String fileName = "./reources/save/"+name+".txt";
+    String fileName = "./resources/save/"+name+".txt";
     File file = new File(fileName);
     if(file.exists()){
         PrintWriter clear = new PrintWriter(file);
@@ -65,7 +65,7 @@ public class SaveGame {
 
     public static ArrayList<Object> loadSave (String name) throws IOException, ClassNotFoundException {
 
-        String fileName = "./reources/save/"+name+".txt";
+        String fileName = "./resources/save/"+name+".txt";
         File file = new File(fileName);
         ArrayList<Object> fileData = new ArrayList<>();
 

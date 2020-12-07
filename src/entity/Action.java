@@ -46,28 +46,4 @@ public class Action extends Tile {
     enum Type {
         fire, ice, doubleMove, backTrack
     }
-
-//	/**
-//	 * Method that uses action tiles which affect the floor tiles.
-//	 * @param tile - The tile which is being acted upon.
-//	 */
-//	public void useFireIce(Floor tile) {
-//		if (ACTION_TYPE.equals(Type.fire)) {
-//			tile.setIsFire(true);
-//		} else if (ACTION_TYPE.equals(Type.ice)) {
-//			tile.setIsIce(true);
-//		}
-//	}
-
-//	/**
-//	 * Method that uses action tiles which affect the player.
-//	 * @param player
-//	 */
-//	public void useBackDouble(Player player) {
-//		if (ACTION_TYPE.equals(Type.doubleMove)) {
-//			player.doubleMove();
-//		} else if (ACTION_TYPE.equals(Type.backTrack)){
-//			player.backTrack();
-//		}
-//	}
 }

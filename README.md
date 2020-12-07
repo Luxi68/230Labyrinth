@@ -23,7 +23,7 @@
     - Must be indicated in some way
 - Tiles pushed over one space
     - Opposite tile ejected into silk bag
-    - entity.Player piece moved to other side
+    - Player piece moved to other side
 
 ### Play Action Tile
 - Play action from hand

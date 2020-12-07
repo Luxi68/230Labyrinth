@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Class that represents the players and their tokens within the game
@@ -168,7 +169,7 @@ public class Player {
 	 */
 	private void storePosi() {
 		lastPosiRow[2] = lastPosiRow[1];
-		lastPosiColumn[2] = lastPosiRow[1];
+		lastPosiColumn[2] = lastPosiColumn[1];
 		lastPosiRow[1] = lastPosiRow[0];
 		lastPosiColumn[1] = lastPosiColumn[0];
 		lastPosiRow[0] = rowLoc;

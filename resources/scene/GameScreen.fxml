@@ -162,7 +162,7 @@
 				<Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
 			</padding>
 			<!--Action tracker: to track progression of actions each player can take on their turn-->
-			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Action Tracker" textAlignment="CENTER">
+			<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Steps to Nike" textAlignment="CENTER">
 				<VBox.margin>
 					<Insets bottom="5.0" top="5.0"/>
 				</VBox.margin>
