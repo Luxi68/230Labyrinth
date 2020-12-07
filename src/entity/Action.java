@@ -33,7 +33,7 @@ public class Action extends Tile {
             case ("backTrack"):
                 this.ACTION_TYPE = Type.backTrack;
                 break;
-            default: // TODO - Maybe throw an exception?
+            default:
                 this.ACTION_TYPE = null;
                 System.out.println("Error: Tried to create action tile with invalid type");
                 break;

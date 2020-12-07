@@ -1,7 +1,7 @@
 INSTRUCTIONS TO PLAYING THE THE FIRST OLYMPIAN
 ---------------------------------------------------------------------------------------------------
 
-===OPTIONS ACCESSABLE FROM MAIN MENU===
+===OPTIONS ACCESSIBLE FROM MAIN MENU===
 
 - You can choose to play a new game or a previously saved game
 - Opening the profile menu reveals player profiles and leaderboard
@@ -20,9 +20,9 @@ INSTRUCTIONS TO PLAYING THE THE FIRST OLYMPIAN
 
 ==NESOI'S GIFTS==
 - NESOI has a fixed amount of gifts (islands and abilities) every game
-    -Gifts will be rewarded until player recieves an island
-- If player recieves an ability, it can not be used until the player's next turn
-- If player recieves an island, the player has to insert it into any island that is not fixed
+    -Gifts will be rewarded until player receives an island
+- If player receives an ability, it can not be used until the player's next turn
+- If player receives an island, the player has to insert it into any island that is not fixed
     - One island at the other end of the board will be pushed out and return to Neosi
 
 ==ABILITIES==

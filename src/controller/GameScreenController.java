@@ -2,8 +2,6 @@ package controller;
 
 import entity.*;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -31,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 /**
  * Class that holds the actions and logic behind GameScreen.fxml
@@ -38,20 +37,17 @@ import java.util.ResourceBundle;
  * @author Junjie, Rhys
  */
 public class GameScreenController implements Initializable {
-	// Colour Scheme
 	private final Paint GREY = Paint.valueOf("#3f443e");
-	public Slider volumeSlider;
-	MediaPlayer mediaPlayer1;
-	ArrayList<Integer> rowNoFixed;
-	ArrayList<Integer> columnNoFixed;
+	private MediaPlayer mediaPlayer1;
 	// Game components
+	private int boardNum; // Which board is being played
 	private Board gameBoard;
 	private SilkBag silkBag;
 	private Tile silkBagTile;
 	private ArrayList<Player> playerRoster;
 	private Player currPlayer;
-	private Action actionToUse;
 	// Game info
+	private Player playerWon;
 	private int turn;
 	private ArrayList<Floor> playerMoves;
 	private int boardRows; // Board height + 2 for arrow buttons
@@ -60,7 +56,9 @@ public class GameScreenController implements Initializable {
 	private ArrayList<Floor> inflictableTiles;
 	private ArrayList<Floor> fireInfectedTiles;
 	private ArrayList<Floor> iceInfectedTiles;
-	// Game checks TODO
+	private ArrayList<Integer> rowNoFixed;
+	private ArrayList<Integer> columnNoFixed;
+	// Game checks
 	private boolean isNewTileAction;
 	private boolean isDoubleMoveUsed;
 
@@ -68,6 +66,8 @@ public class GameScreenController implements Initializable {
 	private BorderPane borderPane;
 	@FXML
 	private AnchorPane anchorPaneCentre;
+	@FXML
+	private Slider volumeSlider;
 	@FXML
 	private Circle actionTrackerDraw;
 	@FXML
@@ -160,12 +160,8 @@ public class GameScreenController implements Initializable {
 		volumeSlider.setShowTickLabels(true);
 		volumeSlider.setShowTickMarks(true);
 		volumeSlider.setValue(mediaPlayer1.getVolume() * 100);
-		volumeSlider.valueProperty().addListener(new InvalidationListener() {
-			@Override
-			public void invalidated(Observable observable) {
-				mediaPlayer1.setVolume(volumeSlider.getValue() / 100);
-			}
-		});
+		volumeSlider.valueProperty().addListener(
+				observable -> mediaPlayer1.setVolume(volumeSlider.getValue() / 100));
 	}
 
 	/**
@@ -186,7 +182,7 @@ public class GameScreenController implements Initializable {
 	 * Method to play a chosen sound effect
 	 *
 	 * @param filename - Name of the sound effect file to be played
-	 * @param volume - Volume the sound is to be played at
+	 * @param volume   - Volume the sound is to be played at
 	 */
 	public void playSoundEffect(String filename, double volume) {
 		Media effect = new Media(new File("resources/sounds/" + filename + ".wav").toURI().toString());
@@ -201,6 +197,7 @@ public class GameScreenController implements Initializable {
 	public void initData(ArrayList<Object> data) {
 		gameBoard = (Board) data.get(0);
 		silkBag = (SilkBag) data.get(1);
+		boardNum = (int) data.get(5);
 
 		// There are coming from file reader so i'm 100% sure on the contents of data
 		@SuppressWarnings("unchecked")
@@ -209,6 +206,7 @@ public class GameScreenController implements Initializable {
 		ArrayList<Integer> rows = (ArrayList<Integer>) data.get(3);
 		@SuppressWarnings("unchecked")
 		ArrayList<Integer> columns = (ArrayList<Integer>) data.get(4);
+
 
 		currPlayer = players.get(0);
 
@@ -312,23 +310,17 @@ public class GameScreenController implements Initializable {
 							Player victim = checkPlayerLoc(finalI - 1, finalJ - 1);
 							// Erase buttons highlights
 							for (Player player : playerRoster) {
-//								int row = player.getRowLoc();
-//								int col = player.getColumnLoc();
-//								toggleRectDisable(boardImg[row + 1][col + 1], true, Color.TRANSPARENT);
-//								if (row == finalI - 1 && col == finalJ) {
-//									victim = player;
-//								}
-								toggleRectDisable(boardImg[player.getRowLoc() + 1][player.getColumnLoc() + 1], true, Color.TRANSPARENT);
+								toggleRectDisable(boardImg[player.getRowLoc() + 1][player.getColumnLoc() + 1]
+										, true, Color.TRANSPARENT);
 							}
 							if (victim != null) {
 								try {
 									setPlayerImg(null,
 											victim.getRowLoc() + 1, victim.getColumnLoc() + 1);
-//									System.out.println((victim.getRowLoc() + 1) + "," + (victim.getColumnLoc() + 1)); TODO - print
 									victim.backtrack(gameBoard);
 									setPlayerImg(victim.getImage(),
 											victim.getRowLoc() + 1, victim.getColumnLoc() + 1);
-//									System.out.println((victim.getRowLoc() + 1) + "," + (victim.getColumnLoc() + 1));
+									victim.toggleBacktracked();
 									gameLog.appendText(victim.getName() + " was forcibly moved back in time.\n");
 									playSoundEffect("backtrack", 0.6);
 								} catch (Exception e) {
@@ -466,12 +458,10 @@ public class GameScreenController implements Initializable {
 							Player token = checkPlayerLoc(i - 1, colPhy);
 							if (token != null) {
 								setPlayerImg(null, i, colImg);
-//								System.out.println("oldLoc: " + (i - 1) + "," + (colPhy)); TODO - print
 								if (i != boardRows - 2) {
 									// set image of tile below
 									setPlayerImg(token.getImage(), i + 1, colImg);
 									token.movePlayer(gameBoard, gameBoard.getTileAt(i, colPhy));
-//									System.out.println("newLoc: " + (i) + "," + (colPhy)); TODO - print
 								}
 							}
 						}
@@ -497,22 +487,15 @@ public class GameScreenController implements Initializable {
 							Player token = checkPlayerLoc(i - 1, colPhy);
 							if (token != null) {
 								setPlayerImg(null, i, colImg);
-//								System.out.println("oldLoc: " + (i - 1) + "," + (colPhy)); TODO - print
 								if (i != 1) {
 									// set image of tile above
 									setPlayerImg(token.getImage(), i - 1, colImg);
 									token.movePlayer(gameBoard, gameBoard.getTileAt(i - 2, colPhy));
-//									System.out.println("newLoc: " + (i - 2) + "," + (colPhy)); TODO - print
 								}
 							}
 						}
 						if (ejectedPlayer != null) {
-//							System.out.println("newLoc: " + (boardRows - 3) + "," + (colPhy));TODO - print
-//							System.out.println(ejectedPlayer.getName()
-//									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
 							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(boardRows - 3, colPhy));
-//							System.out.println(ejectedPlayer.getName()
-//									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
 							setPlayerImg(ejectedPlayer.getImage(), boardRows - 2, colImg);
 
 						}
@@ -538,12 +521,10 @@ public class GameScreenController implements Initializable {
 							Player token = checkPlayerLoc(rowPhy, i - 1);
 							if (token != null) {
 								setPlayerImg(null, rowImg, i);
-//								System.out.println("oldLoc: " + (rowPhy) + "," + (i - 1));TODO - print
 								if (i != boardColumns - 2) {
 									// set image of tile right
 									setPlayerImg(token.getImage(), rowImg, i + 1);
 									token.movePlayer(gameBoard, gameBoard.getTileAt(rowPhy, i));
-//									System.out.println("newLoc: " + (rowPhy) + "," + (i)); TODO - print
 								}
 							}
 						}
@@ -569,22 +550,15 @@ public class GameScreenController implements Initializable {
 							Player token = checkPlayerLoc(rowPhy, i - 1);
 							if (token != null) {
 								setPlayerImg(null, rowImg, i);
-//								System.out.println("oldLoc: " + (rowPhy) + "," + (i - 1)); TODO - print
 								if (i != 1) {
 									// set image of tile left
 									setPlayerImg(token.getImage(), rowImg, i - 1);
 									token.movePlayer(gameBoard, gameBoard.getTileAt(rowPhy, i - 2));
-//									System.out.println("newLoc: " + (rowPhy) + "," + (i - 2)); TODO - print
 								}
 							}
 						}
 						if (ejectedPlayer != null) {
-//							System.out.println("newLoc: " + (rowPhy) + "," + (boardColumns - 3)); TODO - print
-//							System.out.println(ejectedPlayer.getName()
-//									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
 							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowPhy, boardColumns - 3));
-//							System.out.println(ejectedPlayer.getName()
-//									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
 							setPlayerImg(ejectedPlayer.getImage(), rowImg, boardColumns - 2);
 						}
 						playSoundEffect("wind", 1);
@@ -622,17 +596,12 @@ public class GameScreenController implements Initializable {
 		Rectangle tempRect = (Rectangle) tempStack.getChildren().get(0);
 		tempRect.setFill(new ImagePattern(tempFloor.getImage()));
 		tempRect.setRotate(tempFloor.getRotation());
-//		System.out.println("(" + (boardImgRow - 1) + ", " + (boardImgCol - 1) + ") " // TODO - print
-//				+ tempFloor.getRotation() + " " + tempRect.getRotate());
-		// Update fire infliction locations
 		Rectangle tempFire = (Rectangle) tempStack.getChildren().get(1);
 		if (tempFloor.getIsFire()) {
 			tempFire.setOpacity(1);
 		} else {
 			tempFire.setOpacity(0);
 		}
-//		System.out.println("Update- " + tempFloor.getRow() + "," + tempFloor.getColumn() + ":" TODO - print
-//				+ tempFloor.isNorth() + tempFloor.isEast() + tempFloor.isSouth() + tempFloor.isWest());
 	}
 
 	/**
@@ -786,8 +755,6 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Some ice, that were freezing some islands still, have now melted.\n");
 		}
 		iceInfectedTiles.removeAll(removed);
-//		System.out.println(fireInfectedTiles); // TODO - print
-//		System.out.println(iceInfectedTiles);
 	}
 
 	/**
@@ -795,7 +762,6 @@ public class GameScreenController implements Initializable {
 	 */
 	private void startNextTurn() {
 		turn++;
-//		System.out.println("Turn: " + turn); // TODO - print
 
 		setupCurrPlayerDisplay();
 		updatePlayerQueue(q1Img, q1Txt, playerRoster.get(1));
@@ -878,11 +844,13 @@ public class GameScreenController implements Initializable {
 	 * Method that runs when the game ends. Will announce the winner and exit from the game
 	 */
 	private void endGame() { // TODO - flesh out
+		playerWon = currPlayer;
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Over");
 		errorInfo.setHeaderText("GAME WON!!!");
-		errorInfo.setContentText(currPlayer.getName() + " wins!!\nThank you for playing!!\n");
+		errorInfo.setContentText(playerWon.getName() + " wins!!\nThank you for playing!!\n");
 		errorInfo.show();
+
 	}
 
 	/**
@@ -957,10 +925,6 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void takeTileClick() {
-//		for (Player player : playerRoster) { TODO - print
-//			System.out.println(player.getName() + "(" + player.getRowLoc() + ", " + player.getColumnLoc() + ")");
-//		}
-
 		silkBagTile = silkBag.drawTile();
 		silkBagTileImg.setRotate(0);
 		silkBagTileImg.setFill(new ImagePattern(silkBagTile.getImage()));
@@ -1041,7 +1005,8 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void fireClick() {
 		try {
-			currPlayer.playActionTile("fire");
+			Action playedAction = currPlayer.playActionTile("fire");
+			silkBag.addTile(true, playedAction);
 			disableActionSelect();
 			gameLog.appendText("Choose an island to cast FIRE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
@@ -1059,7 +1024,8 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void iceClick() {
 		try {
-			currPlayer.playActionTile("ice");
+			Action playedAction = currPlayer.playActionTile("ice");
+			silkBag.addTile(true, playedAction);
 			disableActionSelect();
 			gameLog.appendText("Choose an island to cast ICE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
@@ -1076,7 +1042,8 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void doubleMoveClick() {
 		try {
-			currPlayer.playActionTile("doubleMove");
+			Action playedAction = currPlayer.playActionTile("doubleMove");
+			silkBag.addTile(true, playedAction);
 			isDoubleMoveUsed = true;
 			disableActionSelect();
 			gameLog.appendText("Double Move was cast on " + currPlayer.getName()
@@ -1095,7 +1062,8 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void backTrackClick() {
 		try {
-			currPlayer.playActionTile("backTrack");
+			Action playedAction = currPlayer.playActionTile("backTrack");
+			silkBag.addTile(true, playedAction);
 			disableActionSelect();
 			gameLog.appendText("Choose a fellow deity to cast BACKTRACK on.\n");
 			currPlayerBacktrackTxt.setText("Used");
@@ -1131,16 +1099,6 @@ public class GameScreenController implements Initializable {
 			playerMoves = currPlayer.possibleMoves(gameBoard);
 			playSoundEffect("button", 1);
 
-//			for (Floor floor : playerMoves) { TODO - print
-//				System.out.println(floor.getRow() + "," + floor.getColumn() + ":"
-//						+ floor.isNorth() + floor.isEast() + floor.isSouth() + floor.isWest());
-//			}
-//			System.out.println(currPlayer.getRowLoc() + "," + currPlayer.getColumnLoc() + ","
-//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isNorth() + ","
-//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isEast() + ","
-//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isSouth() + ","
-//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isWest() + ",");
-
 			// Removing tiles with players on
 			for (Player player : playerRoster) {
 				playerMoves.remove(player.getCurrentFloor(gameBoard));
@@ -1170,52 +1128,35 @@ public class GameScreenController implements Initializable {
 		if (currPlayer.getCurrentFloor(gameBoard).getIsGoal()) {
 			endGame();
 			playSoundEffect("yay", 0.8);
+		} else {
+			moveButton.setDisable(true); // Just in case it wasn't disabled earlier
+			endTurnButton.setDisable(true);
+			playSoundEffect("button", 1);
+
+			// Add tile to hand if tile is an action tile and remove from screen
+			if (isNewTileAction) {
+				Action tempAction = (Action) silkBagTile;
+				currPlayer.addActionTile(tempAction);
+				silkBagTileImg.setFill(GREY);
+				gameLog.appendText(currPlayer.getName() + "'s new ability has been added to their hand.\n");
+			}
+
+			playerRoster.remove(0);
+			playerRoster.add(currPlayer);
+			currPlayer = playerRoster.get(0);
+
+			int round = (turn + playerRoster.size()) / playerRoster.size();
+			gameLog.appendText("Round " + round + ": Next Deity - " + currPlayer.getName() + "!\n");
+			startNextTurn();
 		}
-
-		moveButton.setDisable(true); // Just in case it wasn't disabled earlier
-		endTurnButton.setDisable(true);
-		playSoundEffect("button", 1);
-
-		// Add tile to hand if tile is an action tile and remove from screen
-		if (isNewTileAction) {
-			Action tempAction = (Action) silkBagTile;
-			currPlayer.addActionTile(tempAction);
-			silkBagTileImg.setFill(GREY);
-			gameLog.appendText(currPlayer.getName() + "'s new ability has been added to their hand.\n");
-		}
-
-		playerRoster.remove(0);
-		playerRoster.add(currPlayer);
-		currPlayer = playerRoster.get(0);
-
-		int round = (turn + playerRoster.size()) / playerRoster.size();
-		gameLog.appendText("Round " + round + ": Next Deity - " + currPlayer.getName() + "!\n");
-		startNextTurn();
 	}
 
 	/**
-	 * Opens the game instructions
+	 * Setup a pane to allow game saving.
 	 */
 	@FXML
-	private void openGameInstructionsButton() throws FileNotFoundException {
-		File instructions = new File("src/Instructions.txt");
-		String outputText = "";
-		Scanner in;
-		in = new Scanner(instructions);
-		while (in.hasNextLine()){
-			outputText += in.nextLine() + System.lineSeparator();
-		}
-		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
-		errorInfo.setTitle("Game Instructions");
-		errorInfo.setHeaderText("How to play the game");
-		errorInfo.setContentText(outputText);
-		errorInfo.show();
-	}
-
-	@FXML
 	private void saveGameButton() {
-		borderPane.setEffect(new GaussianBlur());
-
+		// Setup the popup
 		VBox saveGameScreen = new VBox(10);
 		saveGameScreen.setPadding(new Insets(10, 10, 10, 10));
 		saveGameScreen.setAlignment(Pos.CENTER);
@@ -1225,7 +1166,8 @@ public class GameScreenController implements Initializable {
 		Button saveAndQuitButton = new Button("Save and Quit");
 		Button returnButton = new Button("Return to Game");
 		saveGameScreen.getChildren().addAll(header, filename, saveAndQuitButton, returnButton);
-
+		// Open the popup
+		borderPane.setEffect(new GaussianBlur());
 		Stage popupStage = new Stage(StageStyle.TRANSPARENT);
 		popupStage.setScene(new Scene(saveGameScreen, Color.TRANSPARENT));
 		popupStage.setAlwaysOnTop(true);
@@ -1236,7 +1178,6 @@ public class GameScreenController implements Initializable {
 			if (filename.getText().isEmpty()) {
 				// Sound effect for an error pop up
 				playSoundEffect("nope", 3);
-
 			} else {
 				// Code to save file
 				Platform.exit();
@@ -1257,5 +1198,44 @@ public class GameScreenController implements Initializable {
 	private void quitGameFromMenuButton() {
 		playSoundEffect("button", 1);
 		Platform.exit();
+	}
+
+	/**
+	 * Opens the game instructions
+	 */
+	@FXML
+	private void openGameInstructionsButton() throws FileNotFoundException {
+		playSoundEffect("button", 1);
+		// Setup text
+		File instructions = new File("src/Instructions.txt");
+		StringBuilder outputText = new StringBuilder();
+		Scanner in;
+		in = new Scanner(instructions);
+		while (in.hasNextLine()) {
+			outputText.append(in.nextLine()).append(System.lineSeparator());
+		}
+
+		// Setup pane
+		VBox helpPage = new VBox(10);
+		helpPage.setPadding(new Insets(10, 10, 10, 10));
+		helpPage.setAlignment(Pos.CENTER);
+		Label header = new Label("Instructions");
+		TextArea textArea = new TextArea(outputText.toString());
+		Button returnButton = new Button("Return to Game");
+		helpPage.getChildren().addAll(header, textArea, returnButton);
+
+		// Open the popup
+		borderPane.setEffect(new GaussianBlur());
+		Stage popupStage = new Stage(StageStyle.TRANSPARENT);
+		popupStage.setScene(new Scene(helpPage, Color.TRANSPARENT));
+		popupStage.setAlwaysOnTop(true);
+		popupStage.initModality(Modality.APPLICATION_MODAL);
+		popupStage.show();
+
+		returnButton.setOnAction(e -> {
+			playSoundEffect("button", 1);
+			borderPane.setEffect(null);
+			popupStage.hide();
+		});
 	}
 }

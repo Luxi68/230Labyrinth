@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Class that represents the players and their tokens within the game
@@ -22,9 +21,6 @@ public class Player {
 	private int[] lastPosiRow = new int[3];
 	private int[] lastPosiColumn = new int[3];
 	private boolean backtracked;
-
-	// TODO - implement backtrack + bool check
-
 
 	/**
 	 * Constructor to create new player object
@@ -239,8 +235,8 @@ public class Player {
 	 */
 	public Action playActionTile(String type) throws NullPointerException {
 		Action tempAction = null;
-		for (Action actionTile : HAND) {
-			if (actionTile.tileType.equalsIgnoreCase(type)) { //TODO fix this
+		for (Action actionTile: HAND) {
+			if (actionTile.tileType.equalsIgnoreCase(type)) {
 				tempAction = actionTile;
 			}
 		}
@@ -249,7 +245,6 @@ public class Player {
 					"WARNING: " + this.NAME + " does not hold any " + type + " abilities.\n");
 		} else {
 			HAND.remove(tempAction);
-			//add tempAction to discarded section in silkbag
 		}
 		return tempAction;
 	}
@@ -279,5 +274,4 @@ public class Player {
 					"WARNING: Backtrack cannot be used on " + this.NAME + " as they already been backtracked.\n");
 		}
 	}
-
 }
