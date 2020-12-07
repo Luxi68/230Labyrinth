@@ -1,15 +1,16 @@
 package entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-import javax.sound.sampled.AudioFileFormat.Type;
+
 
 /**
  * The class that represents the silk bag
  *
  * @author Chris, Ryan, Junjie
  */
-public class SilkBag {
+public class SilkBag implements Serializable {
     ArrayList<Tile> bag = new ArrayList<>();
     ArrayList<Tile> discardBag = new ArrayList<>();
     Tile removedTile;
@@ -19,6 +20,10 @@ public class SilkBag {
      */
     public ArrayList<Tile> getBag() {
         return bag;
+    }
+
+    public int getBagSize() {
+        return bag.size();
     }
 
     /**
