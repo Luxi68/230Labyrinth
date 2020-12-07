@@ -34,17 +34,23 @@ import java.util.Scanner;
  */
 public class LeaderboardController {
 
-	public TableColumn rankCol;
-	public MediaPlayer mediaPlayer1;
-	public TableColumn nameCol;
-	public TableColumn gamePlayedCol;
-	public TableColumn gameWonCol;
-	public TableView<Profile> leaderbordTable;
-	public Label tableHeader;
-	public Slider volumeSlider;
+	@FXML
+	private TableColumn rankCol;
+	private MediaPlayer mediaPlayer1;
+	@FXML
+	private TableColumn nameCol;
+	@FXML
+	private TableColumn gamePlayedCol;
+	@FXML
+	private TableColumn gameWonCol;
+	@FXML
+	private TableView<Profile> leaderbordTable;
+	@FXML
+	private Label tableHeader;
+	@FXML
+	private Slider volumeSlider;
 	@FXML
 	private ResourceBundle resources;
-
 	@FXML
 	private URL location;
 
@@ -55,7 +61,7 @@ public class LeaderboardController {
 	 * It also implements a method to return an autoincrement value in the rankCol to represent the rank
 	 */
 	@FXML
-	void initialize() {
+	public void initialize() {
 		rankCol.setCellValueFactory(new PropertyValueFactory<Integer, Integer>("1"));
 		nameCol.setCellValueFactory(new PropertyValueFactory<Profile, String>("playerName"));
 		gamePlayedCol.setCellValueFactory(new PropertyValueFactory<Profile, String>("numberOfWins"));
@@ -91,7 +97,7 @@ public class LeaderboardController {
 	 * @param event - the action of clicking the button.
 	 */
 	@FXML
-	void backToProfileSelection(ActionEvent event) {
+	private void backToProfileSelection(ActionEvent event) {
 		try {
 			Parent profileSelectionParent = FXMLLoader.load(getClass().getResource("/scene/ProfileSelection.fxml"));
 			profileSelectionParent.setStyle("-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");
@@ -117,7 +123,8 @@ public class LeaderboardController {
 	 * @param actionEvent - the action of clicking the button
 	 * @throws FileNotFoundException - if the desired file doesn't exist
 	 */
-	public void createLeaderboardKnossos(ActionEvent actionEvent) throws FileNotFoundException {
+	@FXML
+	private void createLeaderboardKnossos(ActionEvent actionEvent) throws FileNotFoundException {
 		tableHeader.setText("User Leaderboard for Knossos Board");
 		Leaderboard knossos = new Leaderboard(1);
 		ObservableList<Profile> choices = FXCollections.observableArrayList(knossos.getLeaderboard());
@@ -136,7 +143,8 @@ public class LeaderboardController {
 	 * @param actionEvent - the action of clicking the button
 	 * @throws FileNotFoundException - if the desired file doesn't exist
 	 */
-	public void createLeaderboardMarathon(ActionEvent actionEvent) throws FileNotFoundException {
+	@FXML
+	private void createLeaderboardMarathon(ActionEvent actionEvent) throws FileNotFoundException {
 		tableHeader.setText("User Leaderboard for Marathon Board");
 		Leaderboard marathon = new Leaderboard(2);
 		ObservableList<Profile> choices = FXCollections.observableArrayList(marathon.getLeaderboard());
@@ -155,7 +163,8 @@ public class LeaderboardController {
 	 * @param actionEvent - the action of clicking the button
 	 * @throws FileNotFoundException - if the desired file doesn't exist
 	 */
-	public void createLeaderboardSparta(ActionEvent actionEvent) throws FileNotFoundException {
+	@FXML
+	private void createLeaderboardSparta(ActionEvent actionEvent) throws FileNotFoundException {
 		tableHeader.setText("User Leaderboard for Sparta Board");
 		Leaderboard sparta = new Leaderboard(3);
 		ObservableList<Profile> choices = FXCollections.observableArrayList(sparta.getLeaderboard());
@@ -170,7 +179,7 @@ public class LeaderboardController {
 	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
 	 * until the users leaves the page.
 	 */
-	public void backgroundMusic() {
+	private void backgroundMusic() {
 		Media backgroundSound = new Media(new File("resources/sounds/profileSelectionBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
 		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
@@ -183,7 +192,8 @@ public class LeaderboardController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menubar
 	 */
-	public void quitGameFromMenu(ActionEvent actionEvent) {
+	@FXML
+	private void quitGameFromMenu(ActionEvent actionEvent) {
 		Platform.exit();
 	}
 
@@ -193,7 +203,8 @@ public class LeaderboardController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menu bar.
 	 */
-	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
+	@FXML
+	private void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
 		File instructions = new File("src/Instructions.txt");
 		String outputText = "";
 		Scanner in;
@@ -207,6 +218,4 @@ public class LeaderboardController {
 		errorInfo.setContentText(outputText);
 		errorInfo.show();
 	}
-
-
 }

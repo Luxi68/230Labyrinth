@@ -34,10 +34,13 @@ import java.util.Scanner;
 
 public class CreateProfileController {
 
-	public TextField profileName;
-	public AnchorPane createProfilePane;
-	public Slider volumeSlider;
 	MediaPlayer mediaPlayer1;
+	@FXML
+	private TextField profileName;
+	@FXML
+	private AnchorPane createProfilePane;
+	@FXML
+	private Slider volumeSlider;
 	@FXML
 	private ResourceBundle resources;
 
@@ -49,7 +52,7 @@ public class CreateProfileController {
 	 * which starts the background music and it also sets up the volume control slider.
 	 */
 	@FXML
-	void initialize() {
+	public void initialize() {
 		backgroundMusic();
 		volumeSlider.setShowTickLabels(true);
 		volumeSlider.setShowTickMarks(true);
@@ -87,7 +90,8 @@ public class CreateProfileController {
 	 * @param actionEvent - the action of pressing the button
 	 * @throws IOException - in case there is a problem creating the file
 	 */
-	public void createNewProfile(ActionEvent actionEvent) throws IOException {
+	@FXML
+	private void createNewProfile(ActionEvent actionEvent) throws IOException {
 		if (profileName.getText().isEmpty()) {
 			showAlert(Alert.AlertType.ERROR, createProfilePane.getScene().getWindow(), "Error!", "Please enter profile name");
 		} else {
@@ -102,7 +106,7 @@ public class CreateProfileController {
 	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
 	 * until the users leaves the page.
 	 */
-	public void backgroundMusic() {
+	private void backgroundMusic() {
 		Media backgroundSound = new Media(new File("resources/sounds/startScreenBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
 		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
@@ -115,7 +119,8 @@ public class CreateProfileController {
 	 *
 	 * @param actionEvent - the action of clicking the button.
 	 */
-	public void goBackToProfileSelection(ActionEvent actionEvent) {
+	@FXML
+	private void goBackToProfileSelection(ActionEvent actionEvent) {
 		try {
 			Parent profileSelectionParent = FXMLLoader.load(
 					getClass().getResource("/scene/ProfileSelection.fxml"));
@@ -140,7 +145,8 @@ public class CreateProfileController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menubar
 	 */
-	public void quitGameFromMenu(ActionEvent actionEvent) {
+	@FXML
+	private void quitGameFromMenu(ActionEvent actionEvent) {
 		Platform.exit();
 	}
 
@@ -150,7 +156,8 @@ public class CreateProfileController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menu bar.
 	 */
-	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
+	@FXML
+	private void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
 		File instructions = new File("src/Instructions.txt");
 		String outputText = "";
 		Scanner in;

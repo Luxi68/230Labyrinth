@@ -847,7 +847,7 @@ public class GameScreenController implements Initializable {
 	/**
 	 * Method that runs when the game ends. Will announce the winner and exit from the game
 	 */
-	private void endGame(){ // TODO - flesh out
+	private void endGame() {
 		playerWon = currPlayer;
 		try {
 			updateProfiles();
@@ -1278,58 +1278,52 @@ public class GameScreenController implements Initializable {
 	public void updateProfiles() throws IOException {
 		ArrayList<String> updatedFileContent = new ArrayList<>();
 		Scanner in;
-		for(int i=0; i<playerRoster.size(); i++){
-			File currentProfileFile = new File("resources/users/"+playerRoster.get(i).getName()+".txt");
+		for (Player player : playerRoster) {
+			File currentProfileFile = new File("resources/users/" + player.getName() + ".txt");
 			FileWriter wr = new FileWriter(currentProfileFile);
 			in = new Scanner(currentProfileFile);
-			while(in.hasNextLine()){
+			while (in.hasNextLine()) {
 				String currentLine = in.nextLine();
 				updatedFileContent.add(currentLine);
 			}
-			switch (boardNum){
+			switch (boardNum) {
 				case 1:
 					String knossosData = updatedFileContent.get(1);
 					String[] knossosSplitted = knossosData.split(",");
-					if(playerRoster.get(i)==playerWon){
+					if (player == playerWon) {
 						knossosSplitted[1] += 1;
-						knossosSplitted[2] += 1;
-					}else{
-						knossosSplitted[2] += 1;
 					}
-					String knossosLineToBeWritten = String.join(",",knossosSplitted);
-					updatedFileContent.set(1,knossosLineToBeWritten);
+					knossosSplitted[2] += 1;
+					String knossosLineToBeWritten = String.join(",", knossosSplitted);
+					updatedFileContent.set(1, knossosLineToBeWritten);
 					for (String s : updatedFileContent) {
 						wr.write(s);
 						wr.write(System.lineSeparator());
 					}
 					break;
 				case 2:
-					String marathonData= updatedFileContent.get(2);
+					String marathonData = updatedFileContent.get(2);
 					String[] marathonSplitted = marathonData.split(",");
-					if(playerRoster.get(i)==playerWon){
+					if (player == playerWon) {
 						marathonSplitted[1] += 1;
-						marathonSplitted[2] += 1;
-					}else{
-						marathonSplitted[2] += 1;
 					}
-					String marathonLineToBeWritten = String.join(",",marathonSplitted);
-					updatedFileContent.set(1,marathonLineToBeWritten);
+					marathonSplitted[2] += 1;
+					String marathonLineToBeWritten = String.join(",", marathonSplitted);
+					updatedFileContent.set(1, marathonLineToBeWritten);
 					for (String s : updatedFileContent) {
 						wr.write(s);
 						wr.write(System.lineSeparator());
 					}
 					break;
 				case 3:
-					String spartaData= updatedFileContent.get(3);
+					String spartaData = updatedFileContent.get(3);
 					String[] spartaSplitted = spartaData.split(",");
-					if(playerRoster.get(i)==playerWon){
+					if (player == playerWon) {
 						spartaSplitted[1] += 1;
-						spartaSplitted[2] += 1;
-					}else{
-						spartaSplitted[2] += 1;
 					}
-					String spartaLineToBeWritten = String.join(",",spartaSplitted);
-					updatedFileContent.set(1,spartaLineToBeWritten);
+					spartaSplitted[2] += 1;
+					String spartaLineToBeWritten = String.join(",", spartaSplitted);
+					updatedFileContent.set(1, spartaLineToBeWritten);
 					for (String s : updatedFileContent) {
 						wr.write(s);
 						wr.write(System.lineSeparator());

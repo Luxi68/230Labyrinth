@@ -30,11 +30,11 @@ import java.util.Scanner;
  */
 public class PlayerSelectionController {
 
-	public Slider volumeSlider;
 	MediaPlayer mediaPlayer1;
 	@FXML
+	private Slider volumeSlider;
+	@FXML
 	private ResourceBundle resources;
-
 	@FXML
 	private URL location;
 
@@ -43,7 +43,7 @@ public class PlayerSelectionController {
 	 * which starts the background music and it also sets up the volume control slider.
 	 */
 	@FXML
-	void initialize() {
+	public void initialize() {
 		backgroundMusic();
 		volumeSlider.setShowTickLabels(true);
 		volumeSlider.setShowTickMarks(true);
@@ -61,7 +61,7 @@ public class PlayerSelectionController {
 	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
 	 * until the users leaves the page.
 	 */
-	public void backgroundMusic() {
+	private void backgroundMusic() {
 		Media backgroundSound = new Media(new File("resources/sounds/playerSelectionBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
 		mediaPlayer1.setVolume(0.1);
@@ -74,7 +74,7 @@ public class PlayerSelectionController {
 	 * @param event - the action of clicking the button.
 	 */
 	@FXML
-	void backToStartScreen(ActionEvent event) {
+	private void backToStartScreen(ActionEvent event) {
 		try {
 			Parent startScreenParent = FXMLLoader.load(getClass().getResource("/scene/StartScreen.fxml"));
 			startScreenParent.setStyle("-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");
@@ -101,7 +101,7 @@ public class PlayerSelectionController {
 	 * @throws IOException - in case the sound files don't exist
 	 */
 	@FXML
-	void fourPlayersSelected(ActionEvent event) throws IOException {
+	private void fourPlayersSelected(ActionEvent event) throws IOException {
 		int playerNum = 4;
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/scene/NewGame.fxml"));
@@ -131,7 +131,7 @@ public class PlayerSelectionController {
 	 * @throws IOException - in case the sound files don't exist
 	 */
 	@FXML
-	void threePlayersSelected(ActionEvent event) throws IOException {
+	private void threePlayersSelected(ActionEvent event) throws IOException {
 		int playerNum = 3;
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/scene/NewGame.fxml"));
@@ -161,7 +161,7 @@ public class PlayerSelectionController {
 	 * @throws IOException - in case the sound files don't exist
 	 */
 	@FXML
-	void twoPlayersSelected(ActionEvent event) throws IOException {
+	private void twoPlayersSelected(ActionEvent event) throws IOException {
 		int playerNum = 2;
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/scene/NewGame.fxml"));
@@ -187,7 +187,8 @@ public class PlayerSelectionController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menubar
 	 */
-	public void quitGameFromMenu(ActionEvent actionEvent) {
+	@FXML
+	private void quitGameFromMenu(ActionEvent actionEvent) {
 		Platform.exit();
 	}
 
@@ -197,7 +198,8 @@ public class PlayerSelectionController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menu bar.
 	 */
-	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
+	@FXML
+	private void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
 		File instructions = new File("src/Instructions.txt");
 		StringBuilder outputText = new StringBuilder();
 		Scanner in;

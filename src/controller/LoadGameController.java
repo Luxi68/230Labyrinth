@@ -34,12 +34,13 @@ import java.util.Scanner;
  */
 public class LoadGameController {
 
-	public ChoiceBox<String> savesChoice;
-	public Slider volumeSlider;
 	MediaPlayer mediaPlayer1;
 	@FXML
+	private ChoiceBox<String> savesChoice;
+	@FXML
+	private Slider volumeSlider;
+	@FXML
 	private ResourceBundle resources;
-
 	@FXML
 	private URL location;
 

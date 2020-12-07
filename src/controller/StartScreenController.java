@@ -93,7 +93,7 @@ public class StartScreenController {
 	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
 	 * until the users leaves the page.
 	 */
-	public void backgroundMusic() {
+	private void backgroundMusic() {
 		Media backgroundSound = new Media(new File("resources/sounds/startScreenBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
 		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
@@ -154,7 +154,8 @@ public class StartScreenController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menubar
 	 */
-	public void quitGameFromMenu(ActionEvent actionEvent) {
+	@FXML
+	private void quitGameFromMenu(ActionEvent actionEvent) {
 		Platform.exit();
 	}
 
@@ -164,7 +165,8 @@ public class StartScreenController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menu bar.
 	 */
-	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
+	@FXML
+	private void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
 		File instructions = new File("src/Instructions.txt");
 		String outputText = "";
 		Scanner in;

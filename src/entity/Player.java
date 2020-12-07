@@ -103,7 +103,6 @@ public class Player {
 	}
 
 	/**
-	 *
 	 * @return
 	 */
 	public boolean isBacktracked() {
@@ -235,7 +234,7 @@ public class Player {
 	 */
 	public Action playActionTile(String type) throws NullPointerException {
 		Action tempAction = null;
-		for (Action actionTile: HAND) {
+		for (Action actionTile : HAND) {
 			if (actionTile.tileType.equalsIgnoreCase(type)) {
 				tempAction = actionTile;
 			}

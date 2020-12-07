@@ -34,16 +34,22 @@ import java.util.Scanner;
  */
 public class NewGameController {
 
-	public ListView<String> chosenProfiles;
-	public ArrayList<Profile> profiles = new ArrayList<>();
-	public Button chooseProfileButton;
 	public int numberOfPlayers;
-	public int count = 0;
-	public ChoiceBox<String> fileChoice;
-	public Label labelSelectPlayers;
-	public ListView<String> listOfProfiles;
-	public Slider volumeSlider;
-	MediaPlayer mediaPlayer1;
+	private ArrayList<Profile> profiles = new ArrayList<>();
+	private int count = 0;
+	private MediaPlayer mediaPlayer1;
+	@FXML
+	private ListView<String> chosenProfiles;
+	@FXML
+	private Button chooseProfileButton;
+	@FXML
+	private ChoiceBox<String> fileChoice;
+	@FXML
+	private Label labelSelectPlayers;
+	@FXML
+	private ListView<String> listOfProfiles;
+	@FXML
+	private Slider volumeSlider;
 	@FXML
 	private ResourceBundle resources;
 
@@ -121,7 +127,7 @@ public class NewGameController {
 	 *
 	 * @return - the arraylist containing the filenames as strings
 	 */
-	public ArrayList<String> getAllLevelFilenames() {
+	private ArrayList<String> getAllLevelFilenames() {
 		ArrayList<String> levelFileNames = new ArrayList<>();
 		File directoryPath = new File("resources/levels");
 		File listOfFiles[] = directoryPath.listFiles();
@@ -137,7 +143,7 @@ public class NewGameController {
 	 *
 	 * @return - the arraylist of profile names
 	 */
-	public ArrayList<String> getAllProfiles() {
+	private ArrayList<String> getAllProfiles() {
 		ArrayList<String> profileFileNames = new ArrayList<>();
 		File directoryPath = new File("resources/users");
 		File listOfFiles[] = directoryPath.listFiles();
@@ -153,7 +159,7 @@ public class NewGameController {
 	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
 	 * until the users leaves the page.
 	 */
-	public void backgroundMusic() {
+	private void backgroundMusic() {
 		Media backgroundSound = new Media(new File("resources/sounds/playerSelectionBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
 		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
@@ -187,7 +193,7 @@ public class NewGameController {
 	 *
 	 * @return - returns true if the condition is true
 	 */
-	public boolean areAllProfilesChosen() {
+	private boolean areAllProfilesChosen() {
 		return count == numberOfPlayers;
 	}
 
@@ -197,7 +203,8 @@ public class NewGameController {
 	 *
 	 * @param actionEvent
 	 */
-	public void chooseProfile(ActionEvent actionEvent) {
+	@FXML
+	private void chooseProfile(ActionEvent actionEvent) {
 		String selectedProfile = listOfProfiles.getSelectionModel().getSelectedItem();
 		Profile chosenOne = new Profile(selectedProfile);
 		if (selectedProfile == null) {
@@ -246,7 +253,8 @@ public class NewGameController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menubar
 	 */
-	public void quitGameFromMenu(ActionEvent actionEvent) {
+	@FXML
+	private void quitGameFromMenu(ActionEvent actionEvent) {
 		Platform.exit();
 	}
 
@@ -256,7 +264,8 @@ public class NewGameController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menu bar.
 	 */
-	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
+	@FXML
+	private void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
 		File instructions = new File("src/Instructions.txt");
 		String outputText = "";
 		Scanner in;

@@ -33,12 +33,13 @@ import java.util.Scanner;
 
 public class ProfileSelectionController {
 
-	public ListView<String> profileList;
-	public MediaPlayer mediaPlayer1;
-	public Slider volumeSlider;
+	private MediaPlayer mediaPlayer1;
+	@FXML
+	private ListView<String> profileList;
+	@FXML
+	private Slider volumeSlider;
 	@FXML
 	private ResourceBundle resources;
-
 	@FXML
 	private URL location;
 
@@ -102,7 +103,7 @@ public class ProfileSelectionController {
 	 *
 	 * @return - the arraylist of filenames
 	 */
-	public ArrayList<String> getAllProfiles() {
+	private ArrayList<String> getAllProfiles() {
 		ArrayList<String> profileFileNames = new ArrayList<>();
 		File directoryPath = new File("resources/users");
 		File listOfFiles[] = directoryPath.listFiles();
@@ -119,7 +120,8 @@ public class ProfileSelectionController {
 	 * @param actionEvent - the button click
 	 * @throws IOException - in case the file doesn't exist
 	 */
-	public void goToCreateProfile(ActionEvent actionEvent) throws IOException {
+	@FXML
+	private void goToCreateProfile(ActionEvent actionEvent) throws IOException {
 		Parent createProfileParent = FXMLLoader.load(getClass().getResource("/scene/CreateProfile.fxml"));
 		createProfileParent.setStyle(
 				"-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");	Scene createProfileScene = new Scene(createProfileParent);
@@ -138,7 +140,8 @@ public class ProfileSelectionController {
 	 *
 	 * @param actionEvent - The button click
 	 */
-	public void viewProfileInformation(ActionEvent actionEvent) {
+	@FXML
+	private void viewProfileInformation(ActionEvent actionEvent) {
 		try {
 			Alert profileInfo = new Alert(Alert.AlertType.INFORMATION);
 			profileInfo.setTitle("Profile Information");
@@ -166,7 +169,8 @@ public class ProfileSelectionController {
 	 *
 	 * @param actionEvent - the button click
 	 */
-	public void deleteFile(ActionEvent actionEvent) {
+	@FXML
+	private void deleteFile(ActionEvent actionEvent) {
 		String filename = profileList.getSelectionModel().getSelectedItem() + ".txt";
 		File fileToBeDeleted = new File("resources/users/" + filename);
 		if (fileToBeDeleted.delete()) {
@@ -189,7 +193,7 @@ public class ProfileSelectionController {
 	 * @return outputText - the string containing the file info
 	 * @throws FileNotFoundException - if the file doesn't exist but it will always
 	 */
-	public String fileToString(String filename) throws FileNotFoundException {
+	private String fileToString(String filename) throws FileNotFoundException {
 		File selectedFile = new File("resources/users/" + filename);
 		String outputText;
 		Scanner in = null;
@@ -219,7 +223,8 @@ public class ProfileSelectionController {
 	 *
 	 * @param actionEvent - the action of clicking the button.
 	 */
-	public void goToLeaderboard(ActionEvent actionEvent) {
+	@FXML
+	private void goToLeaderboard(ActionEvent actionEvent) {
 		try {
 			Parent leaderboardParent = FXMLLoader.load(getClass().getResource("/scene/Leaderboard.fxml"));
 			leaderboardParent.setStyle("-fx-background-image: url('assets/mount.png');" + "-fx-background-size: cover");
@@ -242,7 +247,7 @@ public class ProfileSelectionController {
 	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
 	 * until the users leaves the page.
 	 */
-	public void backgroundMusic() {
+	private void backgroundMusic() {
 		Media backgroundSound = new Media(new File("resources/sounds/profileSelectionBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
 		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
@@ -255,7 +260,8 @@ public class ProfileSelectionController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menubar
 	 */
-	public void quitGameFromMenu(ActionEvent actionEvent) {
+	@FXML
+	private void quitGameFromMenu(ActionEvent actionEvent) {
 		Platform.exit();
 	}
 
@@ -265,7 +271,8 @@ public class ProfileSelectionController {
 	 *
 	 * @param actionEvent - the action of selecting the option in the menu bar.
 	 */
-	public void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
+	@FXML
+	private void openGameInstructions(ActionEvent actionEvent) throws FileNotFoundException {
 		File instructions = new File("src/Instructions.txt");
 		String outputText = "";
 		Scanner in;
