@@ -2,8 +2,6 @@ package controller;
 
 import entity.*;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -28,20 +26,10 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Scanner;
-/*
-TODO - img resources
-	 - action tiles decide how i wanna implement
-	 - implement
-	 - test
-	 - wrap up all other tags
-	 - DONE!!
- */
 
 /**
  * Class that holds the actions and logic behind GameScreen.fxml
@@ -49,23 +37,18 @@ TODO - img resources
  * @author Junjie, Rhys
  */
 public class GameScreenController implements Initializable {
-	// Colour Scheme
 	private final Paint GREY = Paint.valueOf("#3f443e");
-	public Slider volumeSlider;
-	MediaPlayer mediaPlayer1;
-	ArrayList<Integer> rowNoFixed;
-	ArrayList<Integer> columnNoFixed;
+	private MediaPlayer mediaPlayer1;
 	// Game components
-	public int boardNum;
+	private int boardNum; // Which board is being played
 	private Board gameBoard;
 	private SilkBag silkBag;
 	private Tile silkBagTile;
 	private ArrayList<Player> playerRoster;
 	private Player currPlayer;
-	private Action actionToUse;
 	// Game info
-	private int turn;
 	private Player playerWon;
+	private int turn;
 	private ArrayList<Floor> playerMoves;
 	private int boardRows; // Board height + 2 for arrow buttons
 	private int boardColumns; // Board length + 2 for arrow buttons
@@ -73,7 +56,9 @@ public class GameScreenController implements Initializable {
 	private ArrayList<Floor> inflictableTiles;
 	private ArrayList<Floor> fireInfectedTiles;
 	private ArrayList<Floor> iceInfectedTiles;
-	// Game checks TODO
+	private ArrayList<Integer> rowNoFixed;
+	private ArrayList<Integer> columnNoFixed;
+	// Game checks
 	private boolean isNewTileAction;
 	private boolean isDoubleMoveUsed;
 
@@ -81,6 +66,8 @@ public class GameScreenController implements Initializable {
 	private BorderPane borderPane;
 	@FXML
 	private AnchorPane anchorPaneCentre;
+	@FXML
+	private Slider volumeSlider;
 	@FXML
 	private Circle actionTrackerDraw;
 	@FXML
@@ -169,27 +156,39 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Round 1: First Deity - " + currPlayer.getName() + "!\n");
 			startNextTurn();
 		});
-		backgroundMusic();
+		backgroundMusic("gameScreenBackground");
 		volumeSlider.setShowTickLabels(true);
 		volumeSlider.setShowTickMarks(true);
 		volumeSlider.setValue(mediaPlayer1.getVolume() * 100);
-		volumeSlider.valueProperty().addListener(new InvalidationListener() {
-			@Override
-			public void invalidated(Observable observable) {
-				mediaPlayer1.setVolume(volumeSlider.getValue() / 100);
-			}
-		});
+		volumeSlider.valueProperty().addListener(
+				observable -> mediaPlayer1.setVolume(volumeSlider.getValue() / 100));
 	}
 
 	/**
-	 * Method to start background music
+	 * Method to play background music
+	 *
+	 * @param filename the name of the music file that requested
 	 */
-	public void backgroundMusic() {
-		Media backgroundSound = new Media(new File("resources/sounds/gameScreenBackground.wav").toURI().toString());
+	public void backgroundMusic(String filename) {
+		Media backgroundSound = new Media(
+				new File("resources/sounds/" + filename + ".wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
 		mediaPlayer1.setCycleCount(MediaPlayer.INDEFINITE);
 		mediaPlayer1.setVolume(0.1);
 		mediaPlayer1.setAutoPlay(true);
+	}
+
+	/**
+	 * Method to play a chosen sound effect
+	 *
+	 * @param filename - Name of the sound effect file to be played
+	 * @param volume   - Volume the sound is to be played at
+	 */
+	public void playSoundEffect(String filename, double volume) {
+		Media effect = new Media(new File("resources/sounds/" + filename + ".wav").toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(effect);
+		mediaPlayer.play();
+		mediaPlayer.setVolume(volume);
 	}
 
 	/**
@@ -198,6 +197,7 @@ public class GameScreenController implements Initializable {
 	public void initData(ArrayList<Object> data) {
 		gameBoard = (Board) data.get(0);
 		silkBag = (SilkBag) data.get(1);
+		boardNum = (int) data.get(5);
 
 		// There are coming from file reader so i'm 100% sure on the contents of data
 		@SuppressWarnings("unchecked")
@@ -206,6 +206,7 @@ public class GameScreenController implements Initializable {
 		ArrayList<Integer> rows = (ArrayList<Integer>) data.get(3);
 		@SuppressWarnings("unchecked")
 		ArrayList<Integer> columns = (ArrayList<Integer>) data.get(4);
+
 
 		currPlayer = players.get(0);
 
@@ -286,16 +287,10 @@ public class GameScreenController implements Initializable {
 					Paint colour = tile.getStroke();
 
 					if (actionTrackerMove.getFill() == currPlayer.getColour()) { // If movement turn
-						// Sound effect of footsteps when player moves from one tile to the next
-						Media buttonSound = new Media(new File("resources/sounds/footstep.wav").toURI().toString());
-						MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-						mediaPlayer.play();
-						mediaPlayer.setVolume(1.5);
 						// Moving backend
 						Floor currFloor = currPlayer.getCurrentFloor(gameBoard);
 						Floor movedFloor = gameBoard.getTileAt(finalI - 1, finalJ - 1);
 						currPlayer.movePlayer(gameBoard, movedFloor);
-						mediaPlayer.play();
 
 						// Moving frontend
 						ImageView currFloorImg = (ImageView)
@@ -305,6 +300,7 @@ public class GameScreenController implements Initializable {
 						currFloorImg.setImage(null);
 						movedFloorImg.setImage(currPlayer.getImage());
 
+						playSoundEffect("footstep", 3);
 						gameLog.appendText(currPlayer.getName() + " moved to island ("
 								+ (finalJ - 1) + ", " + (finalI - 1) + ").\n");
 						checkEndMove();
@@ -314,28 +310,19 @@ public class GameScreenController implements Initializable {
 							Player victim = checkPlayerLoc(finalI - 1, finalJ - 1);
 							// Erase buttons highlights
 							for (Player player : playerRoster) {
-//								int row = player.getRowLoc();
-//								int col = player.getColumnLoc();
-//								toggleRectDisable(boardImg[row + 1][col + 1], true, Color.TRANSPARENT);
-//								if (row == finalI - 1 && col == finalJ) {
-//									victim = player;
-//								}
-								toggleRectDisable(boardImg[player.getRowLoc() + 1][player.getColumnLoc() + 1], true, Color.TRANSPARENT);
+								toggleRectDisable(boardImg[player.getRowLoc() + 1][player.getColumnLoc() + 1]
+										, true, Color.TRANSPARENT);
 							}
 							if (victim != null) {
 								try {
 									setPlayerImg(null,
 											victim.getRowLoc() + 1, victim.getColumnLoc() + 1);
-//									System.out.println((victim.getRowLoc() + 1) + "," + (victim.getColumnLoc() + 1)); TODO - print
 									victim.backtrack(gameBoard);
 									setPlayerImg(victim.getImage(),
 											victim.getRowLoc() + 1, victim.getColumnLoc() + 1);
-//									System.out.println((victim.getRowLoc() + 1) + "," + (victim.getColumnLoc() + 1));
+									victim.toggleBacktracked();
 									gameLog.appendText(victim.getName() + " was forcibly moved back in time.\n");
-									Media buttonSound = new Media(new File("resources/sounds/backtrack.wav").toURI().toString());
-									MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-									mediaPlayer.play();
-									mediaPlayer.setVolume(0.5);
+									playSoundEffect("backtrack", 0.6);
 								} catch (Exception e) {
 									gameLog.appendText(e.getMessage());
 								}
@@ -353,11 +340,7 @@ public class GameScreenController implements Initializable {
 
 							if (colour == Color.ORANGERED) { // Fire was played
 								int endTurn = turn + (playerRoster.size() * 2);
-								//Sound effect for when a tile is clicked to be on fire
-								Media buttonSound = new Media(new File("resources/sounds/fire.wav").toURI().toString());
-								MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-								mediaPlayer.play();
-								mediaPlayer.setVolume(0.5);
+								playSoundEffect("fire", 0.5);
 
 								for (Floor effected : inflictedTiles) {
 									StackPane tempStack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
@@ -376,10 +359,7 @@ public class GameScreenController implements Initializable {
 
 							} else if (colour == Color.LIGHTBLUE) { // Ice was played
 								int endTurn = turn + playerRoster.size();
-								//Sound effect for when a tile is clicked to be on ice
-								Media buttonSound = new Media(new File("resources/sounds/ice.wav").toURI().toString());
-								MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-								mediaPlayer.play();
+								playSoundEffect("ice", 1);
 
 								for (Floor effected : inflictedTiles) {
 									StackPane tempStack = boardImg[effected.getRow() + 1][effected.getColumn() + 1];
@@ -435,7 +415,7 @@ public class GameScreenController implements Initializable {
 		Polygon insertTileButton = new Polygon();
 		insertTileButton.getPoints().addAll(20.0, 40.0, 40.0, 40.0, 30.0, 20.0);
 //		Alternate size triangle (15.0, 45.0, 45.0, 45.0, 30.0, 15.0);
-		insertTileButton.setFill(GREY);
+		insertTileButton.setFill(Color.BLACK);
 		insertTileButton.setStroke(Color.TRANSPARENT);
 		insertTileButton.setStrokeType(StrokeType.OUTSIDE);
 		insertTileButton.setRotate(rotation);
@@ -448,9 +428,14 @@ public class GameScreenController implements Initializable {
 		boardPhs.getChildren().addAll(stack);
 		boardImg[row][column] = stack;
 
+		// What happens if the arrow tile buttons are clicked
 		stack.setOnMouseClicked(event -> {
+			// The index of the gridpane referencing the images and arrows
 			int rowImg = GridPane.getRowIndex(stack);
 			int colImg = GridPane.getColumnIndex(stack);
+			// The index of the board referencing the floor tiles
+			int rowPhy = rowImg - 1;
+			int colPhy = colImg - 1;
 			Floor ejectedTile;
 			Player ejectedPlayer;
 			Floor insertedTile = (Floor) silkBagTile;
@@ -459,146 +444,125 @@ public class GameScreenController implements Initializable {
 
 			if (row == 0 || row == boardRows - 1) {
 				axis = "longitude";
-				//Sound effect of when a tile is inserted into the board
-				Media buttonSound = new Media(new File("resources/sounds/wind.wav").toURI().toString());
-				MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-				mediaPlayer.play();
 				// Move all the tiles along and return the ejected tile
 				if (row == 0) {
 					try {
 						direction = "north";
-						ejectedTile = gameBoard.insertFromTop(insertedTile, colImg - 1);
+						ejectedTile = gameBoard.insertFromTop(insertedTile, colPhy);
 						silkBag.addTile(true, ejectedTile); //tile is removed
-						ejectedPlayer = checkPlayerLoc(boardRows - 3, colImg - 1);
+						ejectedPlayer = checkPlayerLoc(boardRows - 3, colPhy);
 
 						// Loop up through the column to update all images
 						for (int i = boardRows - 2; i > 0; i--) {
 							updateTileImgs(i, colImg);
-							Player token = checkPlayerLoc(i - 1, colImg - 1);
+							Player token = checkPlayerLoc(i - 1, colPhy);
 							if (token != null) {
 								setPlayerImg(null, i, colImg);
-//								System.out.println("oldLoc: " + (i - 1) + "," + (colImg - 1)); TODO - print
 								if (i != boardRows - 2) {
 									// set image of tile below
 									setPlayerImg(token.getImage(), i + 1, colImg);
-									token.movePlayer(gameBoard, gameBoard.getTileAt(i, colImg - 1));
-//									System.out.println("newLoc: " + (i) + "," + (colImg - 1)); TODO - print
+									token.movePlayer(gameBoard, gameBoard.getTileAt(i, colPhy));
 								}
 							}
 						}
 						if (ejectedPlayer != null) {
-							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(0, colImg - 1));
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(0, colPhy));
 							setPlayerImg(ejectedPlayer.getImage(), 1, colImg);
 						}
-						endDrawTurn(axis, direction, colImg - 1);
+						playSoundEffect("wind", 1);
+						endDrawTurn(axis, direction, colPhy);
 					} catch (Exception e) {
 						gameLog.appendText(e.getMessage());
 					}
 				} else {
 					try {
 						direction = "south";
-						ejectedTile = gameBoard.insertFromBottom(insertedTile, colImg - 1);
+						ejectedTile = gameBoard.insertFromBottom(insertedTile, colPhy);
 						silkBag.addTile(true, ejectedTile); //tile is removed
-						ejectedPlayer = checkPlayerLoc(0, colImg - 1);
+						ejectedPlayer = checkPlayerLoc(0, colPhy);
 
 						// Loop down through the column to update all images
 						for (int i = 1; i < boardRows - 1; i++) {
 							updateTileImgs(i, colImg);
-							Player token = checkPlayerLoc(i - 1, colImg - 1);
+							Player token = checkPlayerLoc(i - 1, colPhy);
 							if (token != null) {
 								setPlayerImg(null, i, colImg);
-//								System.out.println("oldLoc: " + (i - 1) + "," + (colImg - 1)); TODO - print
 								if (i != 1) {
 									// set image of tile above
 									setPlayerImg(token.getImage(), i - 1, colImg);
-									token.movePlayer(gameBoard, gameBoard.getTileAt(i - 2, colImg - 1));
-//									System.out.println("newLoc: " + (i - 2) + "," + (colImg - 1)); TODO - print
+									token.movePlayer(gameBoard, gameBoard.getTileAt(i - 2, colPhy));
 								}
 							}
 						}
 						if (ejectedPlayer != null) {
-//							System.out.println("newLoc: " + (boardRows - 3) + "," + (colImg - 1));TODO - print
-//							System.out.println(ejectedPlayer.getName()
-//									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
-							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(boardRows - 3, colImg - 1));
-//							System.out.println(ejectedPlayer.getName()
-//									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(boardRows - 3, colPhy));
 							setPlayerImg(ejectedPlayer.getImage(), boardRows - 2, colImg);
 
 						}
-						endDrawTurn(axis, direction, colImg - 1);
+						playSoundEffect("wind", 1);
+						endDrawTurn(axis, direction, colPhy);
 					} catch (Exception e) {
 						gameLog.appendText(e.getMessage());
 					}
 				}
 			} else if (column == 0 || column == boardColumns - 1) { // Left column
 				axis = "latitude";
-				Media buttonSound = new Media(new File("resources/sounds/wind.wav").toURI().toString());
-				MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-				mediaPlayer.play();
 				// Move all the tiles along and return the ejected tile
 				if (column == 0) {
 					try {
 						direction = "west";
-						ejectedTile = gameBoard.insertFromLeft(insertedTile, rowImg - 1);
+						ejectedTile = gameBoard.insertFromLeft(insertedTile, rowPhy);
 						silkBag.addTile(true, ejectedTile);
-						ejectedPlayer = checkPlayerLoc(rowImg - 1, boardColumns - 3);
+						ejectedPlayer = checkPlayerLoc(rowPhy, boardColumns - 3);
 
 						// Loop right through the row to update all images
 						for (int i = boardColumns - 2; i > 0; i--) {
 							updateTileImgs(rowImg, i);
-							Player token = checkPlayerLoc(rowImg - 1, i - 1);
+							Player token = checkPlayerLoc(rowPhy, i - 1);
 							if (token != null) {
 								setPlayerImg(null, rowImg, i);
-//								System.out.println("oldLoc: " + (rowImg - 1) + "," + (i - 1));TODO - print
 								if (i != boardColumns - 2) {
 									// set image of tile right
 									setPlayerImg(token.getImage(), rowImg, i + 1);
-									token.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, i));
-//									System.out.println("newLoc: " + (rowImg - 1) + "," + (i)); TODO - print
+									token.movePlayer(gameBoard, gameBoard.getTileAt(rowPhy, i));
 								}
 							}
 						}
 						if (ejectedPlayer != null) {
-							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, 0));
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowPhy, 0));
 							setPlayerImg(ejectedPlayer.getImage(), rowImg, 1);
 						}
-						endDrawTurn(axis, direction, rowImg - 1);
+						playSoundEffect("wind", 1);
+						endDrawTurn(axis, direction, rowPhy);
 					} catch (Exception e) {
 						gameLog.appendText(e.getMessage());
 					}
 				} else {
 					try {
 						direction = "east";
-						ejectedTile = gameBoard.insertFromRight(insertedTile, rowImg - 1);
+						ejectedTile = gameBoard.insertFromRight(insertedTile, rowPhy);
 						silkBag.addTile(true, ejectedTile);
-						ejectedPlayer = checkPlayerLoc(rowImg - 1, 0);
+						ejectedPlayer = checkPlayerLoc(rowPhy, 0);
 
 						// Loop left through the row to update all images
 						for (int i = 1; i < boardColumns - 1; i++) {
 							updateTileImgs(rowImg, i);
-							Player token = checkPlayerLoc(rowImg - 1, i - 1);
+							Player token = checkPlayerLoc(rowPhy, i - 1);
 							if (token != null) {
 								setPlayerImg(null, rowImg, i);
-//								System.out.println("oldLoc: " + (rowImg - 1) + "," + (i - 1)); TODO - print
 								if (i != 1) {
 									// set image of tile left
 									setPlayerImg(token.getImage(), rowImg, i - 1);
-									token.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, i - 2));
-//									System.out.println("newLoc: " + (rowImg - 1) + "," + (i - 2)); TODO - print
+									token.movePlayer(gameBoard, gameBoard.getTileAt(rowPhy, i - 2));
 								}
 							}
 						}
 						if (ejectedPlayer != null) {
-//							System.out.println("newLoc: " + (rowImg - 1) + "," + (boardColumns - 3)); TODO - print
-//							System.out.println(ejectedPlayer.getName()
-//									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
-							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowImg - 1, boardColumns - 3));
-//							System.out.println(ejectedPlayer.getName()
-//									+ "(" + ejectedPlayer.getRowLoc() + ", " + ejectedPlayer.getColumnLoc() + ")");
+							ejectedPlayer.movePlayer(gameBoard, gameBoard.getTileAt(rowPhy, boardColumns - 3));
 							setPlayerImg(ejectedPlayer.getImage(), rowImg, boardColumns - 2);
 						}
-						endDrawTurn(axis, direction, rowImg - 1);
+						playSoundEffect("wind", 1);
+						endDrawTurn(axis, direction, rowPhy);
 					} catch (Exception e) {
 						gameLog.appendText(e.getMessage());
 					}
@@ -632,17 +596,12 @@ public class GameScreenController implements Initializable {
 		Rectangle tempRect = (Rectangle) tempStack.getChildren().get(0);
 		tempRect.setFill(new ImagePattern(tempFloor.getImage()));
 		tempRect.setRotate(tempFloor.getRotation());
-		System.out.println("(" + (boardImgRow - 1) + ", " + (boardImgCol - 1) + ") " // TODO - print
-				+ tempFloor.getRotation() + " " + tempRect.getRotate());
-		// Update fire infliction locations
 		Rectangle tempFire = (Rectangle) tempStack.getChildren().get(1);
 		if (tempFloor.getIsFire()) {
 			tempFire.setOpacity(1);
 		} else {
 			tempFire.setOpacity(0);
 		}
-//		System.out.println("Update- " + tempFloor.getRow() + "," + tempFloor.getColumn() + ":" TODO - print
-//				+ tempFloor.isNorth() + tempFloor.isEast() + tempFloor.isSouth() + tempFloor.isWest());
 	}
 
 	/**
@@ -796,8 +755,6 @@ public class GameScreenController implements Initializable {
 			gameLog.appendText("Some ice, that were freezing some islands still, have now melted.\n");
 		}
 		iceInfectedTiles.removeAll(removed);
-//		System.out.println(fireInfectedTiles); // TODO - print
-//		System.out.println(iceInfectedTiles);
 	}
 
 	/**
@@ -805,7 +762,6 @@ public class GameScreenController implements Initializable {
 	 */
 	private void startNextTurn() {
 		turn++;
-//		System.out.println("Turn: " + turn); // TODO - print
 
 		setupCurrPlayerDisplay();
 		updatePlayerQueue(q1Img, q1Txt, playerRoster.get(1));
@@ -888,11 +844,13 @@ public class GameScreenController implements Initializable {
 	 * Method that runs when the game ends. Will announce the winner and exit from the game
 	 */
 	private void endGame() { // TODO - flesh out
+		playerWon = currPlayer;
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Over");
 		errorInfo.setHeaderText("GAME WON!!!");
-		errorInfo.setContentText(currPlayer.getName() + " wins!!\nThank you for playing!!\n");
+		errorInfo.setContentText(playerWon.getName() + " wins!!\nThank you for playing!!\n");
 		errorInfo.show();
+
 	}
 
 	/**
@@ -967,17 +925,10 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void takeTileClick() {
-//		for (Player player : playerRoster) { TODO - print
-//			System.out.println(player.getName() + "(" + player.getRowLoc() + ", " + player.getColumnLoc() + ")");
-//		}
-
 		silkBagTile = silkBag.drawTile();
 		silkBagTileImg.setRotate(0);
 		silkBagTileImg.setFill(new ImagePattern(silkBagTile.getImage()));
-		// Sound effect when the button is clicked
-		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-		mediaPlayer.play();
+		playSoundEffect("button", 1);
 
 		// Check the type of the tile
 		String tempTileType = silkBagTile.getTileType();
@@ -1014,9 +965,7 @@ public class GameScreenController implements Initializable {
 	private void rotateTileClick() {
 		Floor tempFloor = (Floor) silkBagTile;
 		tempFloor.rotate();
-		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-		mediaPlayer.play();
+		playSoundEffect("button", 1);
 
 		// Rotates the image since it is not 'locked' to tile
 		silkBagTileImg.setRotate(tempFloor.getRotation());
@@ -1028,6 +977,7 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void takeActionClick() {
+		playSoundEffect("button", 1);
 		if (currPlayer.getHand().isEmpty()) {
 			gameLog.appendText("You currently have no castable powers. Please skip, your time to shine will come.\n");
 		} else {
@@ -1055,14 +1005,13 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void fireClick() {
 		try {
-			currPlayer.playActionTile("fire");
+			Action playedAction = currPlayer.playActionTile("fire");
+			silkBag.addTile(true, playedAction);
 			disableActionSelect();
 			gameLog.appendText("Choose an island to cast FIRE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
+			playSoundEffect("magic", 2);
 			setSelectableTiles("fire");
-			Media buttonSound = new Media(new File("resources/sounds/magic.wav").toURI().toString());
-			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-			mediaPlayer.play();
 		} catch (Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
@@ -1075,14 +1024,13 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void iceClick() {
 		try {
-			currPlayer.playActionTile("ice");
+			Action playedAction = currPlayer.playActionTile("ice");
+			silkBag.addTile(true, playedAction);
 			disableActionSelect();
 			gameLog.appendText("Choose an island to cast ICE on.\n");
 			currPlayerBacktrackTxt.setText("Used");
 			setSelectableTiles("ice");
-			Media buttonSound = new Media(new File("resources/sounds/magic.wav").toURI().toString());
-			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-			mediaPlayer.play();
+			playSoundEffect("magic", 2);
 		} catch (Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
@@ -1094,16 +1042,15 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void doubleMoveClick() {
 		try {
-			currPlayer.playActionTile("doubleMove");
+			Action playedAction = currPlayer.playActionTile("doubleMove");
+			silkBag.addTile(true, playedAction);
 			isDoubleMoveUsed = true;
 			disableActionSelect();
 			gameLog.appendText("Double Move was cast on " + currPlayer.getName()
 					+ ". You can now move twice on this turn.\n");
 			currPlayerBacktrackTxt.setText("Used");
-			moveButton.setDisable(false);
-			Media buttonSound = new Media(new File("resources/sounds/doublemove.wav").toURI().toString());
-			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-			mediaPlayer.play();
+			startMoveActionTurn();
+			playSoundEffect("magic", 2);
 		} catch (Exception e) {
 			gameLog.appendText(e.getMessage());
 		}
@@ -1115,13 +1062,12 @@ public class GameScreenController implements Initializable {
 	@FXML
 	private void backTrackClick() {
 		try {
-			currPlayer.playActionTile("backTrack");
+			Action playedAction = currPlayer.playActionTile("backTrack");
+			silkBag.addTile(true, playedAction);
 			disableActionSelect();
 			gameLog.appendText("Choose a fellow deity to cast BACKTRACK on.\n");
 			currPlayerBacktrackTxt.setText("Used");
-			Media buttonSound = new Media(new File("resources/sounds/magic.wav").toURI().toString());
-			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-			mediaPlayer.play();
+			playSoundEffect("magic", 2);
 
 			for (Player player : playerRoster) {
 				if (!player.isBacktracked()) {
@@ -1141,9 +1087,7 @@ public class GameScreenController implements Initializable {
 	private void skipActionClick() {
 		gameLog.appendText(currPlayer.getName() + " skipped casting an ability.\n");
 		startMoveActionTurn();
-		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-		mediaPlayer.play();
+		playSoundEffect("button", 1);
 	}
 
 	/**
@@ -1153,18 +1097,7 @@ public class GameScreenController implements Initializable {
 	private void moveClick() {
 		try {
 			playerMoves = currPlayer.possibleMoves(gameBoard);
-			Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
-			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-			mediaPlayer.play();
-//			for (Floor floor : playerMoves) { TODO - print
-//				System.out.println(floor.getRow() + "," + floor.getColumn() + ":"
-//						+ floor.isNorth() + floor.isEast() + floor.isSouth() + floor.isWest());
-//			}
-//			System.out.println(currPlayer.getRowLoc() + "," + currPlayer.getColumnLoc() + ","
-//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isNorth() + ","
-//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isEast() + ","
-//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isSouth() + ","
-//					+ gameBoard.getTileAt(currPlayer.getRowLoc(), currPlayer.getColumnLoc()).isWest() + ",");
+			playSoundEffect("button", 1);
 
 			// Removing tiles with players on
 			for (Player player : playerRoster) {
@@ -1194,32 +1127,77 @@ public class GameScreenController implements Initializable {
 	private void endTurnClick() {
 		if (currPlayer.getCurrentFloor(gameBoard).getIsGoal()) {
 			endGame();
-			Media buttonSound = new Media(new File("resources/sounds/yay.wav").toURI().toString());
-			MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-			mediaPlayer.play();
+			playSoundEffect("yay", 0.8);
+		} else {
+			moveButton.setDisable(true); // Just in case it wasn't disabled earlier
+			endTurnButton.setDisable(true);
+			playSoundEffect("button", 1);
+
+			// Add tile to hand if tile is an action tile and remove from screen
+			if (isNewTileAction) {
+				Action tempAction = (Action) silkBagTile;
+				currPlayer.addActionTile(tempAction);
+				silkBagTileImg.setFill(GREY);
+				gameLog.appendText(currPlayer.getName() + "'s new ability has been added to their hand.\n");
+			}
+
+			playerRoster.remove(0);
+			playerRoster.add(currPlayer);
+			currPlayer = playerRoster.get(0);
+
+			int round = (turn + playerRoster.size()) / playerRoster.size();
+			gameLog.appendText("Round " + round + ": Next Deity - " + currPlayer.getName() + "!\n");
+			startNextTurn();
 		}
+	}
 
-		moveButton.setDisable(true); // Just in case it wasn't disabled earlier
-		endTurnButton.setDisable(true);
-		Media buttonSound = new Media(new File("resources/sounds/button.wav").toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-		mediaPlayer.play();
+	/**
+	 * Setup a pane to allow game saving.
+	 */
+	@FXML
+	private void saveGameButton() {
+		// Setup the popup
+		VBox saveGameScreen = new VBox(10);
+		saveGameScreen.setPadding(new Insets(10, 10, 10, 10));
+		saveGameScreen.setAlignment(Pos.CENTER);
+		Label header = new Label("Save Game");
+		Text text = new Text("Please name your savefile: ");
+		TextField filename = new TextField();
+		Button saveAndQuitButton = new Button("Save and Quit");
+		Button returnButton = new Button("Return to Game");
+		saveGameScreen.getChildren().addAll(header, filename, saveAndQuitButton, returnButton);
+		// Open the popup
+		borderPane.setEffect(new GaussianBlur());
+		Stage popupStage = new Stage(StageStyle.TRANSPARENT);
+		popupStage.setScene(new Scene(saveGameScreen, Color.TRANSPARENT));
+		popupStage.setAlwaysOnTop(true);
+		popupStage.initModality(Modality.APPLICATION_MODAL);
+		popupStage.show();
 
-		// Add tile to hand if tile is an action tile and remove from screen
-		if (isNewTileAction) {
-			Action tempAction = (Action) silkBagTile;
-			currPlayer.addActionTile(tempAction);
-			silkBagTileImg.setFill(GREY);
-			gameLog.appendText(currPlayer.getName() + "'s new ability has been added to their hand.\n");
-		}
+		saveAndQuitButton.setOnAction(e -> {
+			if (filename.getText().isEmpty()) {
+				// Sound effect for an error pop up
+				playSoundEffect("nope", 3);
+			} else {
+				// Code to save file
+				Platform.exit();
+			}
+		});
 
-		playerRoster.remove(0);
-		playerRoster.add(currPlayer);
-		currPlayer = playerRoster.get(0);
+		returnButton.setOnAction(e -> {
+			playSoundEffect("button", 1);
+			borderPane.setEffect(null);
+			popupStage.hide();
+		});
+	}
 
-		int round = (turn + playerRoster.size()) / playerRoster.size();
-		gameLog.appendText("Round " + round + ": Next Deity - " + currPlayer.getName() + "!\n");
-		startNextTurn();
+	/**
+	 * Button that quits the game when pressed
+	 */
+	@FXML
+	private void quitGameFromMenuButton() {
+		playSoundEffect("button", 1);
+		Platform.exit();
 	}
 
 	/**
@@ -1227,122 +1205,37 @@ public class GameScreenController implements Initializable {
 	 */
 	@FXML
 	private void openGameInstructionsButton() throws FileNotFoundException {
+		playSoundEffect("button", 1);
+		// Setup text
 		File instructions = new File("src/Instructions.txt");
-		String outputText = "";
+		StringBuilder outputText = new StringBuilder();
 		Scanner in;
 		in = new Scanner(instructions);
-		while (in.hasNextLine()){
-			outputText += in.nextLine() + System.lineSeparator();
+		while (in.hasNextLine()) {
+			outputText.append(in.nextLine()).append(System.lineSeparator());
 		}
-		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
-		errorInfo.setTitle("Game Instructions");
-		errorInfo.setHeaderText("How to play the game");
-		errorInfo.setContentText(outputText);
-		errorInfo.show();
-	}
 
-	@FXML
-	private void saveGameButton() {
+		// Setup pane
+		VBox helpPage = new VBox(10);
+		helpPage.setPadding(new Insets(10, 10, 10, 10));
+		helpPage.setAlignment(Pos.CENTER);
+		Label header = new Label("Instructions");
+		TextArea textArea = new TextArea(outputText.toString());
+		Button returnButton = new Button("Return to Game");
+		helpPage.getChildren().addAll(header, textArea, returnButton);
+
+		// Open the popup
 		borderPane.setEffect(new GaussianBlur());
-
-		VBox saveGameScreen = new VBox(10);
-		saveGameScreen.setPadding(new Insets(10, 10, 10, 10));
-		Label header = new Label("Save Game");
-		TextField filename = new TextField();
-		Button saveAndQuit = new Button("Save and Quit");
-		saveGameScreen.getChildren().addAll(header, filename, saveAndQuit);
-		saveGameScreen.setAlignment(Pos.CENTER);
-
 		Stage popupStage = new Stage(StageStyle.TRANSPARENT);
-		popupStage.setScene(new Scene(saveGameScreen, Color.TRANSPARENT));
+		popupStage.setScene(new Scene(helpPage, Color.TRANSPARENT));
 		popupStage.setAlwaysOnTop(true);
 		popupStage.initModality(Modality.APPLICATION_MODAL);
 		popupStage.show();
 
-		saveAndQuit.setOnAction(e -> {
-			if (filename.getText().isEmpty()) {
-				// Sound effect for an error pop up
-				Media buttonSound = new Media(new File("resources/sounds/nope.wav").toURI().toString());
-				MediaPlayer mediaPlayer = new MediaPlayer(buttonSound);
-				mediaPlayer.play();
-				mediaPlayer.setVolume(3);
-
-			} else {
-				borderPane.setEffect(null);
-				popupStage.hide();
-			}
+		returnButton.setOnAction(e -> {
+			playSoundEffect("button", 1);
+			borderPane.setEffect(null);
+			popupStage.hide();
 		});
-	}
-
-	/**
-	 * Button that quits the game when pressed
-	 */
-	public void updateProfiles() throws IOException {
-		Profile currentPlayer = new Profile("");
-		ArrayList<String> updatedFileContent = new ArrayList<>();
-		Scanner in;
-		for(int i=0; i<playerRoster.size(); i++){
-			File currentProfileFile = new File("resources/users/"+playerRoster.get(i).getName()+".txt");
-			FileWriter wr = new FileWriter(currentProfileFile);
-			in = new Scanner(currentProfileFile);
-			while(in.hasNextLine()){
-				String currentLine = in.nextLine();
-				updatedFileContent.add(currentLine);
-			}
-			switch (boardNum){
-				case 1:
-					String knossosData = updatedFileContent.get(1);
-					String[] knossosSplitted = knossosData.split(",");
-					if(playerRoster.get(i)==playerWon){
-						knossosSplitted[1] += 1;
-						knossosSplitted[2] += 1;
-					}else{
-						knossosSplitted[2] += 1;
-					}
-					String knossosLineToBeWritten = String.join(",",knossosSplitted);
-					updatedFileContent.set(1,knossosLineToBeWritten);
-					for (String s : updatedFileContent) {
-						wr.write(s);
-						wr.write(System.lineSeparator());
-					}
-					break;
-				case 2:
-					String marathonData= updatedFileContent.get(2);
-					String[] marathonSplitted = marathonData.split(",");
-					if(playerRoster.get(i)==playerWon){
-						marathonSplitted[1] += 1;
-						marathonSplitted[2] += 1;
-					}else{
-						marathonSplitted[2] += 1;
-					}
-					String marathonLineToBeWritten = String.join(",",marathonSplitted);
-					updatedFileContent.set(1,marathonLineToBeWritten);
-					for (String s : updatedFileContent) {
-						wr.write(s);
-						wr.write(System.lineSeparator());
-					}
-					break;
-				case 3:
-					String spartaData= updatedFileContent.get(3);
-					String[] spartaSplitted = spartaData.split(",");
-					if(playerRoster.get(i)==playerWon){
-						spartaSplitted[1] += 1;
-						spartaSplitted[2] += 1;
-					}else{
-						spartaSplitted[2] += 1;
-					}
-					String spartaLineToBeWritten = String.join(",",spartaSplitted);
-					updatedFileContent.set(1,spartaLineToBeWritten);
-					for (String s : updatedFileContent) {
-						wr.write(s);
-						wr.write(System.lineSeparator());
-					}
-					break;
-			}
-		}
-	}
-	@FXML
-	private void quitGameFromMenuButton() {
-		Platform.exit();
 	}
 }

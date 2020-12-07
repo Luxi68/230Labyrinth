@@ -74,7 +74,7 @@ public class Floor extends Tile {
                 this.west = true;
                 break;
 
-            default: // TODO - Maybe throw an exception?
+            default:
                 this.FLOOR_TYPE = null;
                 throw new IllegalStateException("Floor tile type does not exist");
         }

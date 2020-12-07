@@ -39,7 +39,25 @@ public class FileReader {
             e.printStackTrace();
             System.exit(0);
         }
-        return dataFile(in, a);
+        // Tracks which board is being played
+        int boardNum;
+        switch (filename) {
+            case "Knossos.txt":
+                boardNum = 1;
+                break;
+            case "Marathon.txt":
+                boardNum = 2;
+                break;
+            case "Sparta.txt":
+                boardNum = 3;
+                break;
+            default:
+                boardNum = 0;
+                break;
+        }
+        ArrayList<Object> data = dataFile(in, a);
+        data.add(boardNum);
+        return data;
     }
 
     /**

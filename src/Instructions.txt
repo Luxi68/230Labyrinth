@@ -1,13 +1,42 @@
-INSTRUCTION ON HOW TO PLAY
-1. There are 2-4 players
-2. A predetermined board is setup and you will all be placed on it
-3. In turns you will draw tiles from the silk bag.
-4. If you draw a floor you will place in on the board by sliding it in
-5. If you draw an action you will store it for one turn and then be able to play it
-6. After the tile phase you will need to move if you are able to one of the highlighted tiles.
-7. Your objective is to reach Mount Olympus and take your place amongst the gods
-8. Ice tiles when played make the floor unable to be moved
-9. Fire tiles make the tiles unable to be reach by movement until it expires
-10. Double Move gives you two movement actions.
-11. BackTrack gives you the option to move a player back before he moved.
-12. Good Luck and Have Fun.
+INSTRUCTIONS TO PLAYING THE THE FIRST OLYMPIAN
+---------------------------------------------------------------------------------------------------
+
+===OPTIONS ACCESSIBLE FROM MAIN MENU===
+
+- You can choose to play a new game or a previously saved game
+- Opening the profile menu reveals player profiles and leaderboard
+- You can create and delete player profiles upon opening profile menu
+- You can choose to quit the game at the main menu
+
+
+===INSTRUCTIONS ON HOW TO PLAY===
+
+- Your objective is to reach Mount Olympus and take your place amongst the gods
+- There are 2-4 players
+- A predetermined board is setup and you will all be placed on it
+- Islands are fixed and cannot be moved if no arrows are pointing directly at it
+- Player can move to any connected island; as long as the tile is empty and not on fire
+- Player objective is to reach the goal tile first
+
+==NESOI'S GIFTS==
+- NESOI has a fixed amount of gifts (islands and abilities) every game
+    -Gifts will be rewarded until player receives an island
+- If player receives an ability, it can not be used until the player's next turn
+- If player receives an island, the player has to insert it into any island that is not fixed
+    - One island at the other end of the board will be pushed out and return to Neosi
+
+==ABILITIES==
+- Ice causes an island and surrounding islands fixed and unable to move, affect lasts 1 round
+- Fire makes a group of islands catch on fire, affect lasts 2 rounds
+- Double Move allows you to make two moves
+- BackTrack when casted upon an opponent, forces the opponent to revert two moves
+    - If opponent isn't able to revert moves only due to burning islands, original position maintained
+    - BackTrack can only affect each player once
+
+==PLAYER MOVEMENT==
+- Player then has to move to a connected neighbouring island
+    -The player can also choose to rotate the current island by 90 degrees anti-clockwise before moving
+- If player if unable to make any moves, the original position is maintained
+
+
+===Good Luck and Have Fun===

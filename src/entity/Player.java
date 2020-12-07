@@ -22,9 +22,6 @@ public class Player {
 	private int[] lastPosiColumn = new int[3];
 	private boolean backtracked;
 
-	// TODO - implement backtrack + bool check
-
-
 	/**
 	 * Constructor to create new player object
 	 *
@@ -168,7 +165,7 @@ public class Player {
 	 */
 	private void storePosi() {
 		lastPosiRow[2] = lastPosiRow[1];
-		lastPosiColumn[2] = lastPosiRow[1];
+		lastPosiColumn[2] = lastPosiColumn[1];
 		lastPosiRow[1] = lastPosiRow[0];
 		lastPosiColumn[1] = lastPosiColumn[0];
 		lastPosiRow[0] = rowLoc;
@@ -238,8 +235,8 @@ public class Player {
 	 */
 	public Action playActionTile(String type) throws NullPointerException {
 		Action tempAction = null;
-		for (Action actionTile : HAND) {
-			if (actionTile.tileType.equalsIgnoreCase(type)) { //TODO fix this
+		for (Action actionTile: HAND) {
+			if (actionTile.tileType.equalsIgnoreCase(type)) {
 				tempAction = actionTile;
 			}
 		}
@@ -248,7 +245,6 @@ public class Player {
 					"WARNING: " + this.NAME + " does not hold any " + type + " abilities.\n");
 		} else {
 			HAND.remove(tempAction);
-			//add tempAction to discarded section in silkbag
 		}
 		return tempAction;
 	}
@@ -278,5 +274,4 @@ public class Player {
 					"WARNING: Backtrack cannot be used on " + this.NAME + " as they already been backtracked.\n");
 		}
 	}
-
 }

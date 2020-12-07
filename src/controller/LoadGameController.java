@@ -74,7 +74,7 @@ public class LoadGameController {
 			Parent gameScreenParent = loader.load();
 			GameScreenController controller = loader.getController();
 
-			// controller.initData(); TODO - needs to be edited to input stuff to screen
+			// controller.initData(); TODO - needs the load aspect of saveGame to be implemented
 
 			Scene gameScreenScene = new Scene(gameScreenParent);
 			Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
