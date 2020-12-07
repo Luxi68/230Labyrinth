@@ -1,7 +1,3 @@
-
-
-
-
 THE FIRST OLYMPIAN INSTRUCTION AND RULES
 
 - Game is suitable for 2-4 players.
@@ -17,7 +13,7 @@ THE FIRST OLYMPIAN INSTRUCTION AND RULES
 - Players may receive more one gift from Neosi at every turn, only if player is gifted an action tile.
 - Tiles are rewarded until player receives floor tile.
 - Player then must insert the floor tile immediately on any end of rows/columns.
-- One floor tile one at the other end of the board will be pushed out and return to Neosi.
+- One floor tile at the other end of the board will be pushed out and return to Neosi.
 - Floor tile can’t be inserted where fixed tiles are.
 - Players can move left/right and up/down of the islands.
 - Floor tiles can limit where players can move, there are four types of floor tiles (straight, corner, t-shaped, and goal).
