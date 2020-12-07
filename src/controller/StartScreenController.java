@@ -24,6 +24,11 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
+/**
+ * StartScreenController.java
+ * This class is the controller for the fxml file. StartScreen.fxml
+ * @author - Alberto Ortenzi
+ */
 public class StartScreenController {
 
 	public Label labelMotd;
@@ -35,6 +40,11 @@ public class StartScreenController {
 	@FXML
 	private URL location;
 
+	/**
+	 * This method is called everytime the class is initialised. It executes the backgroundMusic method
+	 * which starts the background music and it also sets up the volume control slider. It also creates a Motd
+	 * object. and then sets a specific label to become equal to the newly created message of the day string.
+	 */
 	@FXML
 	public void initialize() throws IOException {
 		Motd message = new Motd();
@@ -53,6 +63,10 @@ public class StartScreenController {
 		});
 	}
 
+	/**
+	 * This method loads the profile selection scene and plays a sound effect when the button is clicked
+	 * @param actionEvent - the action of clicking the button.
+	 */
 	@FXML
 	private void goToProfileSelection(javafx.event.ActionEvent actionEvent) {
 		try {
@@ -71,6 +85,11 @@ public class StartScreenController {
 		mediaPlayer1.stop();
 	}
 
+	/**
+	 * This method created a new media object and then passes it to a predefined mediaPlayer object.
+	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
+	 * until the users leaves the page.
+	 */
 	public void backgroundMusic(){
 		Media backgroundSound = new Media(new File("resources/sounds/startScreenBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
@@ -78,8 +97,10 @@ public class StartScreenController {
 		mediaPlayer1.setVolume(0.1);
 		mediaPlayer1.setAutoPlay(true);
 	}
-
-
+	/**
+	 * This method loads the new game scene and plays a sound effect when the button is clicked
+	 * @param actionEvent - the action of clicking the button.
+	 */
 	@FXML
 	private void goToNewGame(ActionEvent actionEvent) {
 	    try {
@@ -98,6 +119,10 @@ public class StartScreenController {
 	    mediaPlayer1.stop();
 	}
 
+	/**
+	 * This method loads the load game scene and plays a sound effect when the button is clicked
+	 * @param actionEvent - the action of clicking the button.
+	 */
 	@FXML
 	private void goToLoadGame(ActionEvent actionEvent) {
 	    try {
@@ -116,10 +141,19 @@ public class StartScreenController {
 		mediaPlayer1.stop();
 	}
 
+	/**
+	 * This method quits the application on action. This is used for the menu bar under file
+	 * @param actionEvent - the action of selecting the option in the menubar
+	 */
 	public void quitGameFromMenu(ActionEvent actionEvent) {
 		Platform.exit();
 	}
 
+	/**
+	 * This method opens an information alert which contains the essential game information to know in order
+	 * to play the game.
+	 * @param actionEvent - the action of selecting the option in the menu bar.
+	 */
 	public void openGameInstructions(ActionEvent actionEvent) {
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Instructions");

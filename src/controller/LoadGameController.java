@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+/**
+ * LoadGameController.java
+ * This class is the controller for the fxml file. LoadGame.fxml
+ * @author - Alberto Ortenzi
+ */
 public class LoadGameController {
 
 	public ChoiceBox<String> savesChoice;
@@ -36,6 +41,10 @@ public class LoadGameController {
 	@FXML
 	private URL location;
 
+	/**
+	 * This method is called everytime the class is initialised. It executes the backgroundMusic method
+	 * which starts the background music and it also sets up the volume control slider.
+	 */
 	@FXML
 	public void initialize() {
 		ObservableList<String> choices = FXCollections.observableArrayList(getAllLevelFilenames());
@@ -52,6 +61,11 @@ public class LoadGameController {
 		});
 	}
 
+	/**
+	 * This method on button click. loads the specified save file in the gameScreen by calling the gamescreen controller class
+	 * and creating an instance of it.
+	 * @param actionEvent - the button to be clicked
+	 */
 	@FXML
 	private void loadGame(ActionEvent actionEvent) {
 		try {
@@ -77,6 +91,11 @@ public class LoadGameController {
 		mediaPlayer1.stop();
 	}
 
+	/**
+	 * This method gets all the filenames of the files in the specified directory and returns an arraylist
+	 * of strings
+	 * @return - the arraylist containing the filenames as strings
+	 */
 	public ArrayList<String> getAllLevelFilenames(){
 		ArrayList<String> levelFileNames = new ArrayList<>();
 		File directoryPath = new File("resources/saves");
@@ -87,6 +106,11 @@ public class LoadGameController {
 		}
 		return levelFileNames;
 	}
+	/**
+	 * This method created a new media object and then passes it to a predefined mediaPlayer object.
+	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
+	 * until the users leaves the page.
+	 */
 	public void backgroundMusic(){
 		Media backgroundSound = new Media(new File("resources/sounds/startScreenBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
@@ -95,6 +119,10 @@ public class LoadGameController {
 		mediaPlayer1.setAutoPlay(true);
 	}
 
+	/**
+	 * This method on the button click goes back to the startScreen loading the scene
+	 * @param actionEvent - event of button click
+	 */
 	@FXML
 	private void backToStartScreen(ActionEvent actionEvent) {
 		try {
@@ -112,10 +140,19 @@ public class LoadGameController {
 		}
 		mediaPlayer1.stop();
 	}
+	/**
+	 * This method quits the application on action. This is used for the menu bar under file
+	 * @param actionEvent - the action of selecting the option in the menubar
+	 */
 	public void quitGameFromMenu(ActionEvent actionEvent) {
 		Platform.exit();
 	}
 
+	/**
+	 * This method opens an information alert which contains the essential game information to know in order
+	 * to play the game.
+	 * @param actionEvent - the action of selecting the option in the menu bar.
+	 */
 	public void openGameInstructions(ActionEvent actionEvent) {
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Instructions");

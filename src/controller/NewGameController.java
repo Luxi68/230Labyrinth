@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+/**
+ * NewGameController.java
+ * This class is the controller class for the fxml file NewGame.fxml
+ * @author - Alberto Ortenzi
+ */
 public class NewGameController {
 
 	public ListView<String> chosenProfiles;
@@ -43,6 +48,10 @@ public class NewGameController {
 	@FXML
 	private URL location;
 
+	/**
+	 * This method is called everytime the class is initialised. It executes the backgroundMusic method
+	 * which starts the background music and it also sets up the volume control slider.
+	 */
 	@FXML
 	public void initialize() {
 		ObservableList<String> choices = FXCollections.observableArrayList(getAllLevelFilenames());
@@ -61,6 +70,7 @@ public class NewGameController {
 			}
 		});
 	}
+
 
 	@FXML
 	private void startGame(ActionEvent actionEvent) {
@@ -98,6 +108,12 @@ public class NewGameController {
 		}
 		mediaPlayer1.stop();
 	}
+
+	/**
+	 * This method gets all the filenames of the files in the specified directory and returns an arraylist
+	 * of strings
+	 * @return - the arraylist containing the filenames as strings
+	 */
 	public ArrayList<String> getAllLevelFilenames(){
 		ArrayList<String> levelFileNames = new ArrayList<>();
 		File directoryPath = new File("resources/levels");
@@ -109,6 +125,10 @@ public class NewGameController {
 		return levelFileNames;
 	}
 
+	/**
+	 * This method gets all the files in the users folder and returns the name of the .txt files in an arraylist
+	 * @return - the arraylist of profile names
+	 */
 	public ArrayList<String> getAllProfiles() {
 		ArrayList<String> profileFileNames = new ArrayList<>();
 		File directoryPath = new File("resources/users");
@@ -119,6 +139,12 @@ public class NewGameController {
 		}
 		return profileFileNames;
 	}
+
+	/**
+	 * This method created a new media object and then passes it to a predefined mediaPlayer object.
+	 * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
+	 * until the users leaves the page.
+	 */
 	public void backgroundMusic(){
 		Media backgroundSound = new Media(new File("resources/sounds/playerSelectionBackground.wav").toURI().toString());
 		mediaPlayer1 = new MediaPlayer(backgroundSound);
@@ -127,6 +153,10 @@ public class NewGameController {
 		mediaPlayer1.setAutoPlay(true);
 	}
 
+	/**
+	 * This method outputs the contents of the arraylist which is the product of the getAllprofiles method
+	 * Is also removes the .txt extension for estetics
+	 */
 	private void displayAllProfiles(){
 		for(int i=0; i<getAllProfiles().size(); i++){
 			String currentProfile = getAllProfiles().get(i);
@@ -134,14 +164,28 @@ public class NewGameController {
 		}
 	}
 
+	/**
+	 * this method sets a label using the passed variable from the previous controller, it changes based on the
+	 * button clicked in the previous scene
+	 * @param playerNum - the selected number of players
+	 */
 	public void chooseXProfiles(int playerNum){
 		labelSelectPlayers.setText("Please select " + playerNum + " players");
 	}
 
+	/**
+	 * this method checks if all the desired profiles have been selected
+	 * @return - returns true if the condition is true
+	 */
 	public boolean areAllProfilesChosen(){
 		return count == numberOfPlayers;
 	}
 
+	/**
+	 * This method chooses a profile and adds it to the arraylist which will then be passed onto the gamescreen.
+	 * The selected profile is then removed from the available profiles and added to the chosen profiles.
+	 * @param actionEvent
+	 */
 	public void chooseProfile(ActionEvent actionEvent) {
 		String selectedProfile = listOfProfiles.getSelectionModel().getSelectedItem();
 		Profile chosenOne = new Profile(selectedProfile);
@@ -162,6 +206,10 @@ public class NewGameController {
 		}
 	}
 
+	/**
+	 * This method loads the start Screen scene and plays a sound effect when the button is clicked
+	 * @param actionEvent - the action of clicking the button.
+	 */
 	@FXML
 	private void backToStartScreen(ActionEvent actionEvent) {
 		try {
@@ -179,10 +227,20 @@ public class NewGameController {
 		}
 		mediaPlayer1.stop();
 	}
+
+	/**
+	 * This method quits the application on action. This is used for the menu bar under file
+	 * @param actionEvent - the action of selecting the option in the menubar
+	 */
 	public void quitGameFromMenu(ActionEvent actionEvent) {
 		Platform.exit();
 	}
 
+	/**
+	 * This method opens an information alert which contains the essential game information to know in order
+	 * to play the game.
+	 * @param actionEvent - the action of selecting the option in the menu bar.
+	 */
 	public void openGameInstructions(ActionEvent actionEvent) {
 		Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
 		errorInfo.setTitle("Game Instructions");
