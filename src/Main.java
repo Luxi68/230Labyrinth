@@ -6,6 +6,11 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.net.URL;
 
+/**
+ * Main.java
+ * This class starts the application loading the stage and the first scene.
+ * @author - Alberto Ortenzi
+ */
 public class Main extends Application {
 
     @Override

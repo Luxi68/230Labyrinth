@@ -24,6 +24,11 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+/**
+ * CreateProfileController.java. This class is the controller for the fxml file CreateProfile.fxml
+ * @author - Alberto Ortenzi
+ */
+
 public class CreateProfileController {
 
     public TextField profileName;
@@ -36,6 +41,10 @@ public class CreateProfileController {
     @FXML
     private URL location;
 
+    /**
+     * This method is called everytime the class is initialised. It executes the backgroundMusic method
+     * which starts the background music and it also sets up the volume control slider.
+     */
     @FXML
     void initialize() {
         backgroundMusic();
@@ -50,6 +59,14 @@ public class CreateProfileController {
         });
 
     }
+
+    /**
+     * This method when called shows an Alert of a specific type.
+     * @param alertType - the type of the alert you need
+     * @param owner - the window which needs to display the alert
+     * @param title - the title of the alert
+     * @param message - the context message.
+     */
     private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -59,6 +76,12 @@ public class CreateProfileController {
         alert.show();
     }
 
+    /**
+     * This method creates a new profile object and adds the newly created profile to the listview
+     * It also checks if the textfield is empty and displays an error alert if that is the case
+     * @param actionEvent - the action of pressing the button
+     * @throws IOException - in case there is a problem creating the file
+     */
     public void createNewProfile(ActionEvent actionEvent) throws IOException {
         if (profileName.getText().isEmpty()){
             showAlert(Alert.AlertType.ERROR, createProfilePane.getScene().getWindow(), "Error!", "Please enter profile name");
@@ -68,6 +91,12 @@ public class CreateProfileController {
             showAlert(Alert.AlertType.CONFIRMATION, createProfilePane.getScene().getWindow(),"Creation Successful", "Welcome " + profileName.getText());
         }
     }
+
+    /**
+     * This method created a new media object and then passes it to a predefined mediaPlayer object.
+     * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
+     * until the users leaves the page.
+     */
     public void backgroundMusic(){
         Media backgroundSound = new Media(new File("resources/sounds/startScreenBackground.wav").toURI().toString());
         mediaPlayer1 = new MediaPlayer(backgroundSound);
@@ -76,6 +105,10 @@ public class CreateProfileController {
         mediaPlayer1.setAutoPlay(true);
     }
 
+    /**
+     * This method loads the profile selection scene and plays a sound effect when the button is clicked
+     * @param actionEvent - the action of clicking the button.
+     */
     public void goBackToProfileSelection(ActionEvent actionEvent) {
         try {
             Parent profileSelectionParent = FXMLLoader.load(getClass().getResource("/scene/ProfileSelection.fxml"));
@@ -92,10 +125,20 @@ public class CreateProfileController {
         }
         mediaPlayer1.stop();
     }
+
+    /**
+     * This method quits the application on action. This is used for the menu bar under file
+     * @param actionEvent - the action of selecting the option in the menubar
+     */
     public void quitGameFromMenu(ActionEvent actionEvent) {
         Platform.exit();
     }
 
+    /**
+     * This method opens an information alert which contains the essential game information to know in order
+     * to play the game.
+     * @param actionEvent - the action of selecting the option in the menu bar.
+     */
     public void openGameInstructions(ActionEvent actionEvent) {
         Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
         errorInfo.setTitle("Game Instructions");

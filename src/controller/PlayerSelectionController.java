@@ -20,6 +20,11 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+/**
+ * PlayerSelectionController.java
+ * This class is the controller class for the fxml file PlayerSelection.fxml
+ * @author - Alberto Ortenzi
+ */
 public class PlayerSelectionController {
 
     public Slider volumeSlider;
@@ -30,6 +35,10 @@ public class PlayerSelectionController {
     @FXML
     private URL location;
 
+    /**
+     * This method is called everytime the class is initialised. It executes the backgroundMusic method
+     * which starts the background music and it also sets up the volume control slider.
+     */
     @FXML
     void initialize() {
         backgroundMusic();
@@ -44,6 +53,11 @@ public class PlayerSelectionController {
         });
     }
 
+    /**
+     * This method created a new media object and then passes it to a predefined mediaPlayer object.
+     * it then sets the volume to a predetermined amount and sets the cycle count to indefinite to endlessly loop the music
+     * until the users leaves the page.
+     */
     public void backgroundMusic(){
         Media backgroundSound = new Media(new File("resources/sounds/playerSelectionBackground.wav").toURI().toString());
         mediaPlayer1 = new MediaPlayer(backgroundSound);
@@ -51,6 +65,10 @@ public class PlayerSelectionController {
         mediaPlayer1.setAutoPlay(true);
     }
 
+    /**
+     * This method loads the start screen scene and plays a sound effect when the button is clicked
+     * @param event - the action of clicking the button.
+     */
     @FXML
     void backToStartScreen(ActionEvent event) {
         try{
@@ -69,6 +87,13 @@ public class PlayerSelectionController {
         mediaPlayer1.stop();
     }
 
+    /**
+     * This method passes a parameter to the newGame class by loading it's controller.
+     * is passes the selected number of players through and plays a sound effect
+     * it also stops the music to prevent it overlapping with the next stages music.
+     * @param event - the button click
+     * @throws IOException - in case the sound files don't exist
+     */
     @FXML
     void fourPlayersSelected(ActionEvent event) throws IOException {
         int playerNum = 4;
@@ -90,6 +115,13 @@ public class PlayerSelectionController {
         mediaPlayer1.stop();
     }
 
+    /**
+     * This method passes a parameter to the newGame class by loading it's controller.
+     * is passes the selected number of players through and plays a sound effect
+     * it also stops the music to prevent it overlapping with the next stages music.
+     * @param event - the button click
+     * @throws IOException - in case the sound files don't exist
+     */
     @FXML
     void threePlayersSelected(ActionEvent event) throws IOException {
         int playerNum = 3;
@@ -111,6 +143,13 @@ public class PlayerSelectionController {
         mediaPlayer1.stop();
     }
 
+    /**
+     * This method passes a parameter to the newGame class by loading it's controller.
+     * is passes the selected number of players through and plays a sound effect
+     * it also stops the music to prevent it overlapping with the next stages music.
+     * @param event - the button click
+     * @throws IOException - in case the sound files don't exist
+     */
     @FXML
     void twoPlayersSelected(ActionEvent event) throws IOException {
         int playerNum = 2;
@@ -132,10 +171,19 @@ public class PlayerSelectionController {
         mediaPlayer1.stop();
     }
 
+    /**
+     * This method quits the application on action. This is used for the menu bar under file
+     * @param actionEvent - the action of selecting the option in the menubar
+     */
     public void quitGameFromMenu(ActionEvent actionEvent) {
         Platform.exit();
     }
 
+    /**
+     * This method opens an information alert which contains the essential game information to know in order
+     * to play the game.
+     * @param actionEvent - the action of selecting the option in the menu bar.
+     */
     public void openGameInstructions(ActionEvent actionEvent) {
         Alert errorInfo = new Alert(Alert.AlertType.INFORMATION);
         errorInfo.setTitle("Game Instructions");

@@ -58,7 +58,7 @@ public class GameScreen extends Application {
 			tempProfiles.add(rhys);
 
 			// Reading the data from file into controller
-			controller.initData(FileReader.readDataFile("placeholder.txt", tempProfiles));
+			controller.initData(FileReader.readDataFile("Sparta.txt", tempProfiles));
 
 			// Display the scene on the stage
 			primaryStage.setTitle("The First Olympian");
