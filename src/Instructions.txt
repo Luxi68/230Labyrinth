@@ -1,0 +1,42 @@
+INSTRUCTIONS TO PLAYING THE THE FIRST OLYMPIAN
+---------------------------------------------------------------------------------------------------
+
+===OPTIONS ACCESSABLE FROM MAIN MENU===
+
+- You can choose to play a new game or a previously saved game
+- Opening the profile menu reveals player profiles and leaderboard
+- You can create and delete player profiles upon opening profile menu
+- You can choose to quit the game at the main menu
+
+
+===INSTRUCTIONS ON HOW TO PLAY===
+
+- Your objective is to reach Mount Olympus and take your place amongst the gods
+- There are 2-4 players
+- A predetermined board is setup and you will all be placed on it
+- Islands are fixed and cannot be moved if no arrows are pointing directly at it
+- Player can move to any connected island; as long as the tile is empty and not on fire
+- Player objective is to reach the goal tile first
+
+==NESOI'S GIFTS==
+- NESOI has a fixed amount of gifts (islands and abilities) every game
+    -Gifts will be rewarded until player recieves an island
+- If player recieves an ability, it can not be used until the player's next turn
+- If player recieves an island, the player has to insert it into any island that is not fixed
+    - One island at the other end of the board will be pushed out and return to Neosi
+
+==ABILITIES==
+- Ice causes an island and surrounding islands fixed and unable to move, affect lasts 1 round
+- Fire makes a group of islands catch on fire, affect lasts 2 rounds
+- Double Move allows you to make two moves
+- BackTrack when casted upon an opponent, forces the opponent to revert two moves
+    - If opponent isn't able to revert moves only due to burning islands, original position maintained
+    - BackTrack can only affect each player once
+
+==PLAYER MOVEMENT==
+- Player then has to move to a connected neighbouring island
+    -The player can also choose to rotate the current island by 90 degrees anti-clockwise before moving
+- If player if unable to make any moves, the original position is maintained
+
+
+===Good Luck and Have Fun===
